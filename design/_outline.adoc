@@ -1,5 +1,5 @@
 = Design: Outline
-HusAK
+Husain AK
 
 = Abstraction
 == Data Abstraction

@@ -1,5 +1,5 @@
 = Git Guide (_Incomplete_)
-HusAk
+Husain AK
 :toc:
 :toclevels: 3
 :sectnums: 3

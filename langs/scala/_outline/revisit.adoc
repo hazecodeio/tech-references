@@ -1,0 +1,49 @@
+== Revisit
+
+* [ ] Ordering[T]
+* [ ] Iterables vs Traversables: Iterables are implemented in Traverabales' foreach() method
+* [ ] Variance: Covariance, Contravariance, Invariance
+* [ ] collect{} in Monadic constructs such as List, Set, Option, etc
+* [ ] PartialFunction and the use of apply(), PatterMatchers, and Cases
+* [ ] PartialFunction vs "unapply() & unapplySeq()"
+* [ ] Wrappers & JavaConverters
+* [ ] Indexed vs Ordered vs other categorized collections e.g. IndexedSeq
+* [ ] Continuous Streams via Stream.cons()
+* [ ] /: or foldLeft =>
+
+ (0 /: list) { (acc, nxt) => acc + nxt
+
+* [ ] :\ or foldRight =>
+
+ (list :\ 0) { (nxt, acc) => acc + nxt
+
+
+.Operations on Traversables
+* [ ] partition
+* [ ] groupBy: PartialFunction vs Lambda <- similar to collect{}
+* [ ] slice
+* [ ] splitAt
+* [ ] span
+* [ ] take vs drop
+* [ ] takeWhile vs dropWhile
+* [ ] filter vs filterNot
+* [ ] transpose
+* [ ] others????
+
+.Sorting Algorithms
+* [ ] Insertion Sort
+* [ ] Quick Sort
+* [ ] Bubble Sort
+* [ ] Selection Sort
+* [ ] Merge Sort
+* [ ] Heap Sort
+* [ ] Radix Sort
+* [ ] Others??
+
+.Data Structures
+* [ ] Linked List
+* [ ] Stack
+* [ ] Queue
+* [ ] Binary Tree
+* [ ] Heaps
+

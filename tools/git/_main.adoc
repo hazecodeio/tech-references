@@ -1,0 +1,25 @@
+= Git Guide (_Incomplete_)
+HusAk
+:toc:
+:toclevels: 3
+:sectnums: 3
+:sectnumlevels: 3
+
+== Configs
+.Creating an Alias
+ $ git config --global alias.hist "log --pretty=format:'%h %ad |%s%d [%an]' --date=short"
+
+The above alias can be called just like a regular command:
+
+ $ git hist
+
+
+.Removing/Unsetting an Entry
+ $ git config --global --unset alias.hist
+
+
+== Repositories
+=== Local
+=== Remote
+
+== Merge Conflict

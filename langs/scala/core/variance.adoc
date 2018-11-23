@@ -1,0 +1,135 @@
+== Variance
+:icons: font
+
+=== Covariance
+=== Contravariance
+=== Invariance
+
+=== Passing & Assigning into Variant Variable
+==== Method Parameter
+==== Assignment Variables
+
+=== Variance in Methods: Parameter & Return Type
+==== Passing Objects into a Variant Param
+==== Assigning Returned Objects into a Variant variable
+
+=== Method Overriding
+
+
+=== Contributions
+
+.Description from the tutorial (https://docs.scala-lang.org/tour/variances.html[Variance])
+A type parameter `A` of a generic class can be made covariant by using the annotation `+A`.
+
+For some class `List[+A]`, 
+making `A` covariant implies that for two types `A` and `B` where `A` is a subtype of `B`,
+then `List[A]` is a subtype of `List[B]`.
+
+This allows us to make very useful and intuitive subtyping relationships using generics.
+
+'''
+
+.Argument
+
+
+This has been mind-boggling to me for quite some time. I will assume that I haven't got it yet. So, please bear with me.
+As far as the Covariance & Contravariance go, I've always looked at them as being analogous to UpperBound & LowerBound, respectively.
+
+So, I understand that:
+
+* *Covariance*: allows assigning an instance to a variable whose type is one of the instance's generic type; i.e. _supertype_.
+* *Contravariance*: allows assigning an instance to a variable whose type is one of the instance's derived type; i.e. _subtype_.
+
+The same rule applies when passing to a method parameter.
+
+*For the 1^s^^t^ case*, `List[+A]` was used as an example. Replacing the type with a concrete example:
+
+`List[Animal] // So here A = Animal`
+
+The Covariant of `A` must be a subtype of `A` say `B`. `A` is an UpperBound.
+So I understand that the following must hold true:
+
+`List[Animal] :> List[Cat] \\ where A = Animal & B = Cat`
+
+`List[Animal] :> List[Dog] \\ where A = Animal & B = Dog`
+
+So, this brings me to the conclusion that `A` is a supertype of `B`, or in other words `B` is a subtype of `A`. Therefore,
+
+`val animals:List[Animal] = List[Cat]() \\ holds true!`
+
+I get stuck when I read the description:
+
+"making `A` covariant implies that for two types `A` and `B` where `A` is a subtype of `B`..." <=  
+If `A` is a covariance, why would it be assumed as a subtype of `B`? Shouldn't it be the way around? 
+And if the wording of "subtype" is more natural, Would saying `B` is a subtype of `A` make sense?
+
+
+
+'''
+
+
+*For the 2^n^^d^ case*
+
+.Description
+
+A type parameter `A` of a generic class can be made contravariant by using the annotation `-A`.
+This creates a subtyping relationship between the class and its type parameter that is similar,
+but opposite to what we get with covariance.
+That is, for some `class Writer[-A]`,
+making `A` contravariant implies that for two types `A` and `B` where `A` is a subtype of `B`,
+`Writer[B]` is a subtype of `Writer[A]`.
+
+.Argument
+
+I'm not sure if it's the verbiage that's confusing me, but looking at it for a while I see why you insisted my correction was wrong.
+
+I wonder if having a verbiage like the following would make it less confusing:
+
+Let's take `List[-A]` as an example. Replacing the type with a concrete example:
+
+`List[Cat] // So here A = Cat`
+
+The Contravariant of `A` must be a supertype of `A` say `B`. `A` is a LowerBound.
+So I understand that the following must hold true:
+
+`List[Cat] :< List[Animal] \\ where A = Cat & B = Animal`
+
+`List[Dog] :< List[Animal] \\ where A = Dog & B = Animal`
+
+So, this brings me to the conclusion that `A` is a subtype of `B`, or in other words, `B` is a supertype of `A`. Therefore,
+
+`val catPrinter: Printer[Cat] = new Printer[Animal]{...} \\ holds true!`
+
+----
+abstract class Animal {
+  def name: String
+}
+case class Cat(name: String) extends Animal
+case class Dog(name: String) extends Animal
+
+
+object CovarianceTest extends App {
+  def printAnimalNames(animals: List[Animal]): Unit = {
+    animals.foreach { animal =>
+      println(animal.name)
+    }
+  }
+
+  val cats: List[Cat] = List(Cat("Whiskers"), Cat("Tom"))
+  val dogs: List[Dog] = List(Dog("Fido"), Dog("Rex"))
+
+  printAnimalNames(cats)
+  // Whiskers
+  // Tom
+
+  printAnimalNames(dogs)
+  // Fido
+  // Rex
+}
+----
+
+==== Links
+
+* https://en.wikipedia.org/wiki/Covariance_and_contravariance_(computer_science)[Wiki]
+* https://docs.microsoft.com/en-us/dotnet/standard/generics/covariance-and-contravariance[C#]
+* https://docs.oracle.com/javase/tutorial/java/generics/wildcards.html[Java Tutorial]

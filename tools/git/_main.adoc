@@ -4,6 +4,7 @@ Husain AK
 :toclevels: 3
 :sectnums: 3
 :sectnumlevels: 3
+:icons: font
 
 == Configs
 .Creating an Alias
@@ -21,5 +22,29 @@ The above alias can be called just like a regular command:
 == Repositories
 === Local
 === Remote
+
+=== Multiple Remotes
+The goal is to commit the new changes into a new remote repository (_Keybase in my case_) and leave the current (_GitHub in my case_) intact.
+
+NOTE: create the destination repo first
+
+.Remote (Destination)
+ $ git clone keybase://private/username/your-repo ./your-repo
+
+.Remote (Source)
+ $ git checkout -b kb-repo
+ $ git commit -m "your message"
+ $ git remote add kb keybase://private/username/your-repo
+ $ git fetch --all
+ $ git push -u kb master
+ $ git branch --set-upstream-to=kb/master kb-repo
+ $ git pull
+
+You're all set. +
+If you check the remote Keybase repo you will find all your changes were pushed.
+
+
+
+
 
 == Merge Conflict

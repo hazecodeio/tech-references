@@ -23,7 +23,8 @@ The above alias can be called just like a regular command:
 === Local
 === Remote
 
-=== Multiple Remotes
+=== Adding Multiple Remotes
+
 The goal is to commit the new changes into a new remote repository (_Keybase in my case_) and leave the current (_GitHub in my case_) intact.
 
 NOTE: create the destination repo first
@@ -35,16 +36,26 @@ NOTE: create the destination repo first
  $ git checkout -b kb-repo
  $ git commit -m "your message"
  $ git remote add kb keybase://private/username/your-repo
- $ git fetch --all
+ $ git fetch --all -v
  $ git push -u kb master
  $ git branch --set-upstream-to=kb/master kb-repo
- $ git pull
+ $ git pull -v
 
 You're all set. +
 If you check the remote Keybase repo you will find all your changes were pushed.
 
+=== Pull/Push to/from Multiple Remotes
 
+.Fetch from all remotes
+ $ git fetch --all -v
+
+.Pull changes from remote "kb" @branch "master"
+ $ git pull kb master -v
+
+.Pull changes from remote "origin" @branch "master"
+ $ git pull origin master -v
 
 
 
 == Merge Conflict
+

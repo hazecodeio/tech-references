@@ -1,0 +1,82 @@
+== Summary of https://spark.apache.org/docs/latest/quick-start.html[Quick Start]
+:toc:
+:toclevels: 3
+:sectnums: 3
+:sectnumlevels: 3
+:icons: font
+
+
+* Before Spark 2.0, the main programming interface of Spark was the *Resilient Distributed Dataset (RDD)*.
+* After Spark 2.0, *RDDs* are replaced by *Dataset*, which is strongly-typed like an *RDD*, but with _richer optimizations_ under the hood.
+
+NOTE: It's highly recommend you to switch to use Dataset, which has better performance than RDD. +
+See the SQL programming guide to get more information about Dataset.
+
+* Dataset: Spark’s primary abstraction for a distributed collection of items
+** Datasets can be created from
+*** Hadoop InputFormats (such as HDFS files) or
+*** by transforming other Datasets
+
+*Creating Dataset*:
+
+ scala> val textFile = spark.read.textFile("README.md")
+ textFile: org.apache.spark.sql.Dataset[String] = [value: string]
+
+NOTE: Refer to Spark's Scaladoc to get familiar with the operation on Dataset (Actions + Transformations). +
+https://spark.apache.org/docs/latest/api/scala/index.html#org.apache.spark.sql.Dataset[org.apache.spark.sql.Dataset]
+
+NOTE: Actions & transformations are similar to intermediate and terminal operations in Scala/Java.
+
+
+=== Caching
+
+* Spark supports pulling Datasets into a cluster-wide in-memory cache.
+* Useful when data is accessed repeatedly
+* The following marks linesWithSpark Dataset as cached: +
+
+ scala> linesWithSpark.cache()
+ res7: linesWithSpark.type = [value: string]
+
+=== Self-Contained Spark Application
+
+NOTE: Refer to "*_spark-maven-template*" to set up a maven-based SparkApp
+
+[source,scala]
+--
+import org.apache.spark.sql.SparkSession
+
+object SimpleApp {
+  def main(args: Array[String]) {
+
+    val logFile = "$SPARK_HOME/README.md" // Should be some file on your system
+    val spark = SparkSession.builder.appName("Simple Application").getOrCreate()
+
+    import spark.implicits._ // Necessary for some transformation operations
+
+    val logData = spark.read.textFile(logFile).cache()
+
+    val numAs = logData.filter(line => line.contains("a")).count()
+    val numBs = logData.filter(line => line.contains("b")).count()
+
+    println(s"Lines with a: $numAs, Lines with b: $numBs")
+
+    spark.stop()
+  }
+}
+--
+
+* Note that:
+** `SparkSession.builder` is called to construct a *SparkSession*.
+** with the `spark-shell`, it initializes its own *SparkSession*.
+
+Once compiled into its jar file, you can submit it via `spark-submit`:
+
+ # Use spark-submit to run your application
+ $ $SPARK_HOME/bin/spark-submit \
+   --class "SimpleApp" \
+   --master local[4] \
+   $JAR_LOCATION/simple-project_2.11-1.0.jar
+
+
+=== Unit Testing
+Spark is friendly to unit testing with any popular unit test framework. Simply create a SparkContext in your test with the master URL set to local, run your operations, and then call SparkContext.stop() to tear it down. Make sure you stop the context within a finally block or the test framework’s tearDown method, as Spark does not support two contexts running concurrently in the same program.

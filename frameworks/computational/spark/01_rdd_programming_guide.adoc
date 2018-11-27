@@ -1,0 +1,193 @@
+== Summary of https://spark.apache.org/docs/latest/rdd-programming-guide.html[RDD Programming Guide]
+:toc:
+:toclevels: 3
+:sectnums: 3
+:sectnumlevels: 3
+:icons: font
+
+=== Overview
+
+* Spark application consists of
+ . *Driver Program*: runs the user’s main function and executes various parallel operations on a cluster
+ . *Resilient Distributed Dataset (RDD)*: a collection of elements partitioned across the nodes of the cluster that can be operated on in _parallel_ and fault tolerant.
+
+NOTE: The main abstraction Spark provides is a resilient distributed dataset (RDD)
+
+* Shared Variables: are another abstraction that can be used in parallel operations. +
+Spark supports two types of shared variables:
+** *Broadcast Variables*: which can be used to cache a value in memory on all nodes. +
++
+----
+scala> val broadcastVar = sc.broadcast(Array(1, 2, 3))
+broadcastVar: org.apache.spark.broadcast.Broadcast[Array[Int]] = Broadcast(0)
+
+scala> broadcastVar.value
+res0: Array[Int] = Array(1, 2, 3)
+----
+
+
+**  *Accumulators*: which are variables that are only “added” to, such as counters and sums. +
++
+----
+scala> val accum = sc.longAccumulator("My Accumulator")
+accum: org.apache.spark.util.LongAccumulator = LongAccumulator(id: 0, name: Some(My Accumulator), value: 0)
+
+scala> sc.parallelize(Array(1, 2, 3, 4)).foreach(x => accum.add(x))
+...
+10/09/29 18:41:08 INFO SparkContext: Tasks finished in 0.317106 s
+
+scala> accum.value
+res2: Long = 10
+----
+
+=== Linking with Spark
+
+NOTE: Spark 2.4.0 is built and distributed to work with Scala 2.11 by default.
+
+Assuming you have the necessary jars on your classpath, you'll need to import the following packages:
+
+[source.scala]
+--
+import org.apache.spark.SparkContext
+import org.apache.spark.SparkConf
+--
+
+=== Initializing Spark
+
+The first thing a Spark program must do is to create a SparkContext object
+
+NOTE: SparkContext object tells Spark how to access a cluster.
+
+To create a SparkContext you first need to build a SparkConf object.
+
+NOTE: SparkConf object contains information about your application.
+
+IMPORTANT: Only one SparkContext may be active per JVM. +
+You must stop() the active SparkContext before creating a new one.
+
+[source,scala]
+--
+val conf = new SparkConf().setAppName(appName).setMaster(master) // you will not want to hardcode master in the program
+new SparkContext(conf)
+--
+
+=== Resilient Distributed Datasets (RDDs)
+
+* There are two ways to create RDDs:
+ . *Parallelizing Collections* in the driver program: +
+
+ val data = Array(1, 2, 3, 4, 5)
+ val distData = sc.parallelize(data) // calling SparkContext’s parallelize
+
++
++
+NOTE: Spark tries to set the number of partitions automatically based on your cluster. However, you can also set it manually by passing it as a second parameter to parallelize, e.g.: +
+`sc.parallelize(data, 10)`
+
+ . *Referencing External Datasets* in an external storage system, such as a shared filesystem
+ HDFS, HBase, or any data source offering a Hadoop InputFormat, e.g.: +
+
+ scala> val distFile = sc.textFile("data.txt") // takes an optional #partitions
+ distFile: org.apache.spark.rdd.RDD[String] = data.txt MapPartitionsRDD[10] at textFile at <console>:26
+
+
+==== RDD Operations
+
+* RDDs support two types of operations: +
+ . *Transformations*: which create a new dataset from an existing one; similar to Scala's functional operations. +
++
+NOTE:  `map()` is a transformation that passes each dataset element through a function and returns a new RDD representing the results.
+
+
+ . *Actions*: which return a value to the driver program after running a computation on the dataset; similar to Scala's terminal operations. +
++
+NOTE: `reduce()` is an action that aggregates all the elements of the RDD using some function and returns the final result to the driver program (although there is also a parallel reduceByKey that returns a distributed dataset).
+
+IMPORTANT: All transformations in Spark are lazy, in that they do not compute their results right away. Instead, they just remember the transformations applied to some base dataset (e.g. a file). The transformations are only computed when an action requires a result to be returned to the driver program.
+
+===== Understanding Closures and Scope
+
+Consider the naive RDD element sum below:
+[source, scala]
+--
+var counter = 0 // closure
+var rdd = sc.parallelize(data)
+
+// Wrong: Don't do this!!
+rdd.foreach(x => counter += x)
+
+println("Counter value: " + counter)
+--
+.Cluster Mode
+The variables within the closure sent to each executor are independent copies; similar to Java's LocalThread. Each executor will have its own copy, initialized to `counter = 0`, since all operations on counter were referencing the value within the serialized closure.
+
+NOTE: Observe the two stages: *Driver Program* & *Executors*
+
+
+When counter is referenced within the foreach function, it’s no longer the counter on the driver node.
+
+.Local Mode
+In local mode, in some circumstances, the foreach function will actually execute within the same JVM as the driver and will reference the same original counter, and may actually update it.
+
+NOTE: Use an Accumulator instead if some global aggregation is needed. Accumulators in Spark are used specifically to provide a mechanism for safely updating a variable when execution is split up across worker nodes in a cluster.
+
+===== Collect
+
+
+WARNING: Don't attempt to print out the elements of an RDD using: +
+`rdd.foreach(println)` or `rdd.map(println)`
+
+Instead, always use `collect{}`, whose sole purpose is collecting results back to the Driver Program.
+
+On a single machine, this will generate the expected output and print all the RDD’s elements.
+
+
+===== Transformation Operations
+
+Refer to concrete http://homepage.cs.latrobe.edu.au/zhe/ZhenHeSparkRDDAPIExamples.html[Examples]
+
+.Transformation Operations
+====
+map, filter, flatmap, mapPartitionss, union, intersect, groupByKey, reduceBykey, sortByKey, aggregateByKey, etc
+====
+
+===== Action Operations
+
+Refer to concrete http://homepage.cs.latrobe.edu.au/zhe/ZhenHeSparkRDDAPIExamples.html[Examples]
+
+
+.Action Operations
+====
+collect, reduce, count, first, take, saveAsText, etc
+====
+
+===== Shuffle Operations
+
+The shuffle is Spark’s mechanism for re-distributing data so that it’s grouped differently across partitions. This typically involves copying data across executors and machines, making the shuffle a complex and costly operation.
+
+It's Spark's mechanism to read from all partitions to find all the values for all keys.
+
+If one desires predictably ordered data following shuffle then it’s possible to use:
+
+* `mapPartitions` to sort each partition using, for example, .sorted
+* `repartitionAndSortWithinPartitions` to efficiently sort partitions while simultaneously repartitioning
+* `sortBy` to make a globally ordered RDD
+
+.Performance Impact
+WARNING: Shuffle is an expensive operation since it involves disk I/O, data serialization, and network I/O.
+
+NOTE: Internally, results from individual map tasks are kept in memory until they can’t fit. Then, these are sorted based on the target partition and written to a single file. On the reduce side, tasks read the relevant sorted blocks.
+
+Read more at https://spark.apache.org/docs/latest/rdd-programming-guide.html#performance-impact[Performance Impact]
+
+
+==== RDD Persistence
+
+IMPORTANT: Caching is a key tool for iterative algorithms and fast interactive use.
+
+One of the most important capabilities in Spark is persisting (or caching) a dataset in memory across operations. When an RDD is persisted, its partitions the nodes compute will store them in memory and reuse them to perform other operations on the same Dataset (or Datasets derived from it). This allows future actions to be much faster (often by more than 10x).
+
+NOTE: You can mark an RDD to be persisted using the `persist()` or `cache()` methods on it.
+
+Read more about https://spark.apache.org/docs/latest/rdd-programming-guide.html#rdd-persistence[RDD Persistence and Storage Location]
+

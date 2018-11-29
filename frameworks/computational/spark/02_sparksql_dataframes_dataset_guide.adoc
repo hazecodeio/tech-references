@@ -1,0 +1,94 @@
+== Summary of https://spark.apache.org/docs/latest/sql-programming-guide.html[Spark SQL, DataFrames and Datasets Guide]
+:toc:
+:toclevels: 3
+:sectnums: 3
+:sectnumlevels: 3
+:icons: font
+
+
+NOTE: Spark SQL is a Spark module for structured data processing
+
+* provides more information about the structure of the data and the computation being performed. than Spark RDD API
+* uses this extra information to perform extra optimizations
+* Provides ways to interact with Spark SQL including
+ . SQL
+ . Dataset API
+* Provides a unification between the execution engine and API/language being used to express the computation.
+* Program Driver < = > Executors?
+
+.Spark SQL Use
+. Execute SQL queries.
+. Read data from a Hive installation.
+. Interact with the SQL interface using the command-line or over JDBC/ODBC.
+
+NOTE: Running SQL from within _another programming language_ will always return a *Dataset/DataFrame*.
+
+
+=== Datasets and DataFrames
+
+.RDD Vs. DataFrame Vs. Dataset
+****
+https://www.linkedin.com/pulse/apache-spark-rdd-vs-dataframe-dataset-chandan-prakash/[Depicting The Difference between the Three]
+
+IMPORTANT: RDD (Spark1.0) —> DataFrame(Spark1.3) —> Dataset(Spark1.6)
+
+There are 3 types of data abstractions which Spark officially provides now to use:
+
+. RDD: How to compute.
+. DataFrame: What to compute.
+. Dataset: Gives the best of the previous two worlds.
+
+NOTE: Each of the 3 abstraction will compute and give same results to user. But they differ in performance and the ways they compute.
+****
+
+.Dataset
+* provides the benefits of RDDs (strong typing, ability to use powerful lambda functions) with the benefits of Spark SQL’s optimized execution engine
+
+.DataFrame
+* is a Dataset organized into named columns.
+* equivalent to a table in a relational database
+* but with richer optimizations under the hood
+* DataFrames can be constructed from a wide array of sources such as:
+** structured data files,
+** tables in Hive,
+** external databases, or
+** existing RDDs
+
+NOTE: In the Scala API, `DataFrame` is simply a type alias of `Dataset[Row]`
+
+
+=== Spark SQL https://spark.apache.org/docs/latest/sql-getting-started.html[Guide]
+
+.Starting Point: SparkSession
+[source,scala]
+----
+import org.apache.spark.sql.SparkSession
+
+val spark = SparkSession
+  .builder()
+  .appName("Spark SQL basic example")
+  .config("spark.some.config.option", "some-value")
+  .getOrCreate()
+
+// For implicit conversions like converting RDDs to DataFrames
+import spark.implicits._
+----
+
+NOTE: `SparkSession` in Spark 2.0 provides builtin support for Hive features including the ability to write queries using HiveQL, access to Hive UDFs, and the ability to read data from Hive tables. To use these features, you do not need to have an existing Hive setup.
+
+.Creating DataFrames
+----
+val df = spark.read.json("examples/src/main/resources/people.json") // DF from json
+
+// Displays the content of the DataFrame to stdout
+df.show()
+// +----+-------+
+// | age|   name|
+// +----+-------+
+// |null|Michael|
+// |  30|   Andy|
+// |  19| Justin|
+// +----+-------+
+----
+
+NOTE: With a SparkSession, applications can create DataFrames from an existing RDD, from a Hive table, or from Spark data sources.

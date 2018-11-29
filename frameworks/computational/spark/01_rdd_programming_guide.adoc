@@ -73,6 +73,23 @@ new SparkContext(conf)
 
 === Resilient Distributed Datasets (RDDs)
 
+.RDD Vs. DataFrame Vs. Dataset
+****
+https://www.linkedin.com/pulse/apache-spark-rdd-vs-dataframe-dataset-chandan-prakash/[Depicting The Difference between the Three]
+
+IMPORTANT: RDD (Spark1.0) —> DataFrame(Spark1.3) —> Dataset(Spark1.6)
+
+There are 3 types of data abstractions which Spark officially provides now to use:
+
+. RDD: How to compute.
+. DataFrame: What to compute.
+. DataSet What to compute. Gives the best of the previous two worlds
+
+NOTE: Each of the 3 abstraction will compute and give same results to user. But they differ in performance and the ways they compute.
+****
+
+
+
 * There are two ways to create RDDs:
  . *Parallelizing Collections* in the driver program: +
 

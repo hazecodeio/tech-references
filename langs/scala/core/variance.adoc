@@ -1,5 +1,43 @@
 == Variance
+:toc:
+:toclevels: 3
+:sectnums: 3
+:sectnumlevels: 3
 :icons: font
+
+
+
+Hi Siddhartha,
+Thank you for the elaborate reply and sorry for not coming back to you right away.
+
+I had to spend some time trying to wrap my head around it. It appears the source of my confusion was mixing the the inheritance within the types; say Animal and Dog, and the variance over the inheritance; which provides a subtyping relationship between the parameterized types; say List[Animal] and List[Dog].
+
+I lost you at "increasing and decreasing functions (more precisely order preserving and order reversing)". I understood "increasing" as from the top down the hierarchy and "decreasing" as from the bottom up the hierarchy of the types. Correct me if this is not what you were trying to say.
+
+Assuming this hierarchy:
+
+[source,scala]
+--
+class LivingBeing
+class Animal extends LivingBeing
+class Dog extends Animal
+--
+
+The following is what I could collect:
+
+
+[options="header",cols="~,~,~,~"]
+|===
+^|Variance  ^|Notation  ^|Description                           ^| T = Animal
+|Covariance     ^|+T     |"+" is _inclusive_ of the subtypes | List[Dog] is a subtype of List[Animal]
+|Contrvariance  ^|-T     |"-" is _exclusive_ of the subtypes | List[LivingBeing] is a subtype of List[Animal]
+|Invariance     ^|T      |"+" is neither inclusive nor exclusive of the subtypes | List[Animal] is only and only List[Animal]
+|===
+
+
+
+Variance provides a way to constrain parameterized types. It defines a subtyping relationship between parameterized types based on the subtyping relationship of their component types.
+
 
 === Covariance
 === Contravariance

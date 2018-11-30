@@ -9,7 +9,7 @@
 
 * Spark application consists of
  . *Driver Program*: runs the user’s main function and executes various parallel operations on a cluster
- . *Resilient Distributed Dataset (RDD)*: a collection of elements partitioned across the nodes of the cluster that can be operated on in _parallel_ and fault tolerant.
+ . *Resilient Distributed Dataset (RDD)*: a collection of elements partitioned across the nodes of the cluster that can be operated on in _parallel_ and _fault tolerant_.
 
 NOTE: The main abstraction Spark provides is a resilient distributed dataset (RDD)
 
@@ -110,7 +110,7 @@ NOTE: Spark tries to set the number of partitions automatically based on your cl
 
 ==== RDD Operations
 
-* RDDs support two types of operations: +
+.RDDs support two types of operations: +
  . *Transformations*: which create a new dataset from an existing one; similar to Scala's functional operations. +
 +
 NOTE:  `map()` is a transformation that passes each dataset element through a function and returns a new RDD representing the results.

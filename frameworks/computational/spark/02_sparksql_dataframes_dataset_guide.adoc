@@ -92,3 +92,243 @@ df.show()
 ----
 
 NOTE: With a SparkSession, applications can create DataFrames from an existing RDD, from a Hive table, or from Spark data sources.
+
+
+IMPORTANT: DataFrame Operations are Untyped Dataset Operation.
+
+.DataFrame Operations
+----
+// This import is needed to use the $-notation
+import spark.implicits._
+// Print the schema in a tree format
+df.printSchema()
+// root
+// |-- age: long (nullable = true)
+// |-- name: string (nullable = true)
+
+// Select only the "name" column
+df.select("name").show()
+// +-------+
+// |   name|
+// +-------+
+// |Michael|
+// |   Andy|
+// | Justin|
+// +-------+
+
+// Select everybody, but increment the age by 1
+df.select($"name", $"age" + 1).show()
+// +-------+---------+
+// |   name|(age + 1)|
+// +-------+---------+
+// |Michael|     null|
+// |   Andy|       31|
+// | Justin|       20|
+// +-------+---------+
+
+// Select people older than 21
+df.filter($"age" > 21).show()
+// +---+----+
+// |age|name|
+// +---+----+
+// | 30|Andy|
+// +---+----+
+
+// Count people by age
+df.groupBy("age").count().show()
+// +----+-----+
+// | age|count|
+// +----+-----+
+// |  19|    1|
+// |null|    1|
+// |  30|    1|
+// +----+-----+
+----
+
+.Creating Datasets (from Existing Collections)
+----
+case class Person(name: String, age: Long)
+
+// Encoders are created for case classes
+val caseClassDS = Seq(Person("Andy", 32)).toDS()
+caseClassDS.show()
+// +----+---+
+// |name|age|
+// +----+---+
+// |Andy| 32|
+// +----+---+
+----
+
+.Creating Datasets (from Existing Collections)
+----
+// Encoders for most common types are automatically provided by importing spark.implicits._
+val primitiveDS = Seq(1, 2, 3).toDS()
+primitiveDS.map(_ + 1).collect() // Returns: Array(2, 3, 4)
+----
+
+.DataFrames can be converted to a Dataset
+----
+// DataFrames can be converted to a Dataset by providing a class. Mapping will be done by name
+val path = "examples/src/main/resources/people.json"
+val peopleDS = spark.read.json(path).as[Person]
+peopleDS.show()
+// +----+-------+
+// | age|   name|
+// +----+-------+
+// |null|Michael|
+// |  30|   Andy|
+// |  19| Justin|
+// +----+-------+
+----
+
+Datasets are similar to RDDs, however, instead of using Java serialization or Kryo they use a specialized Encoder to serialize the objects for processing or transmitting over the network. While both encoders and standard serialization are responsible for turning an object into bytes, encoders are code generated dynamically and use a format that allows Spark to perform many operations like filtering, sorting and hashing without deserializing the bytes back into an object.
+
+
+
+=== Running SQL Queries Programmatically
+
+The sql function on a SparkSession enables applications to run SQL queries programmatically and returns the result as a DataFrame.
+
+.Register the DataFrame as a SQL temporary view
+ df.createOrReplaceTempView("people")
+
+.Constructing a SQL Query
+----
+val sqlDF = spark.sql("SELECT * FROM people")
+sqlDF.show()
+// +----+-------+
+// | age|   name|
+// +----+-------+
+// |null|Michael|
+// |  30|   Andy|
+// |  19| Justin|
+// +----+-------+
+----
+
+=== Interoperating with RDDs
+
+Spark SQL supports two different methods for converting existing RDDs into Datasets:
+
+
+
+
+.*The First Method (Using Reflection):*
+which infers the schema of an RDD that contains specific types of objects. This reflection-based approach leads to more concise code and works well when you already know the schema while writing your Spark application.
+
+NOTE: The names of the arguments to the case class are read using reflection and become the names of the columns.
+
+.Constructing Dataset via Reflection (simply by calling `toDF`)
+----
+// For implicit conversions from RDDs to DataFrames
+import spark.implicits._
+
+// Create an RDD of Person objects from a text file, convert it to a Dataframe
+val peopleDF = spark.sparkContext
+  .textFile("examples/src/main/resources/people.txt")
+  .map(_.split(","))
+  .map(attributes => Person(attributes(0), attributes(1).trim.toInt))
+  .toDF()
+// Register the DataFrame as a temporary view
+peopleDF.createOrReplaceTempView("people")
+
+// SQL statements can be run by using the sql methods provided by Spark
+val teenagersDF = spark.sql("SELECT name, age FROM people WHERE age BETWEEN 13 AND 19")
+
+// The columns of a row in the result can be accessed by field index
+teenagersDF.map(teenager => "Name: " + teenager(0)).show()
+// +------------+
+// |       value|
+// +------------+
+// |Name: Justin|
+// +------------+
+
+// or by field name
+teenagersDF.map(teenager => "Name: " + teenager.getAs[String]("name")).show()
+// +------------+
+// |       value|
+// +------------+
+// |Name: Justin|
+// +------------+
+
+// No pre-defined encoders for Dataset[Map[K,V]], define explicitly
+implicit val mapEncoder = org.apache.spark.sql.Encoders.kryo[Map[String, Any]]
+// Primitive types and case classes can be also defined as
+// implicit val stringIntMapEncoder: Encoder[Map[String, Any]] = ExpressionEncoder()
+
+// row.getValuesMap[T] retrieves multiple columns at once into a Map[String, T]
+teenagersDF.map(teenager => teenager.getValuesMap[Any](List("name", "age"))).collect()
+// Array(Map("name" -> "Justin", "age" -> 19))
+
+----
+
+
+
+
+.*The Second Method (Using Programmatic Interface):*
+which allows to construct a schema and then apply it to an existing RDD. While this method is more verbose, it allows you to construct Datasets when the columns and their types are not known until runtime.
+
+DataFrame can be created programmatically with three steps.
+
+. Create an RDD of Rows from the original RDD;
+. Create the schema represented by a StructType matching the structure of Rows in the RDD created in Step 1.
+. Apply the schema to the RDD of Rows via createDataFrame method provided by SparkSession.
+
+NOTE: Remember the `StructType`, `StructField`, `StructString`, etc from: +
+`org.apache.spark.sql.types._`
+
+.Constructing Dataset Programmatically
+----
+import org.apache.spark.sql.types._
+
+// Create an RDD
+val peopleRDD = spark.sparkContext.textFile("examples/src/main/resources/people.txt")
+
+// The schema is encoded in a string
+val schemaString = "name age"
+
+// Generate the schema based on the string of schema
+val fields = schemaString.split(" ")
+  .map(fieldName => StructField(fieldName, StringType, nullable = true))
+val schema = StructType(fields)
+
+// Convert records of the RDD (people) to Rows
+val rowRDD = peopleRDD
+  .map(_.split(","))
+  .map(attributes => Row(attributes(0), attributes(1).trim))
+
+// Apply the schema to the RDD
+val peopleDF = spark.createDataFrame(rowRDD, schema)
+
+// Creates a temporary view using the DataFrame
+peopleDF.createOrReplaceTempView("people")
+
+// SQL can be run over a temporary view created using DataFrames
+val results = spark.sql("SELECT name FROM people")
+
+// The results of SQL queries are DataFrames and support all the normal RDD operations
+// The columns of a row in the result can be accessed by field index or by field name
+results.map(attributes => "Name: " + attributes(0)).show()
+// +-------------+
+// |        value|
+// +-------------+
+// |Name: Michael|
+// |   Name: Andy|
+// | Name: Justin|
+// +-------------+
+----
+
+IMPORTANT: Likewise you can extract columns/fields as follows:
+
+.Extracting Columns/Fields
+----
+val fields: Seq[String] = df.schema.fields.collect{
+    case StructField(fieldName, IntegerType, _, _) => fieldName //extract the Column name if it's an integer type
+}
+----
+
+
+=== Aggregations: User-Defined Aggregate Functions
+
+==== Untyped
+
+==== Type-Safe

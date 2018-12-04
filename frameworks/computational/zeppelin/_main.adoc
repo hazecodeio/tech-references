@@ -1,0 +1,14 @@
+= Fast Data Stack - Quick Installation Guide
+Husain AK
+:toc:
+:toclevels: 3
+:sectnums: 3
+:sectnumlevels: 3
+:icons: font
+
+== Introduction
+* Fast Data? Main objectives?
+* Fast Data vs Big Data?
+* Use Cases? Business model?
+* Streaming, real-time analytics, machine learning, sharing & collaboration (notebooks)
+* Usefulness in Science?

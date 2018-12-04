@@ -1,0 +1,88 @@
+== Zeppelin - Quick Installation Guide [yellow]#(Incomplete)#
+:toc:
+:toclevels: 3
+:sectnums: 3
+:sectnumlevels: 3
+:icons: font
+
+=== Installation
+
+====
+WARNING: For a successful installtion of *Zeppelin-0.8.0*, [red]#DO NOT# yet install/run with:
+
+* Java-11
+* Scala-2.12
+====
+
+==== Binary Package
+
+. Download http://www.apache.org/dyn/closer.cgi/zeppelin/zeppelin-0.8.0/zeppelin-0.8.0-bin-all.tgz[zeppelin-0.8.0-bin-all.tgz]
++
+NOTE: This binary package was built with Scala-2.11 and Spark-2.2??
+
+. https://zeppelin.apache.org/docs/0.8.0/quickstart/install.html[Installation Guide]
+
+. Extract
+
+ $ mkdir -p /opt/tools/zeppelin/
+ $ tar -xvif zeppelin-0.8.0-bin-all.tgz
++
+
+NOTE: Zeppelin runs on port 8080. If you wish to change it to e.g. 9090, proceed with modifying the following file:
+
+ $ cd ./conf
+ $ cp zeppelin-site.xml.template zeppelin-site.xml
+
++
+[source,xml]
+----
+include::etc/zeppelin-site.xml[]
+----
+
+==== Custom Build (SNAPSHOT)
+The goal is to build Zeppelin with *Spark-2.4*
+
+NOTE: For this custome build *zeppelin-0.8.1-SNAPSHOT* was packaged.
+
+Refer to https://zeppelin.apache.org/docs/latest/setup/basics/how_to_build.html[Build Zeppelin from Source]
+
+======
+WARNING: Zeppelin still doesn't support scala 2.12 and profile hadoop-3.1 doesn't exist! +
+So this might work in the future one Zeppelin and Spark officialy support Scala-2.12
+
+ $ mvn clean package -DskipTests -Pbuild-distr -Pspark-2.4 -Phadoop-3.1 -Pr -Pscala-2.12
+
+
+======
+
+. Clone the git repo:
+
+ $ git clone https://github.com/apache/zeppelin.git
+
+. Switch to the branch *branch-0.8*
+. Run maven build with the following switches:
+
+ $ mvn clean package -DskipTests -Pbuild-distr -Pspark-2.4 -Pscala-2.11
+
+. This will build Zeppelin with Spark-2.4
+
+=== Spark Configuration
+
+==== Spark Support
+
+
+NOTE: Refer to https://zeppelin.apache.org/docs/latest/quickstart/spark_with_zeppelin.html[Spark support in Zeppelin
+]
+
+==== Spark Cluster Mode
+
+NOTE: Refer to https://zeppelin.apache.org/docs/latest/setup/deployment/spark_cluster_mode.html[Spark Cluster Mode]
+
+==== Spark Interpreter
+
+NOTE: Refer to https://zeppelin.apache.org/docs/latest/interpreter/spark.html[Spark Interpret]
+
+
+== Playground
+
+https://zeppelin.apache.org/docs/0.8.0/usage/other_features/zeppelin_context.html[Zeppelin Context]

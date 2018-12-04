@@ -1,0 +1,45 @@
+== Spark - Quick Installation Guide
+:toc:
+:toclevels: 3
+:sectnums: 3
+:sectnumlevels: 3
+:icons: font
+
+=== Installation & Configuration
+
+. Download https://archive.apache.org/dist/spark/spark-2.4.0/spark-2.4.0-bin-without-hadoop-scala-2.12.tgz[spark-2.4.0-bin-without-hadoop-scala-2.12.tgz]
++
+
+WARNING: The version didn't work with *Zeppelin-0.8* for it's scala-2.12 build.
++
+NOTE: Try the Scala-2.11 build https://archive.apache.org/dist/spark/spark-2.4.0/spark-2.4.0-bin-without-hadoop.tgz[spark-2.4.0-bin-without-hadoop.tgz]
+
+. Set environment variables
++
+https://spark.apache.org/docs/latest/hadoop-provided.html[Using Spark's "Hadoop Free" Build]
+
+ $ export SPARK_DIST_CLASSPATH=$(hadoop classpath)
+
++
+NOTE: Spark seems to expect hadoop installation on path.
+
+
+=== Running Spark Application
+
+. Run the first example to verify Spark installation
+
+ $ ./bin/run-example SparkPi 10
+
+. Next run the Scala-native spark shell
+
+ $ ./bin/spark-shell
+
+** We can specify the number of jobs to run:
+
+ $ ./bin/spark-shell --master local[2]
+
+** Python-based Spark shell:
+
+ $ ./bin/pyspark --master local[2]
+
+

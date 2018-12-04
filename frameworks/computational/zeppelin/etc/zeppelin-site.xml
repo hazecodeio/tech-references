@@ -1,0 +1,6 @@
+<property>
+    <name>zeppelin.server.port</name>
+    <value>9090</value>
+    <description>Server port.</description>
+</property>
+

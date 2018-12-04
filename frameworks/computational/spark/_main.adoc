@@ -6,11 +6,10 @@ Husain AK
 :sectnumlevels: 3
 :icons: font
 
+include::00_installation.adoc[]
 
-include::00_quick_start.adoc[]
+include::01_quick_start.adoc[]
 
-include::01_rdd_programming_guide.adoc[]
+include::02_rdd_programming_guide.adoc[]
 
-include::02_sparksql_dataframes_dataset_guide.adoc[]
-
-include::_outline.adoc[]
+include::03_sparksql_dataframes_dataset_guide.adoc[]

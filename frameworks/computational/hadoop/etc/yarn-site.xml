@@ -1,0 +1,33 @@
+<configuration>
+
+    <!-- Site specific YARN configuration properties -->
+
+    <property>
+        <name>yarn.nodemanager.aux-services</name>
+        <value>mapreduce_shuffle</value>
+    </property>
+    <property>
+        <name>yarn.nodemanager.aux-services.mapreduce.shuffle.class</name>
+        <value>org.apache.hadoop.mapred.ShuffleHandler</value>
+    </property>
+
+
+    <!--
+        - Hadoop 3.x seems to require the below properties
+        - Make sure $HADOOP_HOME points to Hadoop home directory
+    -->
+
+    <property>
+        <name>yarn.app.mapreduce.am.env</name>
+        <value>HADOOP_MAPRED_HOME=${HADOOP_HOME}</value>
+    </property>
+    <property>
+        <name>mapreduce.map.env</name>
+        <value>HADOOP_MAPRED_HOME=${HADOOP_HOME}</value>
+    </property>
+    <property>
+        <name>mapreduce.reduce.env</name>
+        <value>HADOOP_MAPRED_HOME=${HADOOP_HOME}</value>
+    </property>
+
+</configuration>

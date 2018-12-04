@@ -1,0 +1,159 @@
+== Hadoop - Quick Installation Guide (3.1.1)
+:toc:
+:toclevels: 3
+:sectnums: 3
+:sectnumlevels: 3
+:icons: font
+
+
+====
+WARNING: For a successful installtion of all the major components in this guide, [red]#DO NOT# yet install/run with:
+
+* Java-11
+* Scala-2.12
+====
+
+=== Installation
+
+. Download the archive https://www.apache.org/dyn/closer.cgi/hadoop/common/hadoop-3.1.1/hadoop-3.1.1.tar.gz[hadoop-3.1.1.tar.gz]
+. Extract the archive:
+
+ $ mkdir -p /opt/tools/hadoop
+ $ cd /opt/tools/hadoop
+ $ tar -xvif hadoop-3.1.1/hadoop-3.1.1.tar.gz
+ $ ln -s hadoop-3.1.1 hadoop-current
+
+. Export the following environment variables:
+
+ $ export HADOOP_HOME=/opt/tools/hadoop/hadoop-current
+ $ export PATH=$PATH:$HADOOP_HOME/bin
+
++
+Set the variables either as:
+
+** Session-Wide
+
+ $ vim ~/.profile
+ $ source ~/.profile
+
+** System-Wide
+
+ $ vim /etc/profile.d/hadoop.sh
+ $ source /etc/profile.d/hadoop.sh
+
+
+=== Configurations
+
+NOTE: Configurations in the following steps are according to http://hadoop.apache.org/docs/stable/hadoop-project-dist/hadoop-common/SingleCluster.html#Pseudo-Distributed_Operation[Pseudo-Distributed Operation],
+but also somehow can be seen as a minimized http://hadoop.apache.org/docs/stable/hadoop-project-dist/hadoop-common/ClusterSetup.html[Cluster Setup]
+
+
+. Modify the following files
+
+ $ vim ./etc/hadoop/core-site.xml
++
+So, it contains the following properties:
++
+[source,xml]
+----
+include::etc/core-site.xml[]
+----
+
+
+
++
+ $ vim ./etc/hadoop/hdfs-site.xml
++
+So, it contains the following properties:
++
+[source,xml]
+----
+include::etc/hdfs-site.xml[]
+----
+
+
+
++
+ $ vim ./etc/hadoop/yarn-site.xml
++
+So, it contains the following properties:
++
+[source,xml]
+----
+include::etc/yarn-site.xml[]
+----
+
+
+
++
+ $ vim ./etc/hadoop/mapred-site.xml
++
+So, it contains the following properties:
++
+[source,xml]
+----
+include::etc/mapred-site.xml[]
+----
+
+
+
+. Create the following HDFS directories
++
+ $ mkdir -p /var/data/hadoop/hdfs/nn
++
+ $ mkdir -p /var/data/hadoop/hdfs/snn
++
+ $ mkdir -p /var/data/hadoop/hdfs/dn
+
+. Format the namenode
++
+ $ hdfs namenode -format
++
+
+. Start the HDFS Services:
+
+ $ hdfs --daemon start namenode
+ $ hdfs --daemon start secondarynamenode
+ $ hdfs --daemon start datanode
++
+You can check if all jobs are running in the background via:
++
+ $ jps
++
+TIP: Replace 'start' with 'stop' in order to stop the same jobs.
+
+. use 'hdfs' to create job history server directories:
+
+ $ hdfs dfs -mkdir -p /mr-history/tmp
+ $ hdfs dfs -mkdir -p /mr-history/done
+
+NOTE: Note that the directory is created on hadoop's '*dfs*' filesystem.
+So, a successful execution of this step is an indicator that *HDFS services* are working.
+
+.Verify HDFS:
+HDFS front page: http://localhost:9870/
+
+=== Running Hadoop Application
+
+. Start YARN job:
+
+ $ yarn --daemon start resourcemanager
+ $ yarn --daemon start nodemanager
+
+.Verify YARN:
+Yarn front page: http://localhost:8088/
+
+[start=2]
+. Start MapReduce job:
+
+ $ mapred --daemon start historyserver
+
+. Run a Hadoop application
+
+ $ yarn jar ./share/hadoop/mapreduce/hadoop-mapreduce-examples-3.1.1.jar pi 8 100000
++
+NOTE: A successful run is an indicator that Hadoop is working correctly.
++
+TIP: The same example can be run via "hadoop" command with the same arguments:
+
+ $ hadoop jar ./share/hadoop/mapreduce/hadoop-mapreduce-examples-3.1.1.jar pi 8 100000

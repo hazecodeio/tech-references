@@ -1,0 +1,17 @@
+= Pandoc Reference
+Husain AK
+:toc:
+:toclevels: 3
+:sectnums: 3
+:sectnumlevels: 3
+:icons: font
+
+
+
+.Convert AsciiDoctor to Markdown via shell script "convert_to_md.sh":
+----
+#!/usr/bin/env bash
+
+asciidoctor -b docbook reply.adoc
+pandoc -f docbook -t markdown_strict reply.xml -o reply.md
+----

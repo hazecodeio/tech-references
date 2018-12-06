@@ -1,8 +1,9 @@
-= Template
+= VirtualBox - Reference
 Husain AK
 :toc:
 :toclevels: 3
 :sectnums: 3
 :sectnumlevels: 3
+:icons: font
 
 include::_section.adoc[]

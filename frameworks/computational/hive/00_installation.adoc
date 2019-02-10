@@ -81,17 +81,27 @@ include::etc/hdfs-site.xml[]
  $ hdfs --daemon start namenode
  $ hdfs --daemon start secondarynamenode
  $ hdfs --daemon start datanode
-+
-You can check if all jobs are running in the background via:
-+
- $ jps
 
 
 . Using HDFS create the following directories for Hive:
+
  $ hdfs dfs -mkdir -p /tmp
  $ hdfs dfs -mkdir -p /user/hive/warehouse
  $ hdfs dfs -chmod g+w /tmp
  $ hdfs dfs -chmod g+w /user/hive/warehouse
+
+. Start YARN job:
+
+ $ yarn --daemon start resourcemanager
+ $ yarn --daemon start nodemanager
+
+. Start MapReduce job:
+
+ $ mapred --daemon start historyserver
++
+You can check if all jobs are running in the background via:
++
+ $ jps
 
 
 === Running Hive

@@ -1,0 +1,109 @@
+== Hive - Quick Installation Guide (3.1.1)
+:toc:
+:toclevels: 3
+:sectnums: 3
+:sectnumlevels: 3
+:icons: font
+
+
+====
+WARNING: For a successful installtion of all the major components in this guide, [red]#DO NOT# yet install/run with:
+
+* Java-11
+* Scala-2.12
+====
+
+=== Installation
+
+. Download the archive https://www-eu.apache.org/dist/hive/hive-3.1.1/apache-hive-3.1.1-bin.tar.gz[apache-hive-3.1.1-bin.tar.gz]
+. Extract the archive:
+
+ $ mkdir -p /opt/tools/hive
+ $ cd /opt/tools/hive
+ $ tar -xvif apache-hive-3.1.1-bin.tar.gz
+ $ ln -s apache-hive-3.1.1-bin hive-current
+
+. Export the following environment variables:
+
+ $ export HIVE_HOME=/opt/tools/hive/hive-current
+ $ export PATH=$PATH:$HIVE_HOME/bin
+
++
+Set the variables either as:
+
+** Session-Wide
+
+ $ vim ~/.profile
+ $ source ~/.profile
+
+** System-Wide
+
+ $ vim /etc/profile.d/hive.sh
+ $ source /etc/profile.d/hive.sh
+
+
+=== Configurations
+
+NOTE: https://cwiki.apache.org/confluence/display/Hive/GettingStarted#GettingStarted-InstallationandConfiguration[Official Guide]
+
+
+. Prepare hive-core.xml:
+
+ $ cd $HIVE_HOME/conf
+ $ cp hive-default.xml.template hive-site.xml
+
+. Modify the following files:
+
+ $ vim ./etc/hive/hive-site.xml
++
+So, it contains the following properties:
++
+[source,xml]
+----
+include::etc/hive-site.xml[]
+----
+
+
+
++
+ $ vim ./etc/hadoop/hdfs-site.xml
++
+So, it contains the following properties:
++
+[source,xml]
+----
+include::etc/hdfs-site.xml[]
+----
+
+
+. Start the HDFS Services:
+
+ $ hdfs --daemon start namenode
+ $ hdfs --daemon start secondarynamenode
+ $ hdfs --daemon start datanode
++
+You can check if all jobs are running in the background via:
++
+ $ jps
+
+
+. Using HDFS create the following directories for Hive:
+ $ hdfs dfs -mkdir -p /tmp
+ $ hdfs dfs -mkdir -p /user/hive/warehouse
+ $ hdfs dfs -chmod g+w /tmp
+ $ hdfs dfs -chmod g+w /user/hive/warehouse
+
+
+=== Running Hive
+
+. `cd` to a local dir of your choice where Hive metastore will be ceated.
+
+. Initiate Hive metastore using `schematool`:
+
+ $ schematool -dbType derby -initSchema \\ In Prod this might be MySQL
+
+. Run Hive:
+
+ $ hive
+
+=== Using Hive (HQL)

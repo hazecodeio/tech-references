@@ -3,4 +3,23 @@
         <name>fs.defaultFS</name>
         <value>hdfs://localhost:9000</value>
     </property>
+
+    <!--Needed for HiveServer2 to work with username-->
+    <property>
+        <name>hadoop.proxyuser.hsmak.groups</name>
+        <value>*</value>
+    </property>
+    <property>
+        <name>hadoop.proxyuser.hsmak.hosts</name>
+        <value>*</value>
+    </property>
+
+    <property>
+        <name>hadoop.proxyuser.server.hosts</name>
+        <value>*</value>
+    </property>
+    <property>
+        <name>hadoop.proxyuser.server.groups</name>
+        <value>*</value>
+    </property>
 </configuration>

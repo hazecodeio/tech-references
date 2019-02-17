@@ -64,18 +64,6 @@ include::etc/hive-site.xml[]
 ----
 
 
-
-+
- $ vim ./etc/hadoop/hdfs-site.xml
-+
-So, it contains the following properties:
-+
-[source,xml]
-----
-include::etc/hdfs-site.xml[]
-----
-
-
 . Start the HDFS Services:
 
  $ hdfs --daemon start namenode
@@ -116,4 +104,20 @@ You can check if all jobs are running in the background via:
 
  $ hive
 
-=== Using Hive (HQL)
+=== Using Hiveserver2
+
+NOTE: The personal goal is to communicate through *Hive JDBC URL Connection* with the local Derby database that was initiated using `schematool`!
+
+. Run the server
+
+ $ hiveserver2
+
+. Verify Hiveserver2 is up:
+
+ http://localhost:10002/
+
+. Connect via `beeline`:
+
+ $ $HIVE_HOME/bin/beeline -u "jdbc:hive2://localhost:10000/default" -n hsmak
+
+. Configure your *IntelliJ DataGrip* for Hive using *Hive2 JDBC drive*.

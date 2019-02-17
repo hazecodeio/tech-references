@@ -7,12 +7,46 @@
 
     <property>
         <name>javax.jdo.option.ConnectionURL</name>
-        <value>jdbc:derby:;databaseName=metastore_db;create=true</value>
+        <!--<value>jdbc:derby:;databaseName=metastore_db;create=true</value>-->
+
+        <!--supply the full path instead-->
+        <value>jdbc:derby:;databaseName=/home/hsmak/hive/metastore_db;create=true</value>
+
         <description>
             JDBC connect string for a JDBC metastore.
             To use SSL to encrypt/authenticate the connection, provide database-specific SSL flag in the connection URL.
             For example, jdbc:postgresql://myhost/db?ssl=true for postgres database.
         </description>
+    </property>
+
+
+    <!-- default warehouse dir on hdfs-->
+    <property>
+        <name>hive.metastore.warehouse.dir</name>
+        <value>/user/hive/warehouse</value>
+        <description>location of default database for the warehouse</description>
+    </property>
+
+
+    <!--logging dirs-->
+
+    <property>
+        <name>hive.querylog.location</name>
+        <value>/tmp/hive/hsmak</value>
+        <description>Location of Hive run time structured log file</description>
+    </property>
+
+    <property>
+        <name>hive.server2.logging.operation.log.location</name>
+        <value>/tmp/hive/hsmak/operation_logs</value>
+        <description>Top level directory where operation logs are stored if logging functionality is enabled
+        </description>
+    </property>
+
+    <property>
+        <name>hive.exec.local.scratchdir</name>
+        <value>/tmp/hive/hsmak</value>
+        <description>Local scratch space for Hive jobs</description>
     </property>
 
 </configuration>

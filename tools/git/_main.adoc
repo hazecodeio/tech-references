@@ -69,6 +69,7 @@ If you check the remote Keybase repo you will find all your changes were pushed.
 .Adding local branch after it was added to remote
  $ git ???
 
+.https://www.freecodecamp.org/news/how-to-delete-a-git-branch-both-locally-and-remotely/[Link]
 TIP:    Try to synchronize your branch list using: +
         `git fetch -p` +
         The -p flag means "prune". +

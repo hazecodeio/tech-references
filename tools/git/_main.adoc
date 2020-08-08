@@ -64,11 +64,16 @@ If you check the remote Keybase repo you will find all your changes were pushed.
 === Syncing Local with Remote
 
 .Removing local branch after it was removed from remote
- $git ???
+ $ git ???
 
 .Adding local branch after it was added to remote
- $git ???
+ $ git ???
 
+TIP:    Try to synchronize your branch list using: +
+        `git fetch -p` +
+        The -p flag means "prune". +
+        After fetching, branches which no longer exists on the remote
+        will be deleted.
 
 == Merge Conflict
 === Resolution

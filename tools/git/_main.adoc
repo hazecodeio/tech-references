@@ -18,11 +18,7 @@ The above alias can be called just like a regular command:
 .Removing/Unsetting an Entry
  $ git config --global --unset alias.hist
 
-
-== Repositories
-=== Local
-=== Remote
-
+== Remotes
 === Adding Multiple Remotes
 
 The goal is to commit the new changes into a new remote repository (_Keybase in my case_) and leave the current (_GitHub in my case_) intact.
@@ -55,7 +51,29 @@ If you check the remote Keybase repo you will find all your changes were pushed.
 .Pull changes from remote "origin" @branch "master"
  $ git pull origin master -v
 
+== Syncing (Remote <- -> Local)
+=== Syncing Remote with Local
+
+.Removing remote branch after it was removed from local
+ $git ???
+
+.Adding remote branch after it was added to local
+ $git ???
+
+
+=== Syncing Local with Remote
+
+.Removing local branch after it was removed from remote
+ $git ???
+
+.Adding local branch after it was added to remote
+ $git ???
 
 
 == Merge Conflict
+=== Resolution
+=== Avoidance Strategy
 
+
+== Strategies and Gameplans
+=== Syncing Other's with Forked

@@ -1,0 +1,7 @@
+== Outline: Scala
+
+
+* [ ]  Collection
+** [ ] Immutable
+** [ ] Mutable
+** [x] Etc

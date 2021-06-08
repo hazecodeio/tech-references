@@ -1,6 +1,0 @@
-== Outline: Julia
-
-
-* [ ]  Plotting and Data Visualization
-** [ ] Gadfly.jl
-** [ ] Others such as: PyPlot, etc

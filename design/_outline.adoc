@@ -1,9 +1,0 @@
-= Design: Outline
-Husain AK
-
-= Abstraction
-== Data Abstraction
-== Control Abstraction
-
-= Design Patterns
-= S.O.L.I.D. Design Principles

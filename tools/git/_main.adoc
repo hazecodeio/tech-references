@@ -81,5 +81,5 @@ TIP:    Try to synchronize your branch list using: +
 === Avoidance Strategy
 
 
-== Strategies and Gameplans
+== Strategies and Best Practices
 === Syncing Other's with Forked

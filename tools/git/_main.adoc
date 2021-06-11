@@ -18,6 +18,10 @@ The above alias can be called just like a regular command:
 .Removing/Unsetting an Entry
  $ git config --global --unset alias.hist
 
+.Setting editor 'vim'
+ $ git config --global core.editor "vim"
+
+
 == Remotes
 === Adding Multiple Remotes
 
@@ -76,7 +80,21 @@ TIP:    Try to synchronize your branch list using: +
         After fetching, branches which no longer exists on the remote
         will be deleted.
 
+== Squashing Commits
+
+.Using `rebase`
+----
+git rebase -i HEAD~3
+git push origin master --force
+----
+
+.When merging
+----
+git merge some_branch --squash
+----
+
 == Merge Conflict
+
 === Resolution
 === Avoidance Strategy
 

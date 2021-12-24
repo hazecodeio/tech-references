@@ -1,4 +1,4 @@
-= Git - Quick Guide (_Incomplete_)
+= SSl Certs - Quick Guide
 Husain AK
 :toc:
 :toclevels: 3

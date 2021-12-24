@@ -32,7 +32,7 @@ NOTE: `AES128`
  gpg --full-generate-keys
 
 .Encrypt
- gpg -e --recipient email_id
+ gpg -e --recipient email_id file
 
 .Decrypt and output to STDOUT:
  gpg -d file.gpg
@@ -42,3 +42,14 @@ NOTE: `AES128`
 
 === Export/Import Keys
 
+.Export private key
+ gpg --export-secret-key --armor --output husain-private.key --recipient email_id
+
+.Export public key
+ gpg --export-key --armor --output husain-pub.key --recipient husain.alkhamis@gmail.com
+
+.Import Keys
+ gpg --import secret_key
+
+.ToDo - Confirm this:
+NOTE: Importing secret keys will import the public key as well!

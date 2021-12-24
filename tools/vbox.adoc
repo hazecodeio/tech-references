@@ -5,3 +5,21 @@ Husain AK
 :sectnums: 3
 :sectnumlevels: 3
 :icons: font
+
+
+
+== Expanding/Resizing Hard Disk Size in VirtualBox
+Create a new hdd, then:
+http://forums.virtualbox.org/viewtopic.php?f=1&t=364&start=75
+VBoxManage clonehd old.vdi new.vdi –existing
+
+== convert vdi to a raw format/physical hard drive
+http://askubuntu.com/questions/32499/migrate-from-a-virtual-machine-vm-to-a-physical-system
+
+== VBoxManage extpack
+http://www.virtualbox.org/manual/ch08.html#vboxmanage-extpack
+VBoxManage extpack install --replace <tarball>
+
+== WiFi as an Access Point
+make you WiFi as an access point for other machines:
+http://www.webupd8.org/2013/06/how-to-set-up-wireless-hotspot-access.html

@@ -1,0 +1,44 @@
+= GPG - Quick Guide
+Husain AK
+:toc:
+:toclevels: 3
+:sectnums: 3
+:sectnumlevels: 3
+:icons: font
+
+== Symmetric Encryption/Decryption
+
+.Encrypt via default cipher:
+ gpg -c file
+
+.Decrypt and output to STDOUT:
+ gpg -d file.gpg
+
+.Decrypt and output to FILE:
+ gpg -d -o outfile file.gpg
+
+.You can choose the symmetric cipher:
+TIP: `gpg -c --cipher-algo AES256`
+
+.Default cipher is:
+NOTE: `AES128`
+
+== Asymmetric Encryption/Decryption
+
+.List Keys
+ gpg --list-keys
+
+.Generate Keys
+ gpg --full-generate-keys
+
+.Encrypt
+ gpg -e --recipient email_id
+
+.Decrypt and output to STDOUT:
+ gpg -d file.gpg
+
+.Decrypt and output to FILE:
+ gpg -d -o outfile file.gpg
+
+=== Export/Import Keys
+

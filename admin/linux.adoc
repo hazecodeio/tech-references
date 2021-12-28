@@ -232,3 +232,11 @@ reboot the machine
 
 .Merge splits into one archive
  cat sda1.backup.tar.gz.* | tar xzvf -
+
+== Syncing Dirs - `rsync`
+
+.Syncing dirs
+ rsync -avzhr --delete src_dir dst_dir
+
+.Dry Run
+TIP: add `-n` for dry run.

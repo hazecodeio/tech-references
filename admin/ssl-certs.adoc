@@ -6,98 +6,26 @@ Husain AK
 :sectnumlevels: 3
 :icons: font
 
-== Configs
-.Creating an Alias
- $ git config --global alias.hist "log --pretty=format:'%h %ad |%s%d [%an]' --date=short"
 
-The above alias can be called just like a regular command:
+.Create Private/Public Key Pair
+ keytool -genkey -alias client-key -keyalg RSA -validity 365 -keystore keystore.jks -storetype JKS
 
- $ git hist
+.Extract PublicKey/Cert from Keystore
+ keytool -export -alias client-key -keystore keystore.jks -rfc -file publickey.pem
 
+.PEM or DER Formats
+TIP: Use `-rfc` to generate the PEM format.
 
-.Removing/Unsetting an Entry
- $ git config --global --unset alias.hist
+.Add PublicKey/Cert to Truststore
+ keytool -import -alias client-key -file publickey.pem -keystore truststore.jks -storetype JKS
 
-.Setting editor 'vim'
- $ git config --global core.editor "vim"
+== Converting JKS to PEM
 
+.JKS to PKCS#12
+ keytool -importkeystore -srckeystore keystore.jks -destkeystore keystore.p12 -srcstoretype jks -deststoretype pkcs12
 
-== Remotes
-=== Adding Multiple Remotes
+.PKCS#12 to PEM
+ openssl pkcs12 -in keystore.p12 -out keystore.pem
 
-The goal is to commit the new changes into a new remote repository (_Keybase in my case_) and leave the current (_GitHub in my case_) intact.
-
-NOTE: create the destination repo first
-
-.Remote (Destination)
- $ git clone keybase://private/username/your-repo ./your-repo
-
-.Remote (Source)
- $ git checkout -b kb-branch
- $ git commit -m "your message"
- $ git remote add kb keybase://private/username/your-repo
- $ git fetch --all -v
- $ git push -u kb master
- $ git branch --set-upstream-to=kb/master kb-branch
- $ git pull -v
-
-You're all set. +
-If you check the remote Keybase repo you will find all your changes were pushed.
-
-=== Pull/Push to/from Multiple Remotes
-
-.Fetch from all remotes
- $ git fetch --all -v
-
-.Pull changes from remote "kb" @branch "master"
- $ git pull kb master -v
-
-.Pull changes from remote "origin" @branch "master"
- $ git pull origin master -v
-
-== Syncing (Remote <- -> Local)
-=== Syncing Remote with Local
-
-.Removing remote branch after it was removed from local
- $ git ???
-
-.Adding remote branch after it was added to local
- $ git ???
-
-
-=== Syncing Local with Remote
-
-.Removing local branch after it was removed from remote
- $ git ???
-
-.Adding local branch after it was added to remote
- $ git ???
-
-.https://www.freecodecamp.org/news/how-to-delete-a-git-branch-both-locally-and-remotely/[Link]
-TIP:    Try to synchronize your branch list using: +
-        `git fetch -p` +
-        The -p flag means "prune". +
-        After fetching, branches which no longer exists on the remote
-        will be deleted.
-
-== Squashing Commits
-
-.Using `rebase`
-----
-git rebase -i HEAD~3
-git push origin master --force
-----
-
-.When merging
-----
-git merge some_branch --squash
-----
-
-== Merge Conflict
-
-=== Resolution
-=== Avoidance Strategy
-
-
-== Strategies and Best Practices
-=== Syncing Other's with Forked
+.Argument `-nodes`
+TIP: If we don't want to encrypt the resulting private key, add arg `-node`

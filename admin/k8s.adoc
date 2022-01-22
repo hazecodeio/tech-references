@@ -1,0 +1,74 @@
+= Kubernetes - Quick Quide
+Husain AK
+:toc:
+:toclevels: 3
+:sectnums: 3
+:sectnumlevels: 3
+:icons: font
+
+https://kubernetes.io/docs/tasks/tools/
+
+== K8s Setup - minikube | kubectl
+
+.read
+- https://kubernetes.io/docs/tasks/tools/
+
+.watch
+- https://www.youtube.com/watch?v=X48VuDVv0do&t=2087s
+
+=== minkube
+
+.install
+https://minikube.sigs.k8s.io/docs/start/
+
+
+- minikube is 1 Node k8s cluster
+- runs in a VirtualBox <- maybe other containers too?
+
+=== kubectl
+
+- to control k8s cluster
+- to create pods
+- to create other components on the node
+
+.install
+https://kubernetes.io/docs/tasks/tools/install-kubectl-linux/
+
+
+.install minikube
+----
+smak@HsmakTPX1:~$ sudo dpkg -i ~/Downloads/minikube_latest_amd64.deb
+[sudo] password for hsmak:
+Selecting previously unselected package minikube.
+(Reading database ... 216988 files and directories currently installed.)
+Preparing to unpack .../minikube_latest_amd64.deb ...
+Unpacking minikube (1.25.1-0) ...
+Setting up minikube (1.25.1-0) ...
+----
+
+.start minikube
+----
+hsmak@HsmakTPX1:~$ minikube start
+😄  minikube v1.25.1 on Ubuntu 20.04
+✨  Automatically selected the docker driver. Other choices: none, ssh
+👍  Starting control plane node minikube in cluster minikube
+🚜  Pulling base image ...
+💾  Downloading Kubernetes v1.23.1 preload ...
+    > gcr.io/k8s-minikube/kicbase: 378.97 MiB / 378.98 MiB  100.00% 2.71 MiB p/
+    > preloaded-images-k8s-v16-v1...: 504.42 MiB / 504.42 MiB  100.00% 3.36 MiB
+🔥  Creating docker container (CPUs=2, Memory=3900MB) ...
+🐳  Preparing Kubernetes v1.23.1 on Docker 20.10.12 ...
+    ▪ kubelet.housekeeping-interval=5m
+    ▪ Generating certificates and keys ...
+    ▪ Booting up control plane ...
+    ▪ Configuring RBAC rules ...
+🔎  Verifying Kubernetes components...
+    ▪ Using image gcr.io/k8s-minikube/storage-provisioner:v5
+🌟  Enabled addons: storage-provisioner, default-storageclass
+💡  kubectl not found. If you need it, try: 'minikube kubectl -- get pods -A'
+🏄  Done! kubectl is now configured to use "minikube" cluster and "default" namespace by default
+----
+
+ minikube status
+
+ kubectl get nodes

@@ -28,7 +28,7 @@ Fan Control for Dell	4
  openssl req -x509 -nodes -days 365 -newkey rsa:1024  -keyout vsftpd.pem  -out vsftpd.pem
 
 .generate a self-signed certificate:
- sudo openssl req -new -x509 -nodes -days 10000 -out server.crt -keyout server.key
+ openssl req -new -x509 -nodes -days 10000 -out server.crt -keyout server.key
 
 .encrypt the private key by passing a “pass phrase”
  openssl rsa -des3 -in server.key -out server.key
@@ -46,7 +46,7 @@ iptables -t nat -A POSTROUTING -o $IF_WAN -j MASQUERADE
 iptables -t nat -A PREROUTING -i eth0 -p tcp --dport 80 -j REDIRECT --to-port 3128
 ----
 
-=== Data Backup & Recovery
+== Data Backup & Recovery
 
 - https://help.ubuntu.com/community/DataRecovery
 
@@ -73,7 +73,7 @@ iptables -t nat -A PREROUTING -i eth0 -p tcp --dport 80 -j REDIRECT --to-port 31
 /boot/grub/menu.list
 ----
 
-=== Partitioning & Format
+== Partitioning & Format
 - https://help.ubuntu.com/community/InstallingANewHardDrive
 
  sudo fdisk /dev/sdb

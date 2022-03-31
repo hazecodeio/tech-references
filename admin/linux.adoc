@@ -236,7 +236,7 @@ reboot the machine
 == Syncing Dirs - `rsync`
 
 .Syncing dirs
- rsync -avzhr --delete src_dir dst_dir
+ rsync -avzhruP --delete src_dir dst_dir
 
 .Dry Run
 TIP: add `-n` for dry run.

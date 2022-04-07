@@ -46,7 +46,7 @@ NOTE: `AES128`
  gpg --export-secret-key --armor --output husain-private.key --recipient email_id
 
 .Export public key
- gpg --export-key --armor --output husain-pub.key --recipient husain.alkhamis@gmail.com
+ gpg --export-key --armor --output husain-pub.key --recipient email_id
 
 .Import Keys
  gpg --import secret_key

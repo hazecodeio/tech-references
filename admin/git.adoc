@@ -98,6 +98,38 @@ git merge some_branch --squash
 === Resolution
 === Avoidance Strategy
 
+== Stashing & Popping
+
+- Link: https://www.atlassian.com/git/tutorials/saving-changes/git-stash[git-stash]
+
+
+----
+git stash
+----
+
+.List all stashes
+----
+git stash list
+----
+
+.Diff with a Stash
+----
+git stash show [-p]
+----
+
+
+.Unstashing
+----
+git stash apply [stash@{0|1|..}]
+git stash drop [stash@{0|1|..}]
+git stash pop [stash@{0|1|..}] <- (apply + drop)
+----
+
+
+.Creating a branch from your stash
+----
+git stash branch add-stylesheet stash@{1}
+----
 
 == Strategies and Best Practices
 === Syncing Other's with Forked

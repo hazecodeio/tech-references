@@ -128,7 +128,12 @@ git stash pop [stash@{0|1|..}] <- (apply + drop)
 
 .Creating a branch from your stash
 ----
-git stash branch add-stylesheet stash@{1}
+git stash branch _branchname_ stash@{1}
+----
+
+.Delete all stashes
+----
+git stash clear
 ----
 
 == Strategies and Best Practices

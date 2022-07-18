@@ -1,4 +1,4 @@
-= Git Guide (_Incomplete_)
+= Linux Commands Guide (_Incomplete_)
 Husain AK
 :toc:
 :toclevels: 3

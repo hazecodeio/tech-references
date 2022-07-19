@@ -145,6 +145,7 @@ Image has been written to stdout ….
 . windows7.iso is your new bootable ISO
 
 
+//ToDo - Move to scripts-sandbox
 == Fan Control for Dell
 - control cpu fan speed and temperature
 
@@ -223,7 +224,7 @@ run the command to anable bootup run
 reboot the machine
 
 
-== Archive - Creating | Extracting | Splitting
+== Archive | Create | Extract | Split with - `tar` & `split`
 
 - Link: https://unix.stackexchange.com/questions/61774/create-a-tar-archive-split-into-blocks-of-a-maximum-size[create-a-tar-archive-split-into-blocks-of-a-maximum-size]
 
@@ -233,10 +234,25 @@ reboot the machine
 .Merge splits into one archive
  cat sda1.backup.tar.gz.* | tar xzvf -
 
-== Syncing Dirs - `rsync`
+== Sync Dirs with - `rsync`
 
 .Syncing dirs
  rsync -avzhruP --delete src_dir dst_dir
 
 .Dry Run
 TIP: add `-n` for dry run.
+
+
+== Find Files/Dirs with - `find`
+
+=== With `-type f` & `-regextype posix-extended`
+.Find jar files ending with [`-javadoc.jar` | `-sources.jar` | ...]
+ find ~/.m2/repository/org/apache/ -type f -regextype posix-extended -regex '^[./].*[-][a-z]+[.]jar$' | sort -d
+
+.Find jar files ending with [`.1.jar` | `.12.jar` | ...]
+ find ~/.m2/repository/org/apache/ -type f -regextype posix-extended -regex '^[./].*[.][0-9]+[.]jar$' | sort -d
+
+
+== Grep Text with - `grep`
+
+=== With `-E, --extended-regexp`

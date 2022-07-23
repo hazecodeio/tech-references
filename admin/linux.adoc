@@ -252,7 +252,29 @@ TIP: add `-n` for dry run.
 .Find jar files ending with [`.1.jar` | `.12.jar` | ...]
  find ~/.m2/repository/org/apache/ -type f -regextype posix-extended -regex '^[./].*[.][0-9]+[.]jar$' | sort -d
 
+.Find | Grep
+ find ~/.m2/repository/ -type f -regextype posix-extended -regex '^[./].*[.][0-9]+[.]jar$' | sort -d | grep -Eo '([-.a-z+_0-9+\]+[0-9.]+).jar$' | grep -Eo '([-.a-z+_0-9+\]+[0-9.]+).jar' | grep -Eo '([-.a-z+_0-9+\]+[0-9]+)'
+
+.Find | xargs | ln | Grep
+ find ~/.m2/repository/ -type f -regextype posix-extended -regex '^[./].*[.][0-9]+[.]jar$' | sort -d | xargs -i ln -s {} $(echo {} | grep -Eo '([-a-z+]+[0-9.]+).jar$' | grep -Eo '([-.a-z+_0-9+\]+[0-9]+)' )
+
 
 == Grep Text with - `grep`
 
+.?
+
+
 === With `-E, --extended-regexp`
+
+== JQ
+
+[source,bash]
+----
+{(echo -e 'c1 c2 c3 c4 c5 c6 c7 c8 c9' & (ls -al ../ | tail -n +2)) } | cat - |
+  tr -s ' ' |
+    jq -Rcn '
+    input   | split(" ")  as $header |
+    inputs  | split(" ") |
+                    to_entries |
+                            map(.key = $header[.key]) | .[0:] | from_entries'
+----

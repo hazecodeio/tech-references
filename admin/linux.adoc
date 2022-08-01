@@ -278,3 +278,9 @@ TIP: add `-n` for dry run.
                     to_entries |
                             map(.key = $header[.key]) | .[0:] | from_entries'
 ----
+
+.`gsettings` load/save keybindings
+[source,bash]
+----
+gsettings list-schemas | grep -iE 'org.gnome.*.keybindings' | jq -scR '. | split("\n") | map(select(. != "")) | .[]' | xargs -i gsettings list-recursively {}
+----

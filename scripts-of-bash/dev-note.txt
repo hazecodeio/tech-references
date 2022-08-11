@@ -1,0 +1,23 @@
+ToDo Items:
+    - Replace shell script with a Jar archive with all needed dependencies
+    - Use Java11's JLink  to convert the Jar to a low footprint binary
+    ------------------------------------------------------------------------------------
+
+##############################
+Running the Jar using Scala
+##############################
+$ scala -cp FanCtl-1.0-SNAPSHOT.jar org.hsmak.controller.FanCtl_i8kfan -d=t
+
+# Since there is a Main-Class entry in the Manifest file (notice the argument '-jar' along with '-cp'):
+$ scala -cp -jar FanCtl-1.0-SNAPSHOT.jar -d=t
+
+##############################
+Running the Jar using Java
+##############################
+$ java -cp FanCtl-1.0-SNAPSHOT-jar-with-dependencies.jar org.hsmak.controller.FanCtl_i8kfan -d=t
+
+# Since there is a Main-Class entry in the Manifest file:
+$ java -jar FanCtl-1.0-SNAPSHOT-jar-with-dependencies.jar -d=t
+
+# If scala-library is not part of the dependencies then:
+$ java -cp /opt/tools/scala/scala/lib/scala-library.jar:FanCtl-1.0-SNAPSHOT.jar org.hsmak.controller.FanCtl_i8kfan -d=t

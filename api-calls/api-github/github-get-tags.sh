@@ -1,1 +1,1 @@
-curl -s -H Authorization: token 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 'https://api.github.com/repos/apache/spark/tags?per_page=100' 
+curl -i -H "Authorization: token $TOKEN_GITHUB" 'https://api.github.com/repos/apache/spark/tags?per_page=100'

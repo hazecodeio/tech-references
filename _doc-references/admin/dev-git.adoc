@@ -1,12 +1,11 @@
-= Git - Quick Guide (_Incomplete_)
-Husain AK
+== Git - Quick Guide (_Incomplete_)
 :toc:
 :toclevels: 3
 :sectnums: 3
 :sectnumlevels: 3
 :icons: font
 
-== Configs
+=== Configs
 .Creating an Alias
  $ git config --global alias.hist "log --pretty=format:'%h %ad |%s%d [%an]' --date=short"
 
@@ -22,8 +21,8 @@ The above alias can be called just like a regular command:
  $ git config --global core.editor "vim"
 
 
-== Remotes
-=== Adding Multiple Remotes
+=== Remotes
+==== Adding Multiple Remotes
 
 The goal is to commit the new changes into a new remote repository (_Keybase in my case_) and leave the current (_GitHub in my case_) intact.
 
@@ -44,7 +43,7 @@ NOTE: create the destination repo first
 You're all set. +
 If you check the remote Keybase repo you will find all your changes were pushed.
 
-=== Pull/Push to/from Multiple Remotes
+==== Pull/Push to/from Multiple Remotes
 
 .Fetch from all remotes
  $ git fetch --all -v
@@ -55,8 +54,8 @@ If you check the remote Keybase repo you will find all your changes were pushed.
 .Pull changes from remote "origin" @branch "master"
  $ git pull origin master -v
 
-== Syncing (Remote <- -> Local)
-=== Syncing Remote with Local
+=== Syncing (Remote <- -> Local)
+==== Syncing Remote with Local
 
 .Removing remote branch after it was removed from local
  $ git ???
@@ -65,7 +64,7 @@ If you check the remote Keybase repo you will find all your changes were pushed.
  $ git ???
 
 
-=== Syncing Local with Remote
+==== Syncing Local with Remote
 
 .Removing local branch after it was removed from remote
  $ git ???
@@ -80,7 +79,7 @@ TIP:    Try to synchronize your branch list using: +
         After fetching, branches which no longer exists on the remote
         will be deleted.
 
-== Squashing Commits
+=== Squashing Commits
 
 .Using `rebase`
 ----
@@ -93,12 +92,12 @@ git push origin master --force
 git merge some_branch --squash
 ----
 
-== Merge Conflict
+=== Merge Conflict
 
-=== Resolution
-=== Avoidance Strategy
+==== Resolution
+==== Avoidance Strategy
 
-== Stashing & Popping
+=== Stashing & Popping
 
 - Link: https://www.atlassian.com/git/tutorials/saving-changes/git-stash[git-stash]
 
@@ -136,5 +135,5 @@ git stash branch _branchname_ stash@{1}
 git stash clear
 ----
 
-== Strategies and Best Practices
-=== Syncing Other's with Forked
+=== Strategies and Best Practices
+==== Syncing Other's with Forked

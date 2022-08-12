@@ -7,7 +7,7 @@
 
 
 ====
-WARNING: For a successful installtion of all the major components in this guide, [red]#DO NOT# yet install/run with:
+WARNING: For a successful installation of all the major components in this guide, [red]#DO NOT# yet install/run with:
 
 * Java-11
 * Scala-2.12

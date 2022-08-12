@@ -1,5 +1,4 @@
-= Kubernetes - Quick Quide
-Husain AK
+== Kubernetes - Quick Guide
 :toc:
 :toclevels: 3
 :sectnums: 3

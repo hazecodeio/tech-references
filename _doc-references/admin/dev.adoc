@@ -1,0 +1,13 @@
+= Dev Quick Guide
+Husain AK
+:toc:
+:toclevels: 3
+:sectnums: 3
+:sectnumlevels: 3
+:icons: font
+
+include::dev-git.adoc[]
+
+include::dev-sonarqube.adoc[]
+
+include::dev-k8s.adoc[]

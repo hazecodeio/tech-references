@@ -1,5 +1,4 @@
 = GPG - Quick Guide
-Husain AK
 :toc:
 :toclevels: 3
 :sectnums: 3

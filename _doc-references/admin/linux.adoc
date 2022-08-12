@@ -6,22 +6,6 @@ Husain AK
 :sectnumlevels: 3
 :icons: font
 
-
-Table of Contents
-OpenSSL	2
-generate a self-signed certificate:	2
-encrypt the private key by passing a “pass phrase”	2
-Squid Proxy Server	2
-Data Backup & Recovery	2
-Ubuntu OS Backup & Recovery	2
-Backup	2
-Recovery	2
-Partitioning & Format	2
-extract boot record from Window ISO	3
-VirtualBox	4
-WiFi as an Access Point make you WiFi as an access point for other machines:	4
-Fan Control for Dell	4
-
 == OpenSSL
 
 .todo

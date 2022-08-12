@@ -1,14 +1,10 @@
-= Rolling Updates
-Husain AK
+== SonarQube
 :toc:
 :toclevels: 3
 :sectnums: 3
 :sectnumlevels: 3
 :icons: font
 
-== SonarQube
-
 .Links:
 - https://docs.sonarqube.org/latest/analysis/analysis-parameters/
 - https://docs.sonarqube.org/latest/analysis/scan/sonarscanner/
--

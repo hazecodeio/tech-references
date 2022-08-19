@@ -281,11 +281,20 @@ seq 1 8 | xargs -i bash -c "printf {}'--> ' ;  cat /sys/devices/platform/thinkpa
 find /sys -type f -regextype posix-extended -regex '^(.|./).*(hwmon).*' | jq -R 'split("\n") | .[]'| grep -iE 'temp' | xargs -i bash -c 'echo -n {}": "; cat {}'
 ----
 
+.`thinkfan`
+[source,bash]
 ----
 find /sys -type f -regextype posix-extended -regex '^(.|./).*(hwmon).*' | jq -R 'split("\n") | .[]'| grep -iE 'temp' | xargs -i bash -c 'printf {}" : "; cat {}' | jq -R 'split(" : ")'|jq -s 'to_entries'
 ----
 
+.`thinkfan`
+[source,bash]
 ----
 find /sys -type f -regextype posix-extended -regex '^(.|./).*(hwmon).*' | jq -R 'split("\n") | .[]'| grep -iE 'temp' | xargs -i bash -c 'printf {}" : "; cat {}' | jq -R 'split(" : ")'|jq -s 'to_entries as $p | $p[] | to_entries as $c | $c | {'i':.[0].value, 'path':.[1].value[0], 'content':.[1].value[1]}'
 ----
 
+.`xclip` - copy from terminal
+[source,bash]
+----
+echo "whatever-command-to-be-copiedto-clipabord" | xclip -selection clipboard
+----

@@ -2,9 +2,9 @@
 
 sudo bash -c '
 echo "Restarting Network in 20 Sec";
-ip link set wlp34s0 down;
+systemctl stop network-manager.service;
 sleep 20;
-ip link set wlp34s0 up
+systemctl start network-manager.service;
 echo "Running SpeedTest in 10 Sec";
 sleep 10;
 speedtest;

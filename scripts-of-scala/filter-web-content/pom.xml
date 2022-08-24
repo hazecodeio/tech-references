@@ -6,6 +6,13 @@
     <artifactId>filter-web-content</artifactId>
     <version>1.0-SNAPSHOT</version>
 
+    <repositories>
+        <repository>
+            <id>github-repo</id>
+            <url>https://github.com/hsmak/maven-parent-poms/raw/main/_repo</url>
+        </repository>
+    </repositories>
+
     <parent>
         <artifactId>spark_3.3-pom</artifactId>
         <groupId>org.hsmak</groupId>

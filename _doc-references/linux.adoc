@@ -250,7 +250,7 @@ TIP: add `-n` for dry run.
 
 === With `-E, --extended-regexp`
 
-== JQ
+== jq - Json Query
 
 [source,bash]
 ----

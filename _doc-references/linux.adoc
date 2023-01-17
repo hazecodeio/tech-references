@@ -246,7 +246,10 @@ TIP: add `-n` for dry run.
 == Grep Text with - `grep`
 
 .?
-
+[source,bash]
+----
+???
+----
 
 === With `-E, --extended-regexp`
 

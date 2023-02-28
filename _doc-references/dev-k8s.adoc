@@ -15,7 +15,7 @@ https://kubernetes.io/docs/tasks/tools/
 .watch
 - https://www.youtube.com/watch?v=X48VuDVv0do&t=2087s
 
-=== minkube
+=== minikube
 
 .install
 https://minikube.sigs.k8s.io/docs/start/

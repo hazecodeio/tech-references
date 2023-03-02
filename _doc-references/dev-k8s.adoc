@@ -36,8 +36,7 @@ https://kubernetes.io/docs/tasks/tools/install-kubectl-linux/
 
 .install minikube
 ----
-smak@HsmakTPX1:~$ sudo dpkg -i ~/Downloads/minikube_latest_amd64.deb
-[sudo] password for hsmak:
+$ sudo dpkg -i ~/Downloads/minikube_latest_amd64.deb
 Selecting previously unselected package minikube.
 (Reading database ... 216988 files and directories currently installed.)
 Preparing to unpack .../minikube_latest_amd64.deb ...
@@ -47,7 +46,7 @@ Setting up minikube (1.25.1-0) ...
 
 .start minikube
 ----
-hsmak@HsmakTPX1:~$ minikube start
+$ minikube start
 😄  minikube v1.25.1 on Ubuntu 20.04
 ✨  Automatically selected the docker driver. Other choices: none, ssh
 👍  Starting control plane node minikube in cluster minikube

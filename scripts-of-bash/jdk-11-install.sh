@@ -1,6 +1,6 @@
 #!/bin/bash
 
-suffix=_11
+suffix=11
 sdk_home=/opt/langs/java/jdk11-current
 sdk_bin=$sdk_home/bin
 dst=/usr/bin

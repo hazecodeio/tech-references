@@ -1,6 +1,6 @@
 #!/bin/bash
 
-suffix=_17
+suffix=17
 sdk_home=/opt/langs/java/jdk17-current
 sdk_bin=$sdk_home/bin
 dst=/usr/bin

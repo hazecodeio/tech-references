@@ -301,3 +301,13 @@ find /sys -type f -regextype posix-extended -regex '^(.|./).*(hwmon).*' | jq -R 
 ----
 echo "whatever-command-to-be-copiedto-clipabord" | xclip -selection clipboard
 ----
+
+== GIO commandline tool - `gio`
+
+.gio command manual
+ man gio
+
+.List Google Drive Mount
+ gio list -d
+
+NOTE: `-d` to list with files description name

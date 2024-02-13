@@ -1,5 +1,5 @@
 = SSl Certs - Quick Guide
-Husain AK
+Haze Wylde
 :toc:
 :toclevels: 3
 :sectnums: 3

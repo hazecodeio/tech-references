@@ -1,5 +1,5 @@
 = Linux Commands Guide (_Incomplete_)
-Husain AK
+Haze Wylde
 :toc:
 :toclevels: 3
 :sectnums: 3

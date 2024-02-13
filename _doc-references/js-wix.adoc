@@ -1,0 +1,14 @@
+= Trello Control - JS
+Haze Wylde
+:toc:
+:toclevels: 3
+:sectnums: 3
+:sectnumlevels: 3
+:icons: font
+
+
+[source,javascript]
+.Delete All Archived Cards
+----
+
+----

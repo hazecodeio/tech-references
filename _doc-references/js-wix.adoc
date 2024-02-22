@@ -8,7 +8,44 @@ Haze Wylde
 
 
 [source,javascript]
-.Delete All Archived Cards
+.Template
 ----
+// API Reference: https://www.wix.com/velo/reference/api-overview/introduction
+// “Hello, World!” Example: https://learn-code.wix.com/en/article/hello-world
+
+import wixData from 'wix-data';
+
+$w.onReady(function () {
+    // Write your JavaScript here
+    // To select an element by ID use: $w('#elementID')
+    // Click 'Preview' to run your code
+});
 
 ----
+
+
+[source,javascript]
+.Template
+----
+import wixData from 'wix-data';
+
+$w.onReady(function () {
+    $w('#button4').onClick(() => {
+        search();
+    })
+
+});
+
+function search() {
+
+    wixData.query("Courses1")
+        .eq("subjectName", $w('#button4').label)
+        .find()
+        .then(results => {
+            $w('#listRepeater').data = results.items;
+        });
+
+}
+----
+
+

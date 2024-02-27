@@ -2,4 +2,5 @@
 source ./_env-loader.sh
 
 curl -H "Authorization: OAuth oauth_consumer_key=\"$KEY_TRELLO\", oauth_token=\"$TOKEN_TRELLO\"" \
-        'https://api.trello.com/1/members/me/boards'
+        'https://api.trello.com/1/members/me/boards' \
+        | jq '.[] | select(.name == "tracker-tech") | {name: .name, id: .id}'

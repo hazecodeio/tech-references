@@ -320,3 +320,47 @@ NOTE: `-d` to list with files description name
 ----
 ffmpeg -framerate 25 -pattern_type glob  -i '*.png'  -c:v libx264 -profile:v high -crf 20 -pix_fmt yuv420p -vf 'pad=ceil(iw/2)*2:ceil(ih/2)*2' -y output.mp4
 ----
+
+== Multiple Virtual Webcams - OBS & Iriun
+
+
+.Links used:
+
+* https://obsproject.com/forum/threads/new-virtual-cam-choose-device.137869/[OBS Studio]
+* https://askubuntu.com/questions/1385319/irium-webcam-initialization-failed[Ask Ubuntu]
+
+
+.Steps
+
+. Remove the `v4l2loopback` Module:
++
+----
+sudo rmmod v4l2loopback
+----
+
+. Edit (using sudo) the file `/etc/modprobe.d/iriunwebcam-options.conf`
++
+----
+options v4l2loopback exclusive_caps=1 devices=2 video_nr=8,9 card_label="OBS Virtualcam,Iriun Webcam"
+options snd-aloop index=1
+----
++
+NOTE: Don't change the number at snd-aloop line: it is specific to your system (in my case it is 1). Watch for video_nr numbers. Be sure you are not using one already in use (check it --- no need for sudo --- in terminal: v4l2-ctl --list-devices)
+
+
+. Edit (using sudo) the file `/etc/modules-load.d/iriunwebcam.conf`
++
+----
+v4l2loopback
+options v4l2loopback video_nr=8,9
+options v4l2loopback card_label="OBS Virtualcam,Iriun Webcam"
+snd-aloop
+----
++
+NOTE: Use the same parameters as in the previous file for video_nr and card_label (not sure if it is mandatory, I've not checked this). This file ensures that Ubuntu will load these two virtual video devices at startup.
+
+. I'm not sure if the next (and final) step is needed or just a system reboot is good enough. But before rebooting Ubuntu, I did in terminal:
++
+----
+sudo update-initramfs -u
+----

@@ -330,7 +330,13 @@ ffmpeg -framerate 25 -pattern_type glob  -i '*.png'  -c:v libx264 -profile:v hig
 * https://askubuntu.com/questions/1385319/irium-webcam-initialization-failed[Ask Ubuntu]
 
 
-.Steps
+.Steps:
+
+. List All `v4l2` Devices
++
+----
+v4l2-ctl --list-devices
+----
 
 . Remove the `v4l2loopback` Module:
 +

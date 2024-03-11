@@ -1,0 +1,38 @@
+= Ubuntu OS - Quick Guide
+Haze Wylde
+:toc:
+:toclevels: 3
+:sectnums: 3
+:sectnumlevels: 3
+:icons: font
+
+* Always download the recent Long-Term Support/LTS release
+* Non-LTS releases are more like for Beta Testing by end users
+
+* At the time of writing up this guid, this was the recent Ubuntu LTS release
+** Ubuntu 22.04.4 LTS
+
+
+- Instructions
+. Download 'Oracle VirtualBox 7.0.14' from: https://www.virtualbox.org/wiki/Downloads
+. Download 'VirtualBox 7.0.14 Oracle VM VirtualBox Extension Pack
+' from https://www.virtualbox.org/wiki/Downloads
+. Download 'Ubuntu 22.04.4 LTS' from https://ubuntu.com/download/desktop
+
+
+
+
+== Installation - In a VirtualBox
+
+
+
+== Installation - On a PC
+
+
+
+== Application
+
+== Navigation
+
+== Administration
+

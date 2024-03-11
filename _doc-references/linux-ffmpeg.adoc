@@ -1,0 +1,24 @@
+= ffmpeg - Quick Guide
+:toc:
+:toclevels: 3
+:sectnums: 3
+:sectnumlevels: 3
+:icons: font
+
+
+.Create Video From Multiple Pictures
+[source,bash]
+----
+ffmpeg -framerate 25 -pattern_type glob  -i '*.png'  -c:v libx264 -profile:v high -crf 20 -pix_fmt yuv420p -vf 'pad=ceil(iw/2)*2:ceil(ih/2)*2' -y output.mp4
+----
+
+
+.Combine Video and Audio
+----
+ffmpeg -i input-video.mp4 -i input-audio.mp4 output.mp4
+----
+
+.Combine Video and Audio
+----
+ffmpeg -i input-video.mp4 -i input-audio.mp4 -c:v copy -c:a copy -map_metadata -1 output.mp4
+----

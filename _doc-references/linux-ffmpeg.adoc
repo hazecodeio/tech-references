@@ -6,6 +6,9 @@
 :icons: font
 
 
+.Installation Guide
+* https://trac.ffmpeg.org/wiki/CompilationGuide/Ubuntu[ffmpeg CompilationGuide]
+
 .Create Video From Multiple Pictures
 [source,bash]
 ----

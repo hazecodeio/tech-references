@@ -4,37 +4,30 @@
 :sectnums: 3
 :sectnumlevels: 3
 :icons: font
+:source-highlighter: rouge
 
 
 == Installation
 
 .Links
-* https://trac.ffmpeg.org/wiki/CompilationGuide/Ubuntu[CompilationGuide]
-* https://github.com/FFmpeg/FFmpeg/blob/master/INSTALL.md[Installation]
-
-
-
-----
-git -C SVT-AV1 pull 2> /dev/null || git clone https://gitlab.com/AOMediaCodec/SVT-AV1.git && mkdir -p SVT-AV1/build && cd SVT-AV1/build && PATH="$HOME/bin:$PATH" cmake -G "Unix Makefiles" -DCMAKE_INSTALL_PREFIX="$HOME/ffmpeg_build" -DCMAKE_BUILD_TYPE=Release -DBUILD_DEC=OFF -DBUILD_SHARED_LIBS=OFF .. && PATH="$HOME/bin:$PATH" make && make install
-----
-
+* https://trac.ffmpeg.org/wiki/CompilationGuide/Generic[Generic]
+* https://trac.ffmpeg.org/wiki/CompilationGuide[CompilationGuide]
+* https://trac.ffmpeg.org/wiki/CompilationGuide/Ubuntu[Install from Source - Ubuntu]
+* https://github.com/FFmpeg/FFmpeg/blob/master/INSTALL.md[Install from Binary - Deb]
+* https://hub.docker.com/r/jrottenberg/ffmpeg/[Docker Image]
 
 
 //   --bindir="$HOME/bin" \
 //   --enable-gnutls \
-
 //   --enable-libaom \
-
 //   --enable-libass \
-
 //   --enable-libfreetype \
-
 
 
 
 ----
 ./configure \
-  --prefix="$PWD/ffmpeg_build" \
+  --prefix="$FFMPEG_HOME/ffmpeg_build" \
   --pkg-config-flags="--static" \
   --extra-cflags="-I$PWD/ffmpeg_build/include" \
   --extra-ldflags="-L$PWD/ffmpeg_build/lib" \
@@ -55,9 +48,11 @@ make && \
 make install
 ----
 
-
-
-
+.PreReqs - `apt-get`
+[source,bash]
+----
+include::_etc/ffmpeg-install.sh[tags]
+----
 
 
 == Usage

@@ -45,7 +45,7 @@ sudo apt install libunistring-dev libaom-dev libdav1d-dev
 
 #tag::exports[]
 export FFMPEG_H=/opt/tools/ffmpeg
-export FFMPEG_R=$FFMPEG_H/ffmpeg-resources
+export FFMPEG_SOURCES=$FFMPEG_H/ffmpeg-resources
 export FFMPEG_BIN=$FFMPEG_H/bin
 export FFMPEG_BUILD=$FFMPEG_H/ffmpeg-build
 export FF_I=-I$FFMPEG_BUILD/include
@@ -55,13 +55,13 @@ export FF_L=-L$FFMPEG_BUILD/lib
 
 
 #tag::resources[]
-mkdir -p $FFMPEG_R $FFMPEG_BIN
+mkdir -p $FFMPEG_SOURCES $FFMPEG_BIN
 #end::resources[]
 
 
 
 #tag::nasm[]
-cd $FFMPEG_R && \
+cd $FFMPEG_SOURCES && \
 wget https://www.nasm.us/pub/nasm/releasebuilds/2.16.01/nasm-2.16.01.tar.bz2 && \
 tar xjvf nasm-2.16.01.tar.bz2 && \
 cd nasm-2.16.01 && \
@@ -76,7 +76,7 @@ cd $FFMPEG_H
 
 
 #tag::libx264[]
-cd $FFMPEG_R && \
+cd $FFMPEG_SOURCES && \
 git -C x264 pull 2> /dev/null || git clone --depth 1 https://code.videolan.org/videolan/x264.git && \
 cd x264 && \
 PATH="$FFMPEG_BIN:$PATH" PKG_CONFIG_PATH="$FFMPEG_BUILD/lib/pkgconfig" ./configure --prefix="$FFMPEG_BUILD" --bindir="$FFMPEG_BIN" --enable-static --enable-pic && \
@@ -90,7 +90,7 @@ cd $FFMPEG_H
 
 #tag::libx265[]
 sudo apt-get install libnuma-dev && \
-cd $FFMPEG_R && \
+cd $FFMPEG_SOURCES && \
 wget -O x265.tar.bz2 https://bitbucket.org/multicoreware/x265_git/get/master.tar.bz2 && \
 tar xjvf x265.tar.bz2 && \
 cd multicoreware*/build/linux && \
@@ -104,7 +104,7 @@ cd $FFMPEG_H
 
 
 #tag::libvpx[]
-cd $FFMPEG_R && \
+cd $FFMPEG_SOURCES && \
 git -C libvpx pull 2> /dev/null || git clone --depth 1 https://chromium.googlesource.com/webm/libvpx.git && \
 cd libvpx && \
 PATH="$FFMPEG_BIN:$PATH" ./configure --prefix="$FFMPEG_BUILD" --disable-examples --disable-unit-tests --enable-vp9-highbitdepth --as=yasm && \
@@ -117,7 +117,7 @@ cd $FFMPEG_H
 
 
 #tag::libfdk-aac[]
-cd $FFMPEG_R && \
+cd $FFMPEG_SOURCES && \
 git -C fdk-aac pull 2> /dev/null || git clone --depth 1 https://github.com/mstorsjo/fdk-aac && \
 cd fdk-aac && \
 autoreconf -fiv && \
@@ -131,7 +131,7 @@ cd $FFMPEG_H
 
 
 #tag::libopus[]
-cd $FFMPEG_R && \
+cd $FFMPEG_SOURCES && \
 git -C opus pull 2> /dev/null || git clone --depth 1 https://github.com/xiph/opus.git && \
 cd opus && \
 ./autogen.sh && \
@@ -145,7 +145,7 @@ cd $FFMPEG_H
 
 
 #tag::libaom[]
-cd $FFMPEG_R && \
+cd $FFMPEG_SOURCES && \
 git -C aom pull 2> /dev/null || git clone --depth 1 https://aomedia.googlesource.com/aom && \
 mkdir -p aom_build && \
 cd aom_build && \
@@ -159,7 +159,7 @@ cd $FFMPEG_H
 
 
 #tag::libsvtav1[]
-cd $FFMPEG_R && \
+cd $FFMPEG_SOURCES && \
 git -C SVT-AV1 pull 2> /dev/null || git clone https://gitlab.com/AOMediaCodec/SVT-AV1.git && \
 mkdir -p SVT-AV1/build && \
 cd SVT-AV1/build && \
@@ -173,13 +173,14 @@ cd $FFMPEG_H
 
 
 #tag::libdav1d[]
-cd $FFMPEG_R && \
+cd $FFMPEG_SOURCES && \
 git -C dav1d pull 2> /dev/null || git clone --depth 1 https://code.videolan.org/videolan/dav1d.git && \
 mkdir -p dav1d/build && \
 cd dav1d/build && \
 meson setup -Denable_tools=false -Denable_tests=false --default-library=static .. --prefix "$FFMPEG_BUILD" --libdir="$FFMPEG_BUILD/lib" && \
 ninja && \
-ninja install
+ninja install &&
+cd $FFMPEG_H
 #end::libdav1d[]
 
 
@@ -187,21 +188,22 @@ ninja install
 
 
 #tag::libvmaf[]
-cd $FFMPEG_R && \
+cd $FFMPEG_SOURCES && \
 wget https://github.com/Netflix/vmaf/archive/v2.3.1.tar.gz && \
 tar xvf v2.3.1.tar.gz && \
 mkdir -p vmaf-2.3.1/libvmaf/build &&\
 cd vmaf-2.3.1/libvmaf/build && \
 meson setup -Denable_tests=false -Denable_docs=false --buildtype=release --default-library=static .. --prefix "$FFMPEG_BUILD" --bindir="$FFMPEG_BUILD/bin" --libdir="$FFMPEG_BUILD/lib" && \
 ninja && \
-ninja install
+ninja install &&
+cd $FFMPEG_H
 #end::libvmaf[]
 
 
 
 
 #tag::FFmpeg[]
-cd $FFMPEG_R && \
+cd $FFMPEG_SOURCES && \
 wget -O ffmpeg-snapshot.tar.bz2 https://ffmpeg.org/releases/ffmpeg-snapshot.tar.bz2 && \
 tar xjvf ffmpeg-snapshot.tar.bz2 && \
 cd ffmpeg && \
@@ -230,6 +232,7 @@ PATH="$FFMPEG_BIN:$PATH" PKG_CONFIG_PATH="$FFMPEG_BUILD/lib/pkgconfig" ./configu
   --enable-nonfree && \
 PATH="$FFMPEG_BIN:$PATH" make && \
 make install && \
-hash -r
+hash -r &&
+cd $FFMPEG_H
 #end::FFmpeg[]
 

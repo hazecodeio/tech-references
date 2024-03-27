@@ -20,19 +20,15 @@ Haze Wylde
 . Download 'Ubuntu 22.04.4 LTS' from https://ubuntu.com/download/desktop
 
 
+== Migrating to Ubuntu - Quick Guide
+
+== Installation - Quick Guide
+=== In a VirtualBox
+=== On a Desktop - Side-By-Side to Windows
 
 
-== Installation - In a VirtualBox
+== Ubuntu Exploring - Quick Guide
 
+== Ubuntu Adminsitration - Quick Guide
 
-
-== Installation - On a PC
-
-
-
-== Application
-
-== Navigation
-
-== Administration
 

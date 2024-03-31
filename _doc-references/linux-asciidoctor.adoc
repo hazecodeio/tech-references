@@ -1,0 +1,31 @@
+= Asciidoctor - Quick Guide
+:toc:
+:toclevels: 3
+:sectnums: 3
+:sectnumlevels: 3
+:icons: font
+:source-highlighter: rouge
+
+.Links:
+- https://asciidoctor.org/[Asciidoctor - Main]
+
+
+.Default admonition icons
+Since the names of admonitions doesn’t necessarily match the names of icons in the icon font, the AsciiDoc processor must map admonition CSS classes to icon names.
+
+When using Font Awesome as the icon set, the following mappings are recommended:
+
+.NOTE
+NOTE: → info-circle
+
+.TIP
+TIP: → lightbulb-o
+
+.WARNING
+WARNING: → warning
+
+.CAUTION
+CAUTION: → fire
+
+.IMPORTANT
+IMPORTANT: → exclamation-circle

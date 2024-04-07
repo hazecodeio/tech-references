@@ -361,3 +361,7 @@ NOTE: Use the same parameters as in the previous file for video_nr and card_labe
 ----
 sudo update-initramfs -u
 ----
+
+== Chrome - Inspecting Content
+
+ scontent.cdninstagram.com/v/t

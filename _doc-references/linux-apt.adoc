@@ -1,0 +1,19 @@
+= apt - Quick Guide
+:toc:
+:toclevels: 3
+:sectnums: 3
+:sectnumlevels: 3
+:icons: font
+
+ /etc/apt/sources.list
+ /etc/apt/sources.list.d/
+ /etc/apt/sources.list.d/kubernetes.list
+
+
+ echo "deb [signed-by=/etc/apt/keyrings/kubernetes-apt-keyring.gpg] https://pkgs.k8s.io/core:/stable:/v1.28/deb/ /" | sudo tee /etc/apt/sources.list.d/kubernetes.list
+
+ curl -fsSL https://pkgs.k8s.io/core:/stable:/v1.28/deb/Release.key | sudo gpg --dearmor -o /etc/apt/keyrings/kubernetes-apt-keyring.gpg
+
+ sudo apt-get update; sudo apt-get upgrade
+
+ minikube delete --all

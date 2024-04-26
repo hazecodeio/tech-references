@@ -369,5 +369,5 @@ sudo update-initramfs -u
 == AMD Graphics Driver - `amdgpu-install`
 
 ----
-amdgpu-install -y --accept-eula --usecase=graphics -vulkan=amdvlk --opencl=rocr
+amdgpu-install -y --accept-eula --usecase=graphics --vulkan=amdvlk --opencl=rocr
 ----

@@ -256,6 +256,7 @@ TIP: add `-n` for dry run.
 == jq - Json Query
 
 [source,bash]
+.Restructure Output of `ls -al` into a JSON
 ----
 {(echo -e 'c1 c2 c3 c4 c5 c6 c7 c8 c9' & (ls -al ../ | tail -n +2)) } | cat - |
   tr -s ' ' |
@@ -265,6 +266,18 @@ TIP: add `-n` for dry run.
                     to_entries |
                             map(.key = $header[.key]) | .[0:] | from_entries'
 ----
+
+[source,bash]
+.Restructure Output of Text file into a JSON
+----
+{(echo -e 'url filename' & (cat url-filename.txt)) } | cat - |   tr -s ' ' |     jq -Rcn '
+    input   | split(" ")  as $header |
+    inputs  | split(" ") |
+                    to_entries |
+                            map(.key = $header[.key]) | .[0:] | from_entries' | jq -r '"\(.filename) \(.url)"' | xargs -L 1 bash -c  'wget -O $0 $1'
+----
+
+NOTE: urls and filenames on each line in the file `urle-filename.txt` are separated by a space
 
 .`gsettings` load/save keybindings
 [source,bash]

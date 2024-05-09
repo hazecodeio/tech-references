@@ -4,4 +4,5 @@
 :sectnums: 3
 :sectnumlevels: 3
 :icons: font
+:source-highlighter: rouge
 

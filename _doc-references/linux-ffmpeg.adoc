@@ -5,6 +5,7 @@
 :sectnumlevels: 3
 :icons: font
 :source-highlighter: rouge
+:source-highlighter: rouge
 
 
 == Installation

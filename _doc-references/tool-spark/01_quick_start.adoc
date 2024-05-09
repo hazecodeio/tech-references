@@ -4,6 +4,7 @@
 :sectnums: 3
 :sectnumlevels: 3
 :icons: font
+:source-highlighter: rouge
 
 
 * Before Spark 2.0, the main programming interface of Spark was the *Resilient Distributed Dataset (RDD)*.

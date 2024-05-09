@@ -5,6 +5,7 @@ Haze Wylde
 :sectnums: 3
 :sectnumlevels: 3
 :icons: font
+:source-highlighter: rouge
 
 * Always download the recent Long-Term Support/LTS release
 * Non-LTS releases are more like for Beta Testing by end users

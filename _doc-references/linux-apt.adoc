@@ -4,6 +4,7 @@
 :sectnums: 3
 :sectnumlevels: 3
 :icons: font
+:source-highlighter: rouge
 
  /etc/apt/sources.list
  /etc/apt/sources.list.d/

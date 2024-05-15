@@ -269,7 +269,7 @@ TIP: add `-n` for dry run.
 ----
 
 [source,bash]
-.Restructure Output of Text file into a JSON
+.Restructure Output of Text file into a JSON - Feed to `wget`
 ----
 {(echo -e 'url filename' & (cat url-filename.txt)) } | cat - |   tr -s ' ' |     jq -Rcn '
     input   | split(" ")  as $header |

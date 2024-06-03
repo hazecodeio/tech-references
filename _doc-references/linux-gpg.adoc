@@ -53,3 +53,11 @@ NOTE: `AES128`
 
 .ToDo - Confirm this:
 NOTE: Importing secret keys will import the public key as well!
+
+== Guide
+
+TIP: This is to provide the PASSPHRASE from the environment
+
+ gpg --passphrase $GPG_PASSPHRASE --batch --yes -o ENC-FILE.txt.gpg -c DEC-FILE.txt
+
+ gpg --passphrase $GPG_PASSPHRASE --yes --batch -o DEC-FILE.txt -d ENC-FILE.txt.gpg

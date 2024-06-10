@@ -5,7 +5,6 @@
 :sectnumlevels: 3
 :icons: font
 :source-highlighter: rouge
-:source-highlighter: rouge
 
 
 == Installation
@@ -26,6 +25,17 @@
 
 
 
+
+.PreReqs- `apt-get`
+[source,bash]
+----
+include::_etc/ffmpeg-install.sh[tags]
+----
+
+
+
+.Configure & Install
+[source,bash]
 ----
 ./configure \
   --prefix="$FFMPEG_HOME/ffmpeg_build" \
@@ -49,14 +59,14 @@ make && \
 make install
 ----
 
-.PreReqs - `apt-get`
-[source,bash]
-----
-include::_etc/ffmpeg-install.sh[tags]
-----
+
+
+
+
 
 
 == Usage
+
 .Create Video From Multiple Pictures
 [source,bash]
 ----
@@ -65,11 +75,19 @@ ffmpeg -framerate 25 -pattern_type glob  -i '*.png'  -c:v libx264 -profile:v hig
 
 
 .Combine Video and Audio
+[source,bash]
 ----
 ffmpeg -i input-video.mp4 -i input-audio.mp4 output.mp4
 ----
 
 .Combine Video and Audio
+[source,bash]
 ----
 ffmpeg -i input-video.mp4 -i input-audio.mp4 -c:v copy -c:a copy -map_metadata -1 output.mp4
+----
+
+.Mix Multiple Audio Tracks from a Single Input File | `-filter_complex` `amix`
+[source,bash]
+----
+ffmpeg -i INPUT.mkv -filter_complex "[0:a:0][0:a:1]amix=2:longest[aout]" -map "[aout]" -map 0:v -c:v copy OUTPUT.mp4
 ----

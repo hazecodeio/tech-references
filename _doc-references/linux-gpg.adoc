@@ -58,6 +58,14 @@ NOTE: Importing secret keys will import the public key as well!
 
 TIP: This is to provide the PASSPHRASE from the environment
 
- gpg --passphrase $GPG_PASSPHRASE --batch --yes -o ENC-FILE.txt.gpg -c DEC-FILE.txt
+.Encrypt
+[source, bash]
+----
+gpg --passphrase $GPG_PASSPHRASE --batch --yes -o ENC-FILE.txt.gpg -c DEC-FILE.txt
+----
 
- gpg --passphrase $GPG_PASSPHRASE --yes --batch -o DEC-FILE.txt -d ENC-FILE.txt.gpg
+.Decrypt
+[source, bash]
+----
+gpg --passphrase $GPG_PASSPHRASE --yes --batch -o DEC-FILE.txt -d ENC-FILE.txt.gpg
+----

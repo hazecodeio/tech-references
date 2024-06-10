@@ -89,5 +89,5 @@ ffmpeg -i input-video.mp4 -i input-audio.mp4 -c:v copy -c:a copy -map_metadata -
 .Mix Multiple Audio Tracks from a Single Input File | `-filter_complex` `amix`
 [source,bash]
 ----
-ffmpeg -i INPUT.mkv -filter_complex "[0:a:0][0:a:1]amix=2:longest[aout]" -map "[aout]" -map 0:v -c:v copy OUTPUT.mp4
+ffmpeg -i INPUT.mkv -filter_complex "[0:a:0][0:a:1]amix=2:longest[aout]" -map "[aout]" -map 0:v -c:v libx264 OUTPUT.mp4
 ----

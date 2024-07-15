@@ -381,3 +381,9 @@ sudo update-initramfs -u
 ----
 amdgpu-install -y --accept-eula --usecase=graphics --vulkan=amdvlk --opencl=rocr
 ----
+
+== Open Sockets/Ports
+
+----
+ss -natp
+----

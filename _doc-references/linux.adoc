@@ -372,6 +372,7 @@ NOTE: Use the same parameters as in the previous file for video_nr and card_labe
 
 . I'm not sure if the next (and final) step is needed or just a system reboot is good enough. But before rebooting Ubuntu, I did in terminal:
 +
+[source,bash]
 ----
 sudo update-initramfs -u
 ----
@@ -384,6 +385,12 @@ amdgpu-install -y --accept-eula --usecase=graphics --vulkan=amdvlk --opencl=rocr
 
 == Open Sockets/Ports
 
+[source,bash]
 ----
 ss -natp
+----
+
+[source,bash]
+----
+ss -neopa
 ----

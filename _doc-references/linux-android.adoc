@@ -1,4 +1,4 @@
-= Android  - Quick Guide
+== Android  - Quick Guide
 :toc:
 :toclevels: 3
 :sectnums: 3
@@ -13,13 +13,13 @@
 
 
 
-== Android Configs
+=== Android Configs
 
 .Android Phone/Tablet Settings
 - Enable USB Debugging Mode
 
 
-== `adb` - Android Debug Bridge
+=== `adb` - Android Debug Bridge
 
 .Connect using IP Address
 - On your Android device -> Enable USB Debug Mode
@@ -35,7 +35,7 @@ adb -s 192.168.1.3:5555 shell
 adb disconnect 192.168.1.6:5555
 ----
 
-== `scrcpy` - Screen Sharing
+=== `scrcpy` - Screen Sharing
 
 NOTE: Use refer to how to connect adb over tcpip!
 
@@ -51,7 +51,7 @@ scrcpy --tcpip=192.168.1.6:5555 --max-size=2800
 
 
 
-== Data Backup and Sync
+=== Data Backup and Sync
 
 .Not the official adb
 - https://github.com/google/adb-sync[adb-sync]
@@ -66,5 +66,5 @@ scrcpy --tcpip=192.168.1.6:5555 --max-size=2800
 
 
 
-=== WayDroid
+==== WayDroid
 

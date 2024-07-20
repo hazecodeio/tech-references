@@ -1,4 +1,4 @@
-= apt - Quick Guide
+== apt - Quick Guide
 :toc:
 :toclevels: 3
 :sectnums: 3

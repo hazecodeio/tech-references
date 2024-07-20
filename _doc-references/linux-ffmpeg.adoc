@@ -1,4 +1,4 @@
-= ffmpeg - Quick Guide
+== ffmpeg - Quick Guide
 :toc:
 :toclevels: 3
 :sectnums: 3
@@ -7,7 +7,7 @@
 :source-highlighter: rouge
 
 
-== Installation
+=== Installation
 
 .Links
 * https://trac.ffmpeg.org/wiki/CompilationGuide/Generic[Generic]
@@ -65,7 +65,7 @@ make install
 
 
 
-== Usage
+=== Usage
 
 .Create Video From Multiple Pictures
 [source,bash]

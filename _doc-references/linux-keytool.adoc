@@ -1,4 +1,4 @@
-= SSl Certs - Quick Guide
+== SSl Certs - Quick Guide
 Haze Wylde
 :toc:
 :toclevels: 3
@@ -20,7 +20,7 @@ TIP: Use `-rfc` to generate the PEM format.
 .Add PublicKey/Cert to Truststore
  keytool -import -alias client-key -file publickey.pem -keystore truststore.jks -storetype JKS
 
-== Converting JKS to PEM
+=== Converting JKS to PEM
 
 .JKS to PKCS#12
  keytool -importkeystore -srckeystore keystore.jks -destkeystore keystore.p12 -srcstoretype jks -deststoretype pkcs12

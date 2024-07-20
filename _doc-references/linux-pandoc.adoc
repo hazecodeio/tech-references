@@ -1,4 +1,4 @@
-= Pandoc Reference
+== Pandoc Reference
 Haze Wylde
 :toc:
 :toclevels: 3

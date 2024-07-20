@@ -1,4 +1,4 @@
-= Asciidoctor - Quick Guide
+== Asciidoctor - Quick Guide
 :toc:
 :toclevels: 3
 :sectnums: 3

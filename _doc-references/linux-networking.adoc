@@ -1,0 +1,16 @@
+== Networking - Quick Guide
+Haze Wylde
+:toc:
+:toclevels: 3
+:sectnums: 3
+:sectnumlevels: 3
+:icons: font
+:source-highlighter: rouge
+
+
+
+sudo ip address add 192.168.1.100/24 dev enp0s8
+sudo ip link set dev wlp34s0 enp0s8
+
+
+sudo ip address del 192.168.1.100/24 dev enp0s8

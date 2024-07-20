@@ -1,0 +1,397 @@
+== Random - Quick guide
+Haze Wylde
+:toc:
+:toclevels: 3
+:sectnums: 3
+:sectnumlevels: 3
+:icons: font
+:source-highlighter: rouge
+
+
+=== OpenSSL
+
+.todo
+ openssl req -x509 -nodes -days 365 -newkey rsa:1024  -keyout vsftpd.pem  -out vsftpd.pem
+
+.generate a self-signed certificate:
+ openssl req -new -x509 -nodes -days 10000 -out server.crt -keyout server.key
+
+.encrypt the private key by passing a “pass phrase”
+ openssl rsa -des3 -in server.key -out server.key
+
+.What are these?
+- Squid Proxy Server
+- visible_host hsmaklinux
+
+- http://tldp.org/HOWTO/TransparentProxy.html
+
+----
+http_port hsmaklinux:3128 transparent
+IF_WAN="eth0"
+iptables -t nat -A POSTROUTING -o $IF_WAN -j MASQUERADE
+iptables -t nat -A PREROUTING -i eth0 -p tcp --dport 80 -j REDIRECT --to-port 3128
+----
+
+=== Data Backup & Recovery
+
+- https://help.ubuntu.com/community/DataRecovery
+
+ sudo foremost -v -t jpg -i /dev/hda -o /recovery/foremost
+
+- Ubuntu OS Backup & Recovery
+
+.Backup
+ dd if=/dev/sda of=/mnt/LocalDrive/Ubuntu9.04_Backup_20090625.img conv=noerror,sync bs=4M
+
+.Recovery
+ dd of=/dev/sdc if=/mnt/LocalDrive/Ubuntu9.04_Backup_20090625.img bs=4M
+
+
+.ToDo
+ sudo tune2fs -U random /dev/sdc1
+
+.get the new UUID from:
+ sudo blkid
+
+.modify UUID in the following files accordingly:
+----
+/etc/fstab
+/boot/grub/menu.list
+----
+
+=== Partitioning & Format
+- https://help.ubuntu.com/community/InstallingANewHardDrive
+
+ sudo fdisk /dev/sdb
+
+.then:
+- d:   delete a partition
+- n:   add a new partition
+- w:   write table to disk and exit
+
+ sudo mkfs -t ext3 /dev/sdb1  “for file system type: ext3”
+
+.or
+ sudo mke2fs /dev/sdb1
+
+
+.mount a partition from a hard drive image
+- http://www.andremiller.net/content/mounting-hard-disk-image-including-partitions-using-linux
+
+.extract boot record from Window ISO
+- http://linuxtuneup.blogspot.com/2006/01/slipstreaming-windows-cd-under-linux.html
+
+.making bootable windows iso images
+- http://linuxtuneup.blogspot.com/2006/01/slipstreaming-windows-cd-under-linux.html
+- http://users.telenet.be/mydotcom/howto/boot/bootcd_win.htm
+
+.For Windows 7 img udf
+- http://forums.opensuse.org/english/get-technical-help-here/applications/460308-making-bootable-iso-dvd-virtualbox.html
+
+. Use dd to make an image copy of the DVD to an image file
+
+ > dd if=/dev/sr0 of=windows7.img
+
+. Use geteltorito (in openSUSE, this is in the genisoimage package) to extract the boot binary image
+
+ > geteltorito windows7.iso > boot.bin
++
+----
+Booting catalog starts at sector: 22
+Manufacturer of CD: Microsoft Corporation
+Image architecture: x86
+Boot media type is: no emulation
+El Torito image starts at sector 735 and has 8 sector(s) of 512 Bytes
+Image has been written to stdout ….
+----
+
+. Make a directory to store the contents of the ISO
+
+ > mkdir windows7ISO
+
+. Mount the image file to copy the contents
++
+----
+> su
+# mkdir /mnt/dvd
+# mount windows7.img /mnt/dvd -o loop
+# exit
+> cp -r /mnt/dvd/* windows7ISO
+> chmod -R 754 windows7ISO
+----
+
+. Copy boot.bin to the new ISO directory
+
+ > cp boot.bin windows7ISO
+
+. Make the ISO
+
+ mkisofs -udf -b boot.bin -no-emul-boot -hide boot.bin -relaxed-filenames -joliet-long -D -o windows7.iso windows7ISO
+
+. windows7.iso is your new bootable ISO
+
+
+//ToDo - Move to scripts-sandbox
+=== Fan Control for Dell
+- control cpu fan speed and temperature
+
+.a script to control the fans (shared by someone):
+[source,bash]
+----
+#!/bin/bash
+### BEGIN INIT INFO
+# Provides:          fanCtrl
+# Required-Start:    $remote_fs $syslog
+# Required-Stop:     $remote_fs $syslog
+# Default-Start:     1 2 3 4 5
+# Default-Stop:      0 6
+# Short-Description: Start fan control at boot time
+# Description:       Enable service provided by fanCtrl.
+### END INIT INFO
+
+# Records the CPU temp and writes it to a temporary file.
+tempCPU=0
+
+constMaxTemp=40
+
+fanHI=false
+fanLO=false
+
+while [ 1 ]; do
+var=($(sensors | grep "Core" | sed 's/.*:\s*+\(.*\)  .*(.*/\1/' | sed 's/[°C]//g' | sed 's/\.0//g'))
+
+	for i in {0..11} ; do
+		if [[ ${var[i]} -gt $tempCPU ]]; then
+			tempCPU=${var[i]}
+		fi
+	done
+
+	if [[ $tempCPU -gt $constMaxTemp ]]; then
+		if [[ "$fanHI" -eq false ]] ; then
+			eval "i8kfan 2 2"
+			fanHI=true
+			fanLO=false
+#			echo 'temp is high'
+		fi
+	else
+		if [[ "$fanLO" -eq false ]] ; then
+			eval "i8kfan 1 1"
+			fanHI=false
+			fanLO=true
+#			echo 'temp is low'
+		fi
+	fi
+
+	tempCPU=0;
+
+sleep 1;
+done
+----
+.place the above file in the dir:
+ /usr/local/bin
+
+.create a startup config file to be loaded by systemd:
+file name: fanctl.service:
+[Unit]
+Description="Job that increases cpu fans when core temperature reaches 40C"
+
+[Install]
+WantedBy=multi-user.target
+
+[Service]
+Restart=always
+ExecStart=/usr/local/bin/fanctl.sh
+place the above in the dir:
+/lib/systemd/system
+
+run the command to anable bootup run
+> sudo systemctl enable fanctl
+
+reboot the machine
+
+
+=== Archive | Create | Extract | Split with - `tar` & `split`
+
+- Link: https://unix.stackexchange.com/questions/61774/create-a-tar-archive-split-into-blocks-of-a-maximum-size[create-a-tar-archive-split-into-blocks-of-a-maximum-size]
+
+.Create and Split an Archive
+ tar cvzf - dir/ | split -b 200m - sda1.backup.tar.gz.
+
+.Merge splits into one archive
+ cat sda1.backup.tar.gz.* | tar xzvf -
+
+=== Sync Dirs with - `rsync`
+
+.Syncing dirs
+ rsync -avzhruP --delete src_dir dst_dir
+
+.Dry Run
+TIP: add `-n` for dry run.
+
+
+=== Find Files/Dirs with - `find`
+
+==== With `-type f` & `-regextype posix-extended`
+.Find jar files ending with [`-javadoc.jar` | `-sources.jar` | ...]
+ find ~/.m2/repository/org/apache/ -type f -regextype posix-extended -regex '^[./].*[-][a-z]+[.]jar$' | sort -d
+
+.Find jar files ending with [`.1.jar` | `.12.jar` | ...]
+ find ~/.m2/repository/org/apache/ -type f -regextype posix-extended -regex '^[./].*[.][0-9]+[.]jar$' | sort -d
+
+.Find | Grep
+ find ~/.m2/repository/ -type f -regextype posix-extended -regex '^[./].*[.][0-9]+[.]jar$' | sort -d | grep -Eo '([-.a-z+_0-9+\]+[0-9.]+).jar$' | grep -Eo '([-.a-z+_0-9+\]+[0-9.]+).jar' | grep -Eo '([-.a-z+_0-9+\]+[0-9]+)'
+
+.Find | xargs | ln | Grep
+ find ~/.m2/repository/ -type f -regextype posix-extended -regex '^[./].*[.][0-9]+[.]jar$' | sort -d | xargs -i ln -s {} $(echo {} | grep -Eo '([-a-z+]+[0-9.]+).jar$' | grep -Eo '([-.a-z+_0-9+\]+[0-9]+)' )
+
+
+=== Grep Text with - `grep`
+
+.?
+[source,bash]
+----
+???
+----
+
+==== With `-E, --extended-regexp`
+
+=== jq - Json Query
+
+[source,bash]
+.Restructure Output of `ls -al` into a JSON
+----
+{(echo -e 'c1 c2 c3 c4 c5 c6 c7 c8 c9' & (ls -al ../ | tail -n +2)) } | cat - |
+  tr -s ' ' |
+    jq -Rcn '
+    input   | split(" ")  as $header |
+    inputs  | split(" ") |
+                    to_entries |
+                            map(.key = $header[.key]) | .[0:] | from_entries'
+----
+
+[source,bash]
+.Restructure Output of Text file into a JSON - Feed to `wget`
+----
+{(echo -e 'url filename' & (cat url-filename.txt)) } | cat - |   tr -s ' ' |     jq -Rcn '
+    input   | split(" ")  as $header |
+    inputs  | split(" ") |
+                    to_entries |
+                            map(.key = $header[.key]) | .[0:] | from_entries' | jq -r '"\(.filename) \(.url)"' | xargs -L 1 bash -c  'wget -O $0 $1'
+----
+
+NOTE: urls and filenames on each line in the file `urle-filename.txt` are separated by a space
+
+.`gsettings` load/save keybindings
+[source,bash]
+----
+gsettings list-schemas | grep -iE 'org.gnome.*.keybindings' | jq -scR '. | split("\n") | map(select(. != "")) | .[]' | xargs -i gsettings list-recursively {}
+----
+
+.`thinkfan`
+[source,bash]
+----
+seq 1 8 | xargs -i bash -c "printf {}'--> ' ;  cat /sys/devices/platform/thinkpad_hwmon/hwmon/hwmon5/temp{}_input"
+----
+
+.`thinkfan`
+[source,bash]
+----
+find /sys -type f -regextype posix-extended -regex '^(.|./).*(hwmon).*' | jq -R 'split("\n") | .[]'| grep -iE 'temp' | xargs -i bash -c 'echo -n {}": "; cat {}'
+----
+
+.`thinkfan`
+[source,bash]
+----
+find /sys -type f -regextype posix-extended -regex '^(.|./).*(hwmon).*' | jq -R 'split("\n") | .[]'| grep -iE 'temp' | xargs -i bash -c 'printf {}" : "; cat {}' | jq -R 'split(" : ")'|jq -s 'to_entries'
+----
+
+.`thinkfan`
+[source,bash]
+----
+find /sys -type f -regextype posix-extended -regex '^(.|./).*(hwmon).*' | jq -R 'split("\n") | .[]'| grep -iE 'temp' | xargs -i bash -c 'printf {}" : "; cat {}' | jq -R 'split(" : ")'|jq -s 'to_entries as $p | $p[] | to_entries as $c | $c | {'i':.[0].value, 'path':.[1].value[0], 'content':.[1].value[1]}'
+----
+
+.`xclip` - copy from terminal
+[source,bash]
+----
+echo "whatever-command-to-be-copiedto-clipabord" | xclip -selection clipboard
+----
+
+=== GIO commandline tool - `gio`
+
+.gio command manual
+ man gio
+
+.List Google Drive Mount
+ gio list -d
+
+NOTE: `-d` to list with files description name
+
+=== Multiple Virtual Webcams - OBS & Iriun
+
+
+.Links used:
+
+* https://obsproject.com/forum/threads/new-virtual-cam-choose-device.137869/[OBS Studio]
+* https://askubuntu.com/questions/1385319/irium-webcam-initialization-failed[Ask Ubuntu]
+
+
+.Steps:
+
+. List All `v4l2` Devices
++
+----
+v4l2-ctl --list-devices
+----
+
+. Remove the `v4l2loopback` Module:
++
+----
+sudo rmmod v4l2loopback
+----
+
+. Edit (using sudo) the file `/etc/modprobe.d/iriunwebcam-options.conf`
++
+----
+options v4l2loopback exclusive_caps=1 devices=2 video_nr=8,9 card_label="OBS Virtualcam,Iriun Webcam"
+options snd-aloop index=1
+----
++
+NOTE: Don't change the number at snd-aloop line: it is specific to your system (in my case it is 1). Watch for video_nr numbers. Be sure you are not using one already in use (check it --- no need for sudo --- in terminal: v4l2-ctl --list-devices)
+
+
+. Edit (using sudo) the file `/etc/modules-load.d/iriunwebcam.conf`
++
+----
+v4l2loopback
+options v4l2loopback video_nr=8,9
+options v4l2loopback card_label="OBS Virtualcam,Iriun Webcam"
+snd-aloop
+----
++
+NOTE: Use the same parameters as in the previous file for video_nr and card_label (not sure if it is mandatory, I've not checked this). This file ensures that Ubuntu will load these two virtual video devices at startup.
+
+. I'm not sure if the next (and final) step is needed or just a system reboot is good enough. But before rebooting Ubuntu, I did in terminal:
++
+[source,bash]
+----
+sudo update-initramfs -u
+----
+
+=== AMD Graphics Driver - `amdgpu-install`
+
+----
+amdgpu-install -y --accept-eula --usecase=graphics --vulkan=amdvlk --opencl=rocr
+----
+
+=== Open Sockets/Ports
+
+[source,bash]
+----
+ss -natp
+----
+
+[source,bash]
+----
+ss -neopa
+----

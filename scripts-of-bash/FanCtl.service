@@ -1,9 +1,0 @@
-[Unit]
-Description="Job, written in Scala, that increases cpu fans when core temperature reaches 35C"
-
-[Install]
-WantedBy=multi-user.target
-
-[Service]
-TimeoutSec=infinity
-ExecStart=/usr/local/bin/FanCtl_scala.sh -d=f

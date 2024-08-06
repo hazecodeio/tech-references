@@ -8,9 +8,43 @@ Haze Wylde
 :source-highlighter: rouge
 
 
-
+=== VirtualBox | Local Network | netplan
 sudo ip address add 192.168.1.100/24 dev enp0s8
 sudo ip link set dev wlp34s0 enp0s8
 
-
+.Deleting IP Address
 sudo ip address del 192.168.1.100/24 dev enp0s8
+
+
+
+
+=== vpn | vopono | namespace
+
+.Deleting Connection
+nmcli c delete DEVICE_NAME
+
+.Restarting Network
+nmcli n [on|off]
+
+.Deleting Device
+ip link delete dev DEVICE_NAME
+
+.connect via an established tunnel tun0
+vopono -v exec -i tun0 --provider VPN_PROVIDER --server SERVER_NAME bash
+
+
+=== Disabling IPv6
+
+.https://protonvpn.com/support/browser-extensions/[browser-extensions]
+Can I use the Proton VPN app and the browser extension together?
+
+Yes. If you use the Proton VPN app and the browser extension together, all your device’s internet connections are routed through the VPN server the app is connected to. Connections inside the browser, however, will then also be routed to the VPN server the browser extension is connected to. This creates a “double-VPN” effect similar to our Secure Core feature.
+
+This setup can be useful. For example, you may wish to protect all your device’s connections by connecting to the fastest VPN server for your location. At the same time, you can stream content from another country in your browser.
+
+Using our Secure Core feature will create a "triple-VPN" (or even a "quadruple-VPN" if used on both the browser extension and the VPN app), but the performance hit of doing this is likely to heavily outweigh any potential privacy and security advantages.
+
+
+
+.https://protonvpn.com/support/disable-ipv6-protocol-linux/[disable-ipv6-protocol-linux]
+How to manually disable IPv6 on Linux

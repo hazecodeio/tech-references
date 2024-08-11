@@ -278,6 +278,13 @@ TIP: add `-n` for dry run.
                     to_entries |
                             map(.key = $header[.key]) | .[0:] | from_entries' | jq -r '"\(.filename) \(.url)"' | xargs -L 1 bash -c  'wget -O $0 $1'
 ----
+[source,bash]
+.Print Path and Key Values of a JSON
+----
+jq -r 'paths(scalars | true) as $p  | [ ( [ $p[] | tostring ] | join(".") ), ( getpath($p) | tojson )] | join(": ")'
+----
+
+=== GSettings
 
 NOTE: urls and filenames on each line in the file `urle-filename.txt` are separated by a space
 

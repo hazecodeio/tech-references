@@ -281,7 +281,7 @@ TIP: add `-n` for dry run.
 [source,bash]
 .Print Path and Key Values of a JSON
 ----
-jq -r 'paths(scalars | true) as $p  | [ ( [ $p[] | tostring ] | join(".") ), ( getpath($p) | tojson )] | join(": ")'
+cat somejson.json | jq -r 'paths(scalars | true) as $p  | [ ( [ $p[] | tostring ] | join(".") ), ( getpath($p) | tojson )] | join(": ")'
 ----
 
 === GSettings

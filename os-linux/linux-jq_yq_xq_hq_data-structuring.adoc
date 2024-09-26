@@ -1,0 +1,132 @@
+== jq| yq | xq | hq | Data Structuring - Quick guide
+Haze Wylde
+:toc:
+:toclevels: 3
+:sectnums: 3
+:sectnumlevels: 3
+:icons: font
+:source-highlighter: rouge
+
+
+=== Archive | Create | Extract | Split with - `tar` & `split`
+
+- Link: https://unix.stackexchange.com/questions/61774/create-a-tar-archive-split-into-blocks-of-a-maximum-size[create-a-tar-archive-split-into-blocks-of-a-maximum-size]
+
+.Create and Split an Archive
+ tar cvzf - dir/ | split -b 200m - sda1.backup.tar.gz.
+
+.Merge splits into one archive
+ cat sda1.backup.tar.gz.* | tar xzvf -
+
+=== Sync Dirs with - `rsync`
+
+.Syncing dirs
+ rsync -avzhruP --delete src_dir dst_dir
+
+.Dry Run
+TIP: add `-n` for dry run.
+
+
+=== Find Files/Dirs with - `find`
+
+==== With `-type f` & `-regextype posix-extended`
+.Find jar files ending with [`-javadoc.jar` | `-sources.jar` | ...]
+ find ~/.m2/repository/org/apache/ -type f -regextype posix-extended -regex '^[./].*[-][a-z]+[.]jar$' | sort -d
+
+.Find jar files ending with [`.1.jar` | `.12.jar` | ...]
+ find ~/.m2/repository/org/apache/ -type f -regextype posix-extended -regex '^[./].*[.][0-9]+[.]jar$' | sort -d
+
+.Find | Grep
+ find ~/.m2/repository/ -type f -regextype posix-extended -regex '^[./].*[.][0-9]+[.]jar$' | sort -d | grep -Eo '([-.a-z+_0-9+\]+[0-9.]+).jar$' | grep -Eo '([-.a-z+_0-9+\]+[0-9.]+).jar' | grep -Eo '([-.a-z+_0-9+\]+[0-9]+)'
+
+.Find | xargs | ln | Grep
+ find ~/.m2/repository/ -type f -regextype posix-extended -regex '^[./].*[.][0-9]+[.]jar$' | sort -d | xargs -i ln -s {} $(echo {} | grep -Eo '([-a-z+]+[0-9.]+).jar$' | grep -Eo '([-.a-z+_0-9+\]+[0-9]+)' )
+
+
+=== Grep Text with - `grep`
+
+.?
+[source,bash]
+----
+???
+----
+
+==== With `-E, --extended-regexp`
+
+=== jq - Json Query
+
+[source,bash]
+.Restructure Output of `ls -al` into a JSON
+----
+{(echo -e 'c1 c2 c3 c4 c5 c6 c7 c8 c9' & (ls -al ../ | tail -n +2)) } | cat - |
+  tr -s ' ' |
+    jq -Rcn '
+    input   | split(" ")  as $header |
+    inputs  | split(" ") |
+                    to_entries |
+                            map(.key = $header[.key]) | .[0:] | from_entries'
+----
+
+[source,bash]
+.Restructure Output of Text file into a JSON - Feed to `wget`
+----
+{(echo -e 'url filename' & (cat url-filename.txt)) } | cat - |   tr -s ' ' |     jq -Rcn '
+    input   | split(" ")  as $header |
+    inputs  | split(" ") |
+                    to_entries |
+                            map(.key = $header[.key]) | .[0:] | from_entries' | jq -r '"\(.filename) \(.url)"' | xargs -L 1 bash -c  'wget -O $0 $1'
+----
+
+[source,bash]
+.Print Path and Key Values of a JSON
+----
+cat somejson.json | jq -r 'paths(scalars | true) as $p  | [ ( [ $p[] | tostring ] | join(".") ), ( getpath($p) | tojson )] | join(": ")'
+----
+
+=== jq xq xml html json
+
+- convert html/xml to json
+
+
+
+
+[source,bash]
+.print flattened json _keys_ PATHs
+----
+cat t.html | xq -r | jq -r 'paths(scalars | true) as $p  | [ ( [ $p[] | tostring ] | join(".") )] | join("")'
+----
+
+[source,bash]
+.print flattened json _key:val_ PATHs
+----
+ cat t.html | xq -r | jq -r 'paths(scalars | true) as $p  | [ ( [ $p[] | tostring ] | join(".") ), ( getpath($p) | tojson )] | join(": ")'
+----
+
+.remove null - [RED]#NOT# working as expected
+----
+walk(
+    if type == "array" then
+      map(select(. != null))
+    elif type == "object" then
+      with_entries(
+        select(
+          .value != null and
+          .value != "" and
+          .value != [] and
+          .value != {}
+        )
+      )
+    else
+      .
+    end
+  )
+----
+
+
+[source,bash]
+.remove null - [GREEN]#Working#
+----
+walk( if type == "array" then map(select(length > 0)) elif type == "object" then with_entries( select( .value != null and .value != "" and .value != [] and .value != {} ) ) else select(.) end )
+
+----
+

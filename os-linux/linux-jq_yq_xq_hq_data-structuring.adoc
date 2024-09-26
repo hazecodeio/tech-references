@@ -93,13 +93,13 @@ cat somejson.json | jq -r 'paths(scalars | true) as $p  | [ ( [ $p[] | tostring 
 [source,bash]
 .print flattened json _keys_ PATHs
 ----
-cat t.html | xq -r | jq -r 'paths(scalars | true) as $p  | [ ( [ $p[] | tostring ] | join(".") )] | join("")'
+cat xml-file.xml | xq -r | jq -r 'paths(scalars | true) as $p  | [ ( [ $p[] | tostring ] | join(".") )] | join("")'
 ----
 
 [source,bash]
 .print flattened json _key:val_ PATHs
 ----
- cat t.html | xq -r | jq -r 'paths(scalars | true) as $p  | [ ( [ $p[] | tostring ] | join(".") ), ( getpath($p) | tojson )] | join(": ")'
+ cat xml-file.xml | xq -r | jq -r 'paths(scalars | true) as $p  | [ ( [ $p[] | tostring ] | join(".") ), ( getpath($p) | tojson )] | join(": ")'
 ----
 
 .remove null - [RED]#NOT# working as expected

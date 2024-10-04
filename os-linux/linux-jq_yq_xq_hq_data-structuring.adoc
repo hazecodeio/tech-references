@@ -130,3 +130,8 @@ walk( if type == "array" then map(select(length > 0)) elif type == "object" then
 
 ----
 
+.Extract/Validate JSON Schema from Source - `JESS`
+ JESS --schema schema.json payload.json
+
+- Link: https://github.com/pkoppstein/JESS
+- Link: https://gist.github.com/pkoppstein/a5abb4ebef3b0f72a6ed[schema.jq]

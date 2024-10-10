@@ -9,3 +9,32 @@ Haze Wylde
 
 .Convert PDF to another PDF
  convert -verbose -density 150 -quality 100  source-file.pdf[0-5,10-20] target-file.pdf
+
+
+=== Installation - From Source
+
+====
+https://github.com/ImageMagick/ImageMagick/releases
+
+Delegate Libraries
+
+On occasion you may receive these warnings:
+
+no decode delegate for this image format
+no encode delegate for this image format
+
+This exception indicates that an external delegate library or its headers
+were not available when ImageMagick was built. To add support for the image
+format, download and install the requisite delegate library and its header
+files and reconfigure, rebuild, and reinstall ImageMagick. As an example,
+lets add support for the JPEG image format. First we install the JPEG RPMS:
+
+$ sudo apt install libjpeg libjpeg-devel
+====
+
+====
+configure with the --enable-shared or --enable-shared --with-modules
+options.
+====
+
+https://imagemagick.org/script/security-policy.php

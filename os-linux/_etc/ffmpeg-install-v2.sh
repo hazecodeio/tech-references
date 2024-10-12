@@ -51,9 +51,9 @@ export FFMPEG_HOME=/opt/_tools-os/$FFMPEG_NAME
 export FFMPEG_SOURCES=$FFMPEG_HOME/ffmpeg-resources
 export FFMPEG_BIN=$FFMPEG_HOME/bin
 export FFMPEG_BUILD=$FFMPEG_HOME/ffmpeg-build
+export FFMPEG_PKG_CONFIG=$FFMPEG_BUILD/lib/pkgconfig
 export FF_I=-I$FFMPEG_BUILD/include
 export FF_L=-L$FFMPEG_BUILD/lib
-export FFMPEG_PKG_CONFIG=$FF_L/pkgconfig
 #end::exports[]
 
 

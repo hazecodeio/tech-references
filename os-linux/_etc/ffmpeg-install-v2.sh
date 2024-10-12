@@ -46,12 +46,14 @@ sudo apt-get -y install \
 
 
 #tag::exports[]
-export FFMPEG_H=/opt/_tools-os/ffmpeg
-export FFMPEG_SOURCES=$FFMPEG_H/ffmpeg-resources
-export FFMPEG_BIN=$FFMPEG_H/bin
-export FFMPEG_BUILD=$FFMPEG_H/ffmpeg-build
+export FFMPEG_NAME=ffmpeg
+export FFMPEG_HOME=/opt/_tools-os/$FFMPEG_NAME
+export FFMPEG_SOURCES=$FFMPEG_HOME/ffmpeg-resources
+export FFMPEG_BIN=$FFMPEG_HOME/bin
+export FFMPEG_BUILD=$FFMPEG_HOME/ffmpeg-build
 export FF_I=-I$FFMPEG_BUILD/include
 export FF_L=-L$FFMPEG_BUILD/lib
+export FFMPEG_PKG_CONFIG=$FF_L/pkgconfig
 #end::exports[]
 
 
@@ -71,7 +73,7 @@ cd nasm-2.16.03 && \
 PATH="$FFMPEG_BIN:$PATH" ./configure --prefix="$FFMPEG_BUILD" --bindir="$FFMPEG_BIN" && \
 make && \
 make install && \
-cd $FFMPEG_H
+cd $FFMPEG_HOME
 #end::nasm[]
 
 
@@ -81,10 +83,10 @@ cd $FFMPEG_H
 cd $FFMPEG_SOURCES && \
 git -C x264 pull 2> /dev/null || git clone --depth 1 https://code.videolan.org/videolan/x264.git && \
 cd x264 && \
-PATH="$FFMPEG_BIN:$PATH" PKG_CONFIG_PATH="$FFMPEG_BUILD/lib/pkgconfig" ./configure --prefix="$FFMPEG_BUILD" --bindir="$FFMPEG_BIN" --enable-static --enable-pic && \
+PATH="$FFMPEG_BIN:$PATH" PKG_CONFIG_PATH="$FFMPEG_PKG_CONFIG" ./configure --prefix="$FFMPEG_BUILD" --bindir="$FFMPEG_BIN" --enable-static --enable-pic && \
 PATH="$FFMPEG_BIN:$PATH" make && \
 make install && 
-cd $FFMPEG_H
+cd $FFMPEG_HOME
 #end::libx264[]
 
 
@@ -99,7 +101,7 @@ cd multicoreware*/build/linux && \
 PATH="$FFMPEG_BIN:$PATH" cmake -G "Unix Makefiles" -DCMAKE_INSTALL_PREFIX="$FFMPEG_BUILD" -DENABLE_SHARED=off ../../source && \
 PATH="$FFMPEG_BIN:$PATH" make && \
 make install && \
-cd $FFMPEG_H
+cd $FFMPEG_HOME
 #end::libx265[]
 
 
@@ -112,7 +114,7 @@ cd libvpx && \
 PATH="$FFMPEG_BIN:$PATH" ./configure --prefix="$FFMPEG_BUILD" --disable-examples --disable-unit-tests --enable-vp9-highbitdepth --as=yasm && \
 PATH="$FFMPEG_BIN:$PATH" make && \
 make install && \
-cd $FFMPEG_H
+cd $FFMPEG_HOME
 #end::libvpx[]
 
 
@@ -126,7 +128,7 @@ autoreconf -fiv && \
 ./configure --prefix="$FFMPEG_BUILD" --disable-shared && \
 make && \
 make install && 
-cd $FFMPEG_H
+cd $FFMPEG_HOME
 #end::libfdk-aac[]
 
 
@@ -140,7 +142,7 @@ cd opus && \
 ./configure --prefix="$FFMPEG_BUILD" --disable-shared && \
 make && \
 make install && 
-cd $FFMPEG_H
+cd $FFMPEG_HOME
 #end::libopus[]
 
 
@@ -154,7 +156,7 @@ cd aom_build && \
 PATH="$FFMPEG_BIN:$PATH" cmake -G "Unix Makefiles" -DCMAKE_INSTALL_PREFIX="$FFMPEG_BUILD" -DENABLE_TESTS=OFF -DENABLE_NASM=on ../aom && \
 PATH="$FFMPEG_BIN:$PATH" make && \
 make install && \
-cd $FFMPEG_H
+cd $FFMPEG_HOME
 #end::libaom[]
 
 
@@ -168,7 +170,7 @@ cd SVT-AV1/build && \
 PATH="$FFMPEG_BIN:$PATH" cmake -G "Unix Makefiles" -DCMAKE_INSTALL_PREFIX="$FFMPEG_BUILD" -DCMAKE_BUILD_TYPE=Release -DBUILD_DEC=OFF -DBUILD_SHARED_LIBS=OFF .. && \
 PATH="$FFMPEG_BIN:$PATH" make && \
 make install && 
-cd $FFMPEG_H
+cd $FFMPEG_HOME
 #end::libsvtav1[]
 
 
@@ -182,7 +184,7 @@ cd dav1d/build && \
 PATH="$FFMPEG_BIN:$PATH" meson setup -Denable_tools=false -Denable_tests=false --default-library=static .. --prefix "$FFMPEG_BUILD" --libdir="$FFMPEG_BUILD/lib" && \
 ninja && \
 ninja install &&
-cd $FFMPEG_H
+cd $FFMPEG_HOME
 #end::libdav1d[]
 
 
@@ -198,7 +200,7 @@ cd vmaf-3.0.0/libvmaf/build && \
 PATH="$FFMPEG_BIN:$PATH" meson setup -Denable_tests=false -Denable_docs=false --buildtype=release --default-library=static .. --prefix "$FFMPEG_BUILD" --bindir="$FFMPEG_BUILD/bin" --libdir="$FFMPEG_BUILD/lib" && \
 ninja && \
 ninja install &&
-cd $FFMPEG_H
+cd $FFMPEG_HOME
 #end::libvmaf[]
 
 
@@ -209,7 +211,7 @@ cd $FFMPEG_SOURCES && \
 wget -O ffmpeg-7.1.tar.bz2 https://ffmpeg.org/releases/ffmpeg-7.1.tar.bz2 && \
 tar xjvf ffmpeg-7.1.tar.bz2 && \
 cd ffmpeg-7.1 && \
-PATH="$FFMPEG_BIN:$PATH" PKG_CONFIG_PATH="$FFMPEG_BUILD/lib/pkgconfig" ./configure \
+PATH="$FFMPEG_BIN:$PATH" PKG_CONFIG_PATH="$FFMPEG_PKG_CONFIG" ./configure \
   --prefix="$FFMPEG_BUILD" \
   --pkg-config-flags="--static" \
   --extra-cflags="-I$FFMPEG_BUILD/include" \
@@ -236,6 +238,6 @@ PATH="$FFMPEG_BIN:$PATH" PKG_CONFIG_PATH="$FFMPEG_BUILD/lib/pkgconfig" ./configu
 PATH="$FFMPEG_BIN:$PATH" make && \
 make install && \
 hash -r &&
-cd $FFMPEG_H
+cd $FFMPEG_HOME
 #end::FFmpeg[]
 

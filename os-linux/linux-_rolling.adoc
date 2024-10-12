@@ -336,6 +336,11 @@ NOTE: `-d` to list with files description name
 
 === Multiple Virtual Webcams - OBS & Iriun
 
+.install v4l2
+ sudo apt install v4l2loopback-dkms
+ sudo apt install v4l-utils
+
+ v4l2-ctl --list-devices
 
 .Links used:
 

@@ -98,7 +98,7 @@ cd $FFMPEG_SOURCES && \
 wget -O x265.tar.bz2 https://bitbucket.org/multicoreware/x265_git/get/master.tar.bz2 && \
 tar xjvf x265.tar.bz2 && \
 cd multicoreware*/build/linux && \
-PATH="$FFMPEG_BIN:$PATH" cmake -G "Unix Makefiles" -DCMAKE_INSTALL_PREFIX="$FFMPEG_BUILD" -DENABLE_SHARED=off ../../source && \
+PATH="$FFMPEG_BIN:$PATH" PKG_CONFIG_PATH="$FFMPEG_PKG_CONFIG" cmake -G "Unix Makefiles" -DCMAKE_INSTALL_PREFIX="$FFMPEG_BUILD" -DENABLE_SHARED=off ../../source && \
 PATH="$FFMPEG_BIN:$PATH" make && \
 make install && \
 cd $FFMPEG_HOME
@@ -111,7 +111,7 @@ cd $FFMPEG_HOME
 cd $FFMPEG_SOURCES && \
 git -C libvpx pull 2> /dev/null || git clone --depth 1 https://chromium.googlesource.com/webm/libvpx.git && \
 cd libvpx && \
-PATH="$FFMPEG_BIN:$PATH" ./configure --prefix="$FFMPEG_BUILD" --disable-examples --disable-unit-tests --enable-vp9-highbitdepth --as=yasm && \
+PATH="$FFMPEG_BIN:$PATH" PKG_CONFIG_PATH="$FFMPEG_PKG_CONFIG" ./configure --prefix="$FFMPEG_BUILD" --disable-examples --disable-unit-tests --enable-vp9-highbitdepth --as=yasm && \
 PATH="$FFMPEG_BIN:$PATH" make && \
 make install && \
 cd $FFMPEG_HOME
@@ -153,7 +153,7 @@ cd $FFMPEG_SOURCES && \
 git -C aom pull 2> /dev/null || git clone --depth 1 https://aomedia.googlesource.com/aom && \
 mkdir -p aom_build && \
 cd aom_build && \
-PATH="$FFMPEG_BIN:$PATH" cmake -G "Unix Makefiles" -DCMAKE_INSTALL_PREFIX="$FFMPEG_BUILD" -DENABLE_TESTS=OFF -DENABLE_NASM=on ../aom && \
+PATH="$FFMPEG_BIN:$PATH" PKG_CONFIG_PATH="$FFMPEG_PKG_CONFIG" cmake -G "Unix Makefiles" -DCMAKE_INSTALL_PREFIX="$FFMPEG_BUILD" -DENABLE_TESTS=OFF -DENABLE_NASM=on ../aom && \
 PATH="$FFMPEG_BIN:$PATH" make && \
 make install && \
 cd $FFMPEG_HOME
@@ -167,7 +167,7 @@ cd $FFMPEG_SOURCES && \
 git -C SVT-AV1 pull 2> /dev/null || git clone https://gitlab.com/AOMediaCodec/SVT-AV1.git && \
 mkdir -p SVT-AV1/build && \
 cd SVT-AV1/build && \
-PATH="$FFMPEG_BIN:$PATH" cmake -G "Unix Makefiles" -DCMAKE_INSTALL_PREFIX="$FFMPEG_BUILD" -DCMAKE_BUILD_TYPE=Release -DBUILD_DEC=OFF -DBUILD_SHARED_LIBS=OFF .. && \
+PATH="$FFMPEG_BIN:$PATH" PKG_CONFIG_PATH="$FFMPEG_PKG_CONFIG" cmake -G "Unix Makefiles" -DCMAKE_INSTALL_PREFIX="$FFMPEG_BUILD" -DCMAKE_BUILD_TYPE=Release -DBUILD_DEC=OFF -DBUILD_SHARED_LIBS=OFF .. && \
 PATH="$FFMPEG_BIN:$PATH" make && \
 make install && 
 cd $FFMPEG_HOME

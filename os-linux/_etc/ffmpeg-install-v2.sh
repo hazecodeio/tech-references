@@ -7,7 +7,6 @@ sudo apt-get -y install \
   git-core \
   libass-dev \
   libfreetype6-dev \
-  libgnutls28-dev \
   libmp3lame-dev \
   libsdl2-dev \
   libtool \
@@ -25,6 +24,9 @@ sudo apt-get -y install \
   yasm \
   zlib1g-dev
 #end::apt[]
+
+#  libgnutls28-dev \
+
 
 
 #tag::apt2[]
@@ -44,7 +46,7 @@ sudo apt-get -y install \
 
 
 #tag::exports[]
-export FFMPEG_H=/opt/_tools-os/ffmpeg-me
+export FFMPEG_H=/opt/_tools-os/ffmpeg
 export FFMPEG_SOURCES=$FFMPEG_H/ffmpeg-resources
 export FFMPEG_BIN=$FFMPEG_H/bin
 export FFMPEG_BUILD=$FFMPEG_H/ffmpeg-build
@@ -230,7 +232,7 @@ PATH="$FFMPEG_BIN:$PATH" PKG_CONFIG_PATH="$FFMPEG_BUILD/lib/pkgconfig" ./configu
   --enable-libvpx \
   --enable-libx264 \
   --enable-libx265 \
-  --enable-nonfree --enable-chromaprint --enable-frei0r --enable-gnutls --enable-gpl --enable-ladspa --enable-libaom --enable-libass --enable-libbluray --enable-libbs2b --enable-libcaca --enable-libcdio --enable-libcodec2 --enable-libdav1d --enable-libdc1394 --enable-libdrm --enable-libfdk-aac --enable-libflite --enable-libfontconfig --enable-libfreetype --enable-libfribidi --enable-libglslang --enable-libgme --enable-libgsm --enable-libharfbuzz --enable-libiec61883 --enable-libjack --enable-libjxl --enable-libmp3lame --enable-libmysofa --enable-libopenjpeg --enable-libopenmpt --enable-libopus --enable-libplacebo --enable-libpulse --enable-librabbitmq --enable-librav1e --enable-librist --enable-librsvg --enable-librubberband --enable-libshine --enable-libsnappy --enable-libsoxr --enable-libspeex --enable-libsrt --enable-libssh --enable-libsvtav1 --enable-libtheora --enable-libtwolame --enable-libvidstab --enable-libvorbis --enable-libvpl --enable-libvpx --enable-libwebp --enable-libx264 --enable-libx265 --enable-libxml2 --enable-libxvid --enable-libzimg --enable-libzmq --enable-libzvbi --enable-lv2 --enable-nonfree --enable-openal --enable-opencl --enable-opengl --enable-pocketsphinx --enable-sdl2 --enable-shared && \
+  --enable-nonfree && \
 PATH="$FFMPEG_BIN:$PATH" make && \
 make install && \
 hash -r &&

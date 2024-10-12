@@ -44,7 +44,7 @@ sudo apt-get -y install \
 
 
 #tag::exports[]
-export FFMPEG_H=/opt/_tools-os/ffmpeg
+export FFMPEG_H=/opt/_tools-os/ffmpeg-me
 export FFMPEG_SOURCES=$FFMPEG_H/ffmpeg-resources
 export FFMPEG_BIN=$FFMPEG_H/bin
 export FFMPEG_BUILD=$FFMPEG_H/ffmpeg-build
@@ -62,9 +62,9 @@ mkdir -p $FFMPEG_SOURCES $FFMPEG_BIN
 
 #tag::nasm[]
 cd $FFMPEG_SOURCES && \
-wget https://www.nasm.us/pub/nasm/releasebuilds/2.16.01/nasm-2.16.01.tar.bz2 -O nasm-2.16.01.tar.bz2 && \
-tar xjvf nasm-2.16.01.tar.bz2 && \
-cd nasm-2.16.01 && \
+wget https://www.nasm.us/pub/nasm/releasebuilds/2.16.03/nasm-2.16.03.tar.bz2 && \
+tar xjvf nasm-2.16.03.tar.bz2 && \
+cd nasm-2.16.03 && \
 ./autogen.sh && \
 PATH="$FFMPEG_BIN:$PATH" ./configure --prefix="$FFMPEG_BUILD" --bindir="$FFMPEG_BIN" && \
 make && \
@@ -189,11 +189,11 @@ cd $FFMPEG_H
 
 #tag::libvmaf[]
 cd $FFMPEG_SOURCES && \
-wget https://github.com/Netflix/vmaf/archive/v2.3.1.tar.gz -O v2.3.1.tar.gz && \
-tar xvf v2.3.1.tar.gz && \
-mkdir -p vmaf-2.3.1/libvmaf/build &&\
-cd vmaf-2.3.1/libvmaf/build && \
-PATH="$FFMPEG_BIN:$PATH" meson setup -Denable_tests=false -Denable_docs=false --buildtype=release --default-library=static .. --prefix "$FFMPEG_BUILD" --bindir="$FFMPEG_BIN" --libdir="$FFMPEG_BUILD/lib" && \
+wget https://github.com/Netflix/vmaf/archive/refs/tags/v3.0.0.tar.gz && \
+tar xvf v3.0.0.tar.gz && \
+mkdir -p vmaf-3.0.0/libvmaf/build &&\
+cd vmaf-3.0.0/libvmaf/build && \
+PATH="$FFMPEG_BIN:$PATH" meson setup -Denable_tests=false -Denable_docs=false --buildtype=release --default-library=static .. --prefix "$FFMPEG_BUILD" --bindir="$FFMPEG_BUILD/bin" --libdir="$FFMPEG_BUILD/lib" && \
 ninja && \
 ninja install &&
 cd $FFMPEG_H
@@ -204,9 +204,9 @@ cd $FFMPEG_H
 
 #tag::FFmpeg[]
 cd $FFMPEG_SOURCES && \
-wget -O ffmpeg-snapshot.tar.bz2 https://ffmpeg.org/releases/ffmpeg-snapshot.tar.bz2 && \
-tar xjvf ffmpeg-snapshot.tar.bz2 && \
-cd ffmpeg && \
+wget -O ffmpeg-7.1.tar.bz2 https://ffmpeg.org/releases/ffmpeg-7.1.tar.bz2 && \
+tar xjvf ffmpeg-7.1.tar.bz2 && \
+cd ffmpeg-7.1 && \
 PATH="$FFMPEG_BIN:$PATH" PKG_CONFIG_PATH="$FFMPEG_BUILD/lib/pkgconfig" ./configure \
   --prefix="$FFMPEG_BUILD" \
   --pkg-config-flags="--static" \
@@ -214,6 +214,7 @@ PATH="$FFMPEG_BIN:$PATH" PKG_CONFIG_PATH="$FFMPEG_BUILD/lib/pkgconfig" ./configu
   --extra-ldflags="-L$FFMPEG_BUILD/lib" \
   --extra-libs="-lpthread -lm" \
   --ld="g++" \
+  --arch=amd64 \
   --bindir="$FFMPEG_BIN" \
   --enable-gpl \
   --enable-gnutls \
@@ -229,7 +230,7 @@ PATH="$FFMPEG_BIN:$PATH" PKG_CONFIG_PATH="$FFMPEG_BUILD/lib/pkgconfig" ./configu
   --enable-libvpx \
   --enable-libx264 \
   --enable-libx265 \
-  --enable-nonfree && \
+  --enable-nonfree --enable-chromaprint --enable-frei0r --enable-gnutls --enable-gpl --enable-ladspa --enable-libaom --enable-libass --enable-libbluray --enable-libbs2b --enable-libcaca --enable-libcdio --enable-libcodec2 --enable-libdav1d --enable-libdc1394 --enable-libdrm --enable-libfdk-aac --enable-libflite --enable-libfontconfig --enable-libfreetype --enable-libfribidi --enable-libglslang --enable-libgme --enable-libgsm --enable-libharfbuzz --enable-libiec61883 --enable-libjack --enable-libjxl --enable-libmp3lame --enable-libmysofa --enable-libopenjpeg --enable-libopenmpt --enable-libopus --enable-libplacebo --enable-libpulse --enable-librabbitmq --enable-librav1e --enable-librist --enable-librsvg --enable-librubberband --enable-libshine --enable-libsnappy --enable-libsoxr --enable-libspeex --enable-libsrt --enable-libssh --enable-libsvtav1 --enable-libtheora --enable-libtwolame --enable-libvidstab --enable-libvorbis --enable-libvpl --enable-libvpx --enable-libwebp --enable-libx264 --enable-libx265 --enable-libxml2 --enable-libxvid --enable-libzimg --enable-libzmq --enable-libzvbi --enable-lv2 --enable-nonfree --enable-openal --enable-opencl --enable-opengl --enable-pocketsphinx --enable-sdl2 --enable-shared && \
 PATH="$FFMPEG_BIN:$PATH" make && \
 make install && \
 hash -r &&

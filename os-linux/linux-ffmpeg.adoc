@@ -24,6 +24,11 @@
 //   --enable-libfreetype \
 
 
+.Enable Flag `--enable-gnutls`
+https://gitlab.com/gnutls/gnutls/-/tree/master
+
+.Test Failure around this
+ sudo apt install unbound
 
 
 .PreReqs- `apt-get`

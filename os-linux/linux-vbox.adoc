@@ -10,6 +10,9 @@ Haze Wylde
 .add users to vboxusers to enable USB usage
  sudo usermod -a -G vboxusers $USER
 
+.to avoid relogin
+ newgrp vboxusers
+
 === Expanding/Resizing Hard Disk Size in VirtualBox
 Create a new hdd, then:
 http://forums.virtualbox.org/viewtopic.php?f=1&t=364&start=75

@@ -7,7 +7,8 @@ Haze Wylde
 :icons: font
 :source-highlighter: rouge
 
-
+.add users to vboxusers to enable USB usage
+ sudo usermod -a -G vboxusers $USER
 
 === Expanding/Resizing Hard Disk Size in VirtualBox
 Create a new hdd, then:

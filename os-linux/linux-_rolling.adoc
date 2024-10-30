@@ -416,7 +416,7 @@ ss -neopa
 
 === Listing Hardware/Devices/Products/Vendors & their Class/Buses/Speed
 
-sudo lshw  | grep -iE '''|5000|speed'
+sudo lshw  | grep -iE '''|5000|speed|anker|hitachi|Renesas|hub|android|brio|C310|GenesysLogic|yeti|plantronics'
 
 
 sudo lshw -short
@@ -424,3 +424,4 @@ sudo lshw -class bus -class disk
 
 .List All Classes
 sudo lshw -json | jq -r 'include "m"; .children | pv' | grep -i class | jq -Rr 'split(": ") | .[1]' | jq -sr 'unique | sort'
+

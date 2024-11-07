@@ -1,12 +1,10 @@
 == Networking - Quick Guide
-Haze Wylde
 :toc:
 :toclevels: 3
 :sectnums: 3
 :sectnumlevels: 3
 :icons: font
 :source-highlighter: rouge
-
 
 === VirtualBox | Local Network | netplan
 sudo ip address add 192.168.1.100/24 dev enp0s8
@@ -32,6 +30,14 @@ ip link delete dev DEVICE_NAME
 .connect via an established tunnel tun0
 vopono -v exec -i tun0 --provider VPN_PROVIDER --server SERVER_NAME bash
 
+.deleting a dead link
+----
+ip link show
+sudo ip link delete LINKNAME
+----
+
+.Example
+NOTE: LINKNAME is namespace created by vopono
 
 === Disabling IPv6
 
@@ -48,3 +54,5 @@ Using our Secure Core feature will create a "triple-VPN" (or even a "quadruple-V
 
 .https://protonvpn.com/support/disable-ipv6-protocol-linux/[disable-ipv6-protocol-linux]
 How to manually disable IPv6 on Linux
+
+

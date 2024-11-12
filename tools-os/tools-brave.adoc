@@ -7,3 +7,22 @@
 :source-highlighter: rouge
 
 
+
+
+
+.Profile Name (not dir name)
+ find .config/BraveSoftware/Brave-Browser/Profile*/Preferences | xargs -i jq --arg path "{}" '{path: $path, profile_name: .profile.name}' "{}"
+
+
+
+
+
+
+.Profile Dir Name
+cat .config/BraveSoftware/Brave-Browser/Local\ State | jq -r 'include "m"; pv' | grep -iE PROFILE_DIR_NAME
+
+cat .config/BraveSoftware/Brave-Browser/Local\ State | jq -r 'include "m"; .profile.info_cache'
+
+.Create a profile
+ brave-browser --profile-directory="PROFILE_DIR_NAME"
+

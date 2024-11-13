@@ -7,7 +7,7 @@ Haze Wylde
 :icons: font
 :source-highlighter: rouge
 
-include::tools-os-_rolling.adoc[]
+include::tools-_rolling.adoc[]
 
 include::tools-android.adoc[]
 
@@ -23,7 +23,7 @@ include::tools-imagemagick.adoc[]
 
 include::tools-keytool.adoc[]
 
-include::tools-networking.adoc[]
+include::./tools-networking/tools-networking.adoc[]
 
 include::tools-pandoc.adoc[]
 

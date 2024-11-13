@@ -425,3 +425,20 @@ sudo lshw -class bus -class disk
 .List All Classes
 sudo lshw -json | jq -r 'include "m"; .children | pv' | grep -i class | jq -Rr 'split(": ") | .[1]' | jq -sr 'unique | sort'
 
+
+=== Proton
+
+.Extract credentials for a pinned account
+----
+cat vault.json | jq '.vaults
+      | to_entries
+      | .[].value
+      | select(.name == "Personal")
+      | .items[]
+      | select(.pinned == true)
+      | .data.content
+      | select(.itemUsername)
+      | select(.itemUsername
+      | contains("USERNAME"))
+      | .password'
+----

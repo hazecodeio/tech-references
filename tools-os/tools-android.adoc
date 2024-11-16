@@ -66,5 +66,65 @@ scrcpy --tcpip=192.168.1.6:5555 --max-size=2800
 
 
 
-==== WayDroid
+=== WayDroid
+
+----
+sudo systemctl restart waydroid-container.service
+waydroid session start
+----
+
+
+.Uninstall
+----
+sudo apt purge waydroid
+
+sudo rm -r /var/lib/waydroid
+sudo rm -r /home/.waydroid
+sudo rm -r ~/waydroid
+sudo rm -r ~/.share/waydroid
+sudo rm -r ~/.local/share/waydroid
+----
+
+.Re-Init
+----
+sudo waydroid init -f -s GAPPS
+----
+
+
+----
+waydroid prop set 'persist.waydroid.width' 2000
+waydroid prop set 'persist.waydroid.height' 1080
+----
+
+
+----
+waydroid show-full-ui
+----
+
+==== Install APK Apps
+
+
+.Verify APKs
+----
+apksigner verify -v --print-certs --min-sdk-version 24
+----
+
+.Install apksigner
+Install -> Android SDK Build-Tools
+
+.F-Droid
+https://f-droid.org/F-Droid.apk
+
+.Brave
+https://github.com/brave/brave-browser/releases/download/v1.73.89/BraveMonox64.apk
+
+.DuckDuckGo
+https://github.com/duckduckgo/Android/releases/download/5.220.0/duckduckgo-5.220.0-play-release.apk
+
+.Signal
+----
+wget https://updates.signal.org/android/Signal-Android-website-prod-universal-release-7.23.1.apk
+
+waydroid app install Signal-Android-website-prod-universal-release-7.25.0.apk
+----
 

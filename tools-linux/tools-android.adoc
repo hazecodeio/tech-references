@@ -66,7 +66,53 @@ scrcpy --tcpip=192.168.1.6:5555 --max-size=2800
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 === WayDroid
+
+
+
+
+.install
+----
+curl -s https://repo.waydro.id | sudo bash
+
+sudo apt install waydroid -y
+----
+
+.init
+----
+sudo waydroid init -f -s GAPPS #Google App
+sudo waydroid init -f -s VANILLA
+----
+
+
+
+
+
+
+
+
+
+
+
+
 
 ----
 sudo systemctl restart waydroid-container.service
@@ -76,13 +122,12 @@ waydroid session start
 
 .Uninstall
 ----
+waydroid session stop
+sudo waydroid container stop
+
 sudo apt purge waydroid
 
-sudo rm -r /var/lib/waydroid
-sudo rm -r /home/.waydroid
-sudo rm -r ~/waydroid
-sudo rm -r ~/.share/waydroid
-sudo rm -r ~/.local/share/waydroid
+sudo rm -rf /var/lib/waydroid /home/.waydroid ~/waydroid ~/.share/waydroid ~/.local/share/applications/*aydroid* ~/.local/share/waydroid
 ----
 
 .Re-Init
@@ -92,8 +137,12 @@ sudo waydroid init -f -s GAPPS
 
 
 ----
-waydroid prop set 'persist.waydroid.width' 2000
-waydroid prop set 'persist.waydroid.height' 1080
+waydroid prop set persist.waydroid.multi_windows true
+waydroid prop set persist.waydroid.width 1920
+waydroid prop set persist.waydroid.height 2000
+
+waydroid prop get persist.waydroid.width
+waydroid prop get persist.waydroid.height
 ----
 
 
@@ -128,3 +177,58 @@ wget https://updates.signal.org/android/Signal-Android-website-prod-universal-re
 waydroid app install Signal-Android-website-prod-universal-release-7.25.0.apk
 ----
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+=== Android SDK & Studio
+
+.install
+----
+
+----
+
+NOTE: It uses `qemu-kvm`
+
+.uninstall
+----
+
+----
+
+
+
+.Create an Emulator
+----
+
+----
+
+.Navigate Emulator Dir
+----
+
+----
+
+
+.Webcam Troubleshooting
+----
+
+----
+
+.Install APK via adb
+----
+
+----
+
+ ANDROID_SDK_HOME=/opt/_langs/android/sdk/; $ANDROID_SDK_HOME/emulator/emulator -list-avds
+
+ $ANDROID_SDK_HOME/emulator/emulator -list-avds
+ $ANDROID_SDK_HOME/emulator/emulator -avd Small_Phone_API_34

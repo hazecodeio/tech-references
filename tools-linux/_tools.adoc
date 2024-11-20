@@ -499,3 +499,18 @@ install.
 note: If you believe this is a mistake, please contact your Python installation or OS distribution provider. You can override this, at the risk of breaking your Python installation or OS, by passing --break-system-packages.
 hint: See PEP 668 for the detailed specification.
 ****
+
+
+=== Bluetooth
+
+.Find Bluetooth version aka (HCI & LMP), and others
+----
+hciconfig -a
+hcitool info MAC_ADD
+
+hcitool
+hcitool dev
+hcitool scan
+hcitool lescan
+hcitool leinfo
+----

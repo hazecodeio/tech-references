@@ -503,9 +503,14 @@ hint: See PEP 668 for the detailed specification.
 
 === Bluetooth
 
-.Find Bluetooth version aka (HCI & LMP), and others
+.Find Bluetooth version aka (HCI & LMP)
 ----
 hciconfig -a
+----
+
+.Query Bluetooth devices
+----
+bluetoothctl devices
 hcitool info MAC_ADD
 
 hcitool

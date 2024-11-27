@@ -106,4 +106,5 @@ ffmpeg -i INPUT.mkv -filter_complex "[0:a:0][0:a:1]amix=2:longest[aout]" -map "[
  identify -verbose media_src | yq
 
 .`exiftool`
+ sudo apt install exiftool
  exiftool -json media_src

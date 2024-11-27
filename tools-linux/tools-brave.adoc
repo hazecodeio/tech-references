@@ -19,9 +19,9 @@
 
 
 .Profile Dir Name
-cat $HOME/.config/BraveSoftware/Brave-Browser/Local\ State | jq -r 'include "m"; pv' | grep -iE PROFILE_DIR_NAME
+ cat $HOME/.config/BraveSoftware/Brave-Browser/Local\ State | jq -r 'include "m"; pv' | grep -iE PROFILE_DIR_NAME
 
-cat $HOME/.config/BraveSoftware/Brave-Browser/Local\ State | jq -r 'include "m"; .profile.info_cache'
+ cat $HOME/.config/BraveSoftware/Brave-Browser/Local\ State | jq -r 'include "m"; .profile.info_cache'
 
 .Create a New Profile
  brave-browser --profile-directory="PROFILE_DIR_NAME"

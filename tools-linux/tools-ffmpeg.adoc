@@ -100,6 +100,22 @@ ffmpeg -i input-video.mp4 -i input-audio.mp4 -c:v copy -c:a copy -map_metadata -
 ffmpeg -i INPUT.mkv -filter_complex "[0:a:0][0:a:1]amix=2:longest[aout]" -map "[aout]" -map 0:v -c:v libx264 OUTPUT.mp4
 ----
 
+
+.Trim from/to time
+----
+ffmpeg -i INPUT.mkv -ss 00:00:00 -t 00:11:47 -c copy OUTPUT.mkv
+----
+
+.Concatenate Multiple Videos
+----
+$ cat mylist.txt
+file '/path/to/file1'
+file '/path/to/file2'
+file '/path/to/file3'
+
+$ ffmpeg -f concat -i mylist.txt -c copy output.mp4
+----
+
 === Query Metadata
 
 .ImageMagic - `identify`

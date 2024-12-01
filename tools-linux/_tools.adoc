@@ -519,3 +519,28 @@ hcitool scan
 hcitool lescan
 hcitool leinfo
 ----
+
+=== vdhcoapp
+
+----
+curl -sSLf https://github.com/aclap-dev/vdhcoapp/releases/latest/download/install.sh | bash
+W: flatpak not installed. It is not necessary to install it, but if you're using Ubuntu (and derivatives), we recommend to install it to solve some CoApp registrations issues.
+Skipping flatpak install
+Downloading: https://github.com/aclap-dev/vdhcoapp/releases/latest/download/vdhcoapp-linux-x86_64.tar.bz2
+  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
+                                 Dload  Upload   Total   Spent    Left  Speed
+  0     0    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0
+  0     0    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0
+100 52.8M  100 52.8M    0     0  9847k      0  0:00:05  0:00:05 --:--:-- 10.9M
+Extracting tarball…
+/tmp/vdhcoapp-TuKNrx: bzip2 compressed data, block size = 900k
+Registering CoApp
+Installing…
+Writing /home/haze/.mozilla/native-messaging-hosts/net.downloadhelper.coapp.json
+Writing /home/haze/.var/app/org.mozilla.firefox/.mozilla/native-messaging-hosts/net.downloadhelper.coapp.json
+Writing /home/haze/.config/BraveSoftware/Brave-Browser/NativeMessagingHosts/net.downloadhelper.coapp.json
+VdhCoApp : VdhCoApp is ready to be used
+CoApp successfuly installed under '~/.local/share/vdhcoapp'.
+To uninstall, run '~/.local/share/vdhcoapp/vdhcoapp uninstall' and remove '~/.local/share/vdhcoapp'.
+Re-run that script to update the coapp.
+----

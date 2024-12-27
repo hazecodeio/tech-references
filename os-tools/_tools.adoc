@@ -7,23 +7,11 @@ Haze Wylde
 :icons: font
 :source-highlighter: rouge
 
-include::tools-android.adoc[]
-
-include::tools-apt.adoc[]
-
 include::tools-asciidoctor.adoc[]
 
-include::tools-ffmpeg.adoc[]
-
-include::tools-gpg.adoc[]
-
-include::tools-imagemagick.adoc[]
-
-include::tools-keytool.adoc[]
+include::tools-brave.adoc[]
 
 include::tools-pandoc.adoc[]
-
-include::tools-vbox.adoc[]
 
 include::tools-jq_yq_xq_hq_data-structuring.adoc[]
 

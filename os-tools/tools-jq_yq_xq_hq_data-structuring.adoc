@@ -1,5 +1,4 @@
 == jq| yq | xq | hq | Data Structuring - Quick guide
-Haze Wylde
 :toc:
 :toclevels: 3
 :sectnums: 3

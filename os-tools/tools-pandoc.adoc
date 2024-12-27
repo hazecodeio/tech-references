@@ -1,5 +1,4 @@
 == Pandoc Reference
-Haze Wylde
 :toc:
 :toclevels: 3
 :sectnums: 3

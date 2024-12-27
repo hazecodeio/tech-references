@@ -1,4 +1,5 @@
-== Networking - Quick Guide
+= Linux Commands Guide (_Incomplete_)
+Haze Wylde
 :toc:
 :toclevels: 3
 :sectnums: 3
@@ -6,5 +7,5 @@
 :icons: font
 :source-highlighter: rouge
 
+include::_networking.adoc[]
 
-include::./networking-vlans/networking-vlans.adoc[]

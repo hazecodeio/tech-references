@@ -1,5 +1,4 @@
 == SSl Certs - Quick Guide
-Haze Wylde
 :toc:
 :toclevels: 3
 :sectnums: 3

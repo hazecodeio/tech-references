@@ -1,4 +1,4 @@
-== jq| yq | xq | hq | Data Structuring - Quick guide
+== jq | yq | xq | hq | Data Structuring - Quick guide
 :toc:
 :toclevels: 3
 :sectnums: 3

@@ -501,6 +501,49 @@ sudo lshw -class bus -class disk
 sudo lshw -json | jq -r 'include "m"; .children | pv' | grep -i class | jq -Rr 'split(": ") | .[1]' | jq -sr 'unique | sort'
 
 
+=== Unclaimed Network PCIE
+
+----
+{
+    "id" : "network",
+    "class" : "network",
+    "handle" : "PCI:0000:22:00.0",
+    "description" : "Network controller",
+    "product" : "MEDIATEK Corp.",
+    "vendor" : "MEDIATEK Corp.",
+    "physid" : "0",
+    "businfo" : "pci@0000:22:00.0",
+    "version" : "00",
+    "width" : 64,
+    "clock" : 33000000,
+    "configuration" : {
+      "latency" : "0"
+    },
+    "capabilities" : {
+      "pciexpress" : "PCI Express",
+      "msi" : "Message Signalled Interrupts",
+      "pm" : "Power Management",
+      "bus_master" : "bus mastering",
+      "cap_list" : "PCI capabilities listing"
+    }
+  }
+----
+
+----
+-network UNCLAIMED
+       description: Network controller
+       product: MEDIATEK Corp.
+       vendor: MEDIATEK Corp.
+       physical id: 0
+       bus info: pci@0000:22:00.0
+       version: 00
+       width: 64 bits
+       clock: 33MHz
+       capabilities: pciexpress msi pm bus_master cap_list
+       configuration: latency=0
+       resources: memory:dfc00000-dfdfffff memory:dfef8000-dfefffff
+----
+
 === Proton Pass - Vaults
 
 .Extract credentials for a pinned account

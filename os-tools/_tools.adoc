@@ -505,7 +505,7 @@ sudo lshw -json | jq -r 'include "m"; .children | pv' | grep -i class | jq -Rr '
 
 .Extract credentials for a pinned account
 ----
-cat data.json | jq '.vaults
+cat data.json | jq 'include "m"; .vaults
       | to_entries
       | .[].value
       | select(.name | ascii_downcase | contains( "VAULT_NAME"))
@@ -516,7 +516,7 @@ cat data.json | jq '.vaults
       | .password'
 ----
 
-.TBS
+.TBD
 ----
 cat ./data.json   | jq -r 'include "m"; .vaults
     | to_entries

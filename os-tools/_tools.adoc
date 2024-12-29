@@ -501,21 +501,29 @@ sudo lshw -class bus -class disk
 sudo lshw -json | jq -r 'include "m"; .children | pv' | grep -i class | jq -Rr 'split(": ") | .[1]' | jq -sr 'unique | sort'
 
 
-=== Proton
+=== Proton Pass - Vaults
 
 .Extract credentials for a pinned account
 ----
-cat vault.json | jq '.vaults
+cat data.json | jq '.vaults
       | to_entries
       | .[].value
-      | select(.name == "Personal")
+      | select(.name | ascii_downcase | contains( "VAULT_NAME"))
       | .items[]
       | select(.pinned == true)
       | .data.content
-      | select(.itemUsername)
-      | select(.itemUsername
-      | contains("USERNAME"))
+      | select(.itemUsername | ascii_downcase | contains( "USERNAME"))
       | .password'
+----
+
+.TBS
+----
+cat ./data.json   | jq -r 'include "m"; .vaults
+    | to_entries
+    | .[].value
+    | select(.name | ascii_downcase | contains( "VAULT_NAME"))
+    | .items[].data
+    | select (.metadata.name | ascii_downcase | contains( "KEYWARD"))'
 ----
 
 === python venv

@@ -675,3 +675,9 @@ make install
  sudo apt-get install libavahi-core-dev
 
 .CUPSEXT could not be loaded. Please check HPLIP installation.
+
+.Gtk-Message: 09:18:48.486: Failed to load module "canberra-gtk-module"
+ sudo apt-get install libcanberra-gtk-module
+
+.warning: Failed to read /etc/cups/ppd/OfficeJet_250_Mobile.ppd ppd file
+ TBD

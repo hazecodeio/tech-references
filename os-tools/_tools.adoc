@@ -641,8 +641,9 @@ Re-run that script to update the coapp.
 ----
 
 
-== `hplip` - instaollation
+== `hplip` - Installation
 
+.build
 ----
 tar -xvif hplip-3.24.4.tar.gz
 cd hplip-3.24.4
@@ -650,6 +651,14 @@ cd hplip-3.24.4
 ./configure
 make
 make install
+----
+
+.Alternative - run `./hplip-install`
+----
+tar -xvif hplip-3.24.4.tar.gz
+cd hplip-3.24.4
+
+./hplip-install
 ----
 
 === troubleshooting

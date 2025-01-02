@@ -639,3 +639,39 @@ CoApp successfuly installed under '~/.local/share/vdhcoapp'.
 To uninstall, run '~/.local/share/vdhcoapp/vdhcoapp uninstall' and remove '~/.local/share/vdhcoapp'.
 Re-run that script to update the coapp.
 ----
+
+
+== `hplip` - instaollation
+
+----
+tar -xvif hplip-3.24.4.tar.gz
+cd hplip-3.24.4
+
+./configure
+make
+make install
+----
+
+=== troubleshooting
+
+.configure: error: cannot find net/ucd-snmp support
+ sudo apt-get install libsnmp-dev
+
+.configure: error: cannot find avahi_client support
+ sudo apt-get install libavahi-client-dev
+
+.configure: error: cannot find libcups support
+ sudo apt-get install libcups2-dev
+
+.configure: error: cannot find sane-backends-devel support
+ sudo apt install libsane-dev
+
+.prnt/cupsext/cupsext.c:78:10: fatal error: Python.h: No such file or directory
+ make clean
+ ./configure
+ make
+
+./usr/bin/ld: cannot find -lavahi-core: No such file or directory
+ sudo apt-get install libavahi-core-dev
+
+.CUPSEXT could not be loaded. Please check HPLIP installation.

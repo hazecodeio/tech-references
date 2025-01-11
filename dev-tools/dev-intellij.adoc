@@ -1,0 +1,18 @@
+== IntelliJ - Quick Guide
+:toc:
+:toclevels: 3
+:sectnums: 3
+:sectnumlevels: 3
+:icons: font
+:source-highlighter: rouge
+
+=== RegEx - Text Search/Replacement
+
+.Swap Replacement - Group Capture
+----
+Find:       (\{?)(KEY|TOKEN)_(\w*)(\}?)
+Replace:    $1$3_$2$4
+----
+
+
+NOTE: https://www.jetbrains.com/help/idea/tutorial-finding-and-replacing-text-using-regular-expressions.html#capture_groups_and_backreference[Reference - capture_groups_and_backreference]

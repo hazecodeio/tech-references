@@ -11,7 +11,7 @@
 
 
 .Profile Name (not dir name)
- find $HOME/.config/BraveSoftware/Brave-Browser/*/Preferences | xargs -i jq --arg path "{}" '{path: $path, profile_name: .profile.name}' "{}"
+ find $HOME/.config/BraveSoftware/*/*/Preferences | xargs -i jq --arg path "{}" '{path: $path, profile_name: .profile.name}' "{}"
 
 
 
@@ -31,4 +31,11 @@
 BRAVE_HOME_NEW=$HOME/temp-brave
 PROFILE_DIR_NAME=Profile@Therapy
 brave-browser --user-data-dir=$BRAVE_HOME_NEW --profile-directory=$PROFILE_DIR_NAME
+----
+
+
+.Profile-Only Backup - `rsync`
+[source,bash]
+----
+rsync -avzHrup --include='brave-browser*' --include='brave-browser*/Profile@*' --exclude='brave-browser*/*' $HOME/.config/BraveSoftware $HOME/.config/BraveSoftware.Profiles
 ----

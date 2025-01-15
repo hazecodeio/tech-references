@@ -34,8 +34,54 @@ brave-browser --user-data-dir=$BRAVE_HOME_NEW --profile-directory=$PROFILE_DIR_N
 ----
 
 
-.Profile-Only Backup - `rsync`
+.Profile-Only Full Backup - `rsync`
 [source,bash]
 ----
-rsync -avzhruP --include='brave-browser*' --include='brave-browser*/Profile@*' --exclude='brave-browser*/*' $HOME/.config/BraveSoftware $HOME/.config/BraveSoftware.Profiles
+rsync -avzhruP --delete
+  --include='brave-browser*'
+  --include='brave-browser*/Profile@*'
+  --exclude='brave-browser*/*'
+  $HOME/.config/BraveSoftware $HOME/.config/BraveSoftware.Profiles.2 -n
+----
+
+.Profile-Only Full Backup - `rsync`
+[source,bash]
+----
+rsync -avzhruP --delete \
+  --include="brave-browser*" \
+  --include="brave-browser*/Local State" \
+  --include="brave-browser*/First Run" \
+  --include="brave-browser*/Profile@*" \
+  --exclude="brave-browser*/*" \
+  --exclude="brave-browser*/Profile@*/.org.chromium.*" \
+  ${HOME}/.config/BraveSoftware/ ${HOME}/.config/BraveSoftware.profiles/ -n
+----
+
+
+.Profiles-Onlyc Selective Backup - `rsync`
+[source,bash]
+----
+rsync -avzhruP --delete \
+  --include="brave-browser*/" \
+  --include="brave-browser*/Local State" \
+  --include="brave-browser*/First Run" \
+  --include="brave-browser*/Profile@*" \
+  --exclude="brave-browser*/Profile@*/.org.chromium.*" \
+  --include="brave-browser*/Profile@*/Extensions" \
+  --include="brave-browser*/Profile@*/Bookmarks*" \
+  --include="brave-browser*/Profile@*/Custom Dictionary.txt" \
+  --include="brave-browser*/Profile@*/Preferences" \
+  --include="brave-browser*/Profile@*/Shared Dictionary" \
+  --include="brave-browser*/Profile@*/Top Sites*" \
+  --include="brave-browser*/Profile@*/Visited Links" \
+  --include="brave-browser*/Profile@*/Web Data*" \
+  --include="brave-browser*/Profile@*/Extensions" \
+  --exclude="brave-browser*/Profile@*/*" \
+  --exclude="brave-browser*/*" \
+  ${HOME}/.config/BraveSoftware/ ${HOME}/.config/BraveSoftware.profiles.selective/ -n
+
+
+#  --include="brave-browser*/Profile@*/Shortcuts.*" \
+#  --include="brave-browser*/Profile@*/Favicons.*" \
+#  --include="brave-browser*/Profile@*/Cookies.*" \
 ----

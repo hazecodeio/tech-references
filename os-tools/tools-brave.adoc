@@ -37,5 +37,5 @@ brave-browser --user-data-dir=$BRAVE_HOME_NEW --profile-directory=$PROFILE_DIR_N
 .Profile-Only Backup - `rsync`
 [source,bash]
 ----
-rsync -avzHrup --include='brave-browser*' --include='brave-browser*/Profile@*' --exclude='brave-browser*/*' $HOME/.config/BraveSoftware $HOME/.config/BraveSoftware.Profiles
+rsync -avzhruP --include='brave-browser*' --include='brave-browser*/Profile@*' --exclude='brave-browser*/*' $HOME/.config/BraveSoftware $HOME/.config/BraveSoftware.Profiles
 ----

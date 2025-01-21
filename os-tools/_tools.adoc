@@ -7,6 +7,7 @@ Haze Wylde
 :icons: font
 :source-highlighter: rouge
 
+
 include::tools-asciidoctor.adoc[]
 
 include::tools-brave.adoc[]
@@ -15,7 +16,7 @@ include::tools-pandoc.adoc[]
 
 include::tools-jq_yq_xq_hq_data-structuring.adoc[]
 
-
+include::tools-gnome.adoc[]
 
 
 
@@ -302,66 +303,6 @@ TIP: add `-n` for dry run.
 ----
 cat somejson.json | jq -r 'paths(scalars | true) as $p  | [ ( [ $p[] | tostring ] | join(".") ), ( getpath($p) | tojson )] | join(": ")'
 ----
-
-=== GSettings
-
-NOTE: urls and filenames on each line in the file `urle-filename.txt` are separated by a space
-
-.`gsettings` load/save keybindings
-[source,bash]
-----
-gsettings list-schemas | grep -iE 'org.gnome.*.keybindings' | jq -scR '. | split("\n") | map(select(. != "")) | .[]' | xargs -i gsettings list-recursively {}
-----
-
-.`gsettings` shortened
-[source,bash]
-----
-gsettings list-schemas | grep -iE 'org.gnome.*.keybindings' | jq -cR '.' | xargs -i gsettings list-recursively {}
-----
-
-
-.Get a Key
-----
-gsettings set org.gnome.desktop.wm.keybindings move-to-corner-se []
-----
-
-.Set a Key
-----
-gsettings set org.gnome.desktop.wm.keybindings move-to-corner-se "['<Ctrl><Super>Right']"
-----
-
-.Reset a Key
-----
-gsettings set org.gnome.desktop.wm.keybindings move-to-corner-se []
-----
-
-
-.List of Key/Value Pairs
-----
-org.gnome.shell.extensions.tiling-assistant tile-bottom-half ['<Super>KP_2']
-org.gnome.shell.extensions.tiling-assistant tile-bottom-half-ignore-ta @as []
-org.gnome.shell.extensions.tiling-assistant tile-bottomleft-quarter ['<Super>KP_1']
-org.gnome.shell.extensions.tiling-assistant tile-bottomleft-quarter-ignore-ta @as []
-org.gnome.shell.extensions.tiling-assistant tile-bottomright-quarter ['<Super>KP_3']
-org.gnome.shell.extensions.tiling-assistant tile-bottomright-quarter-ignore-ta @as []
-org.gnome.shell.extensions.tiling-assistant tile-edit-mode @as []
-org.gnome.shell.extensions.tiling-assistant tile-left-half ['<Super>Left', '<Super>KP_4']
-org.gnome.shell.extensions.tiling-assistant tile-left-half-ignore-ta @as []
-org.gnome.shell.extensions.tiling-assistant tile-maximize ['<Super>Up', '<Super>KP_5']
-org.gnome.shell.extensions.tiling-assistant tile-maximize-horizontally @as []
-org.gnome.shell.extensions.tiling-assistant tile-maximize-vertically @as []
-org.gnome.shell.extensions.tiling-assistant tile-right-half ['<Super>Right', '<Super>KP_6']
-org.gnome.shell.extensions.tiling-assistant tile-right-half-ignore-ta @as []
-org.gnome.shell.extensions.tiling-assistant tile-top-half ['<Super>KP_8']
-org.gnome.shell.extensions.tiling-assistant tile-top-half-ignore-ta @as []
-org.gnome.shell.extensions.tiling-assistant tile-topleft-quarter ['<Super>KP_7']
-org.gnome.shell.extensions.tiling-assistant tile-topleft-quarter-ignore-ta @as []
-org.gnome.shell.extensions.tiling-assistant tile-topright-quarter ['<Super>KP_9']
-org.gnome.shell.extensions.tiling-assistant tile-topright-quarter-ignore-ta @as []
-org.gnome.shell.extensions.tiling-assistant tilegroups-in-app-switcher false
-org.gnome.shell.extensions.tiling-assistant tiling-popup-all-workspace false
-----
-
 
 
 

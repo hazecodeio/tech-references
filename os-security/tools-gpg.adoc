@@ -61,14 +61,14 @@ TIP: This is to provide the PASSPHRASE from the environment
 .Encrypt
 [source, bash]
 ----
-gpg --passphrase $GPG_PASSPHRASE --batch --yes -o ENC-FILE.txt.gpg -c DEC-FILE.txt
+gpg -v --passphrase $GPG_PASSPHRASE --batch --yes -o ENC-FILE.txt.gpg -c DEC-FILE.txt
 ----
 
 .Encrypt - Automated
 [source, bash]
 ----
 find ./ -type f -regextype posix-extended -regex "^(../|./|/).*(_env-)*.properties$" \
-  | xargs -i gpg --passphrase $GPG_PASSPHRASE --batch --yes -o {}.gpg -c {}
+  | xargs -i gpg -v --passphrase $GPG_PASSPHRASE --batch --yes -o {}.gpg -c {}
 ----
 
 
@@ -76,7 +76,7 @@ find ./ -type f -regextype posix-extended -regex "^(../|./|/).*(_env-)*.properti
 .Decrypt
 [source, bash]
 ----
-gpg --passphrase $GPG_PASSPHRASE --yes --batch -o DEC-FILE.txt -d ENC-FILE.txt.gpg
+gpg -v --passphrase $GPG_PASSPHRASE --yes --batch -o DEC-FILE.txt -d ENC-FILE.txt.gpg
 ----
 
 .Decrypt - Automated
@@ -84,5 +84,5 @@ gpg --passphrase $GPG_PASSPHRASE --yes --batch -o DEC-FILE.txt -d ENC-FILE.txt.g
 ----
 find ./ -type f -regextype posix-extended -regex "^(../|./|/).*(_env-)*.properties.gpg$" \
   | grep -o '.*[^.gpg]' \
-  | xargs -i gpg --passphrase $GPG_PASSPHRASE --yes --batch -o {} -d {}.gpg
+  | xargs -i gpg -v --passphrase $GPG_PASSPHRASE --yes --batch -o {} -d {}.gpg
 ----

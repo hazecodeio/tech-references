@@ -37,3 +37,6 @@ options.
 ====
 
 https://imagemagick.org/script/security-policy.php
+
+.Install from source
+https://imagemagick.org/script/install-source.php

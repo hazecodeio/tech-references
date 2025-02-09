@@ -15,6 +15,9 @@
 ====
 https://github.com/ImageMagick/ImageMagick/releases
 
+.Install from source
+https://imagemagick.org/script/install-source.php
+
 Delegate Libraries
 
 On occasion you may receive these warnings:
@@ -37,6 +40,3 @@ options.
 ====
 
 https://imagemagick.org/script/security-policy.php
-
-.Install from source
-https://imagemagick.org/script/install-source.php

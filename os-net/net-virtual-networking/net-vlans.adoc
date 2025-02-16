@@ -1,4 +1,4 @@
-== [`ipvlan`, `macvlan`, `veth`] - Quick Guide
+== `ipvlan`, `macvlan`, `veth` - Quick Guide
 :toc:
 :toclevels: 3
 :sectnums: 3

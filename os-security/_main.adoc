@@ -7,9 +7,9 @@ Haze Wylde
 :icons: font
 :source-highlighter: rouge
 
-include::tools-gpg.adoc[]
+include::security-gpg.adoc[]
 
-include::tools-keytool.adoc[]
+include::security-keytool.adoc[]
 
 
 

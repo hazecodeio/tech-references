@@ -7,9 +7,7 @@ Haze Wylde
 :icons: font
 :source-highlighter: rouge
 
-include::tools-ffmpeg.adoc[]
+include::./net-virtual-networking/net-vlans.adoc[]
 
-include::tools-imagemagick.adoc[]
-
-
+include::net-dns.adoc[]
 

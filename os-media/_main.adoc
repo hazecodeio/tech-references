@@ -7,5 +7,9 @@ Haze Wylde
 :icons: font
 :source-highlighter: rouge
 
-include::_networking.adoc[]
+include::media-ffmpeg.adoc[]
+
+include::media-imagemagick.adoc[]
+
+
 

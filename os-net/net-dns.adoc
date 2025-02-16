@@ -1,0 +1,18 @@
+== DNS - Quick Guide
+:toc:
+:toclevels: 3
+:sectnums: 3
+:sectnumlevels: 3
+:icons: font
+:source-highlighter: rouge
+
+
+----
+sudo resolvectl status
+sudo resolvectl statistics
+sudo resolvectl show-cache
+sudo resolvectl flush-caches
+
+sudo resolvectl query queerfolxcode.io -t help
+sudo resolvectl query queerfolxcode.io -t txt --cache=no --stale-data=no
+----

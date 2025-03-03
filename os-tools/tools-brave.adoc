@@ -88,9 +88,21 @@ rsync -avzhruP --delete \
 
 === Extensions
 
+
 [source,bash]
 ----
 KEYWORD=session; find ${HOME}/.config/BraveSoftware/brave-browser-*/Profile@*/Extensions/*/*/manifest.json \
     | xargs -i jq --arg path "{}" '{short_name: .short_name, name: .name, path: $path}' {} \
     | jq --arg kw $KEYWORD 'select([.name, .short_name] | .[] | tostring | test($kw; "ig"))'
+----
+
+.https://jqlang.org/manual/#error-suppression-optional-operator[Error Suppression]
+NOTE: The `?` operator, used as *EXP?*, is shorthand for *try EXP*
+
+
+.Example of using `?`
+----
+Command:    jq '[.[] | tonumber?]'
+Input:      ["1", "invalid", "3", 4]
+Output:     [1, 3, 4]
 ----

@@ -85,3 +85,12 @@ rsync -avzhruP --delete \
 #  --include="brave-browser*/Profile@*/Favicons.*" \
 #  --include="brave-browser*/Profile@*/Cookies.*" \
 ----
+
+=== Extensions
+
+[source,bash]
+----
+KEYWORD=session; find ${HOME}/.config/BraveSoftware/brave-browser-*/Profile@*/Extensions/*/*/manifest.json \
+    | xargs -i jq --arg path "{}" '{short_name: .short_name, name: .name, path: $path}' {} \
+    | jq --arg kw $KEYWORD 'select([.name, .short_name] | .[] | tostring | test($kw; "ig"))'
+----

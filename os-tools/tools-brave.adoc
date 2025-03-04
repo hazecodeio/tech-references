@@ -86,9 +86,10 @@ rsync -avzhruP --delete \
 #  --include="brave-browser*/Profile@*/Cookies.*" \
 ----
 
-=== Extensions
+=== Extensions Management
 
 
+.Find All Extensions in All Profiles (name + path)
 [source,bash]
 ----
 KEYWORD=session; find ${HOME}/.config/BraveSoftware/brave-browser-*/Profile@*/Extensions/*/*/manifest.json \
@@ -106,3 +107,4 @@ Command:    jq '[.[] | tonumber?]'
 Input:      ["1", "invalid", "3", 4]
 Output:     [1, 3, 4]
 ----
+

@@ -67,4 +67,37 @@ org.gnome.shell.extensions.tiling-assistant tiling-popup-all-workspace false
 
 
 
+----
+gsettings set org.gnome.shell.extensions.tiling-assistant tile-bottom-half "['<Super>KP_2']"
+gsettings set org.gnome.shell.extensions.tiling-assistant tile-bottomleft-quarter "['<Super>KP_1']"
+gsettings set org.gnome.shell.extensions.tiling-assistant tile-bottomright-quarter "['<Super>KP_3']"
+gsettings set org.gnome.shell.extensions.tiling-assistant tile-left-half "['<Super>Left', '<Super>KP_4']"
+gsettings set org.gnome.shell.extensions.tiling-assistant tile-maximize "['<Super>Up', '<Super>KP_5']"
+gsettings set org.gnome.shell.extensions.tiling-assistant tile-right-half "['<Super>Right', '<Super>KP_6']"
+gsettings set org.gnome.shell.extensions.tiling-assistant tile-top-half "['<Super>KP_8']"
+gsettings set org.gnome.shell.extensions.tiling-assistant tile-topleft-quarter "['<Super>KP_7']"
+gsettings set org.gnome.shell.extensions.tiling-assistant tile-topright-quarter "['<Super>KP_9']"
+
+org.gnome.shell.extensions.tiling-assistant tile-topleft-quarter-ignore-ta @as "[]"
+org.gnome.shell.extensions.tiling-assistant tile-right-half-ignore-ta @as "[]"
+org.gnome.shell.extensions.tiling-assistant tile-top-half-ignore-ta @as "[]"
+org.gnome.shell.extensions.tiling-assistant tile-topright-quarter-ignore-ta @as "[]"
+org.gnome.shell.extensions.tiling-assistant tilegroups-in-app-switcher false
+org.gnome.shell.extensions.tiling-assistant tiling-popup-all-workspace false
+
+org.gnome.shell.extensions.tiling-assistant tile-bottomleft-quarter-ignore-ta @as "[]"
+org.gnome.shell.extensions.tiling-assistant tile-bottom-half-ignore-ta @as "[]"
+org.gnome.shell.extensions.tiling-assistant tile-bottomright-quarter-ignore-ta @as "[]"
+org.gnome.shell.extensions.tiling-assistant tile-edit-mode @as "[]"
+org.gnome.shell.extensions.tiling-assistant tile-left-half-ignore-ta @as "[]"
+org.gnome.shell.extensions.tiling-assistant tile-maximize-horizontally @as "[]"
+org.gnome.shell.extensions.tiling-assistant tile-maximize-vertically @as "[]"
+----
+
+
 === Gnome Shell `gnome-shell`
+
+.Enable Gnome Extension
+----
+gnome-extensions enable tactile@lundal.io
+----

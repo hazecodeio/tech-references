@@ -32,6 +32,16 @@ history | grep -i hsmak9 | jq -rR 'split(" ") | .[0]' | jq -cs '(.[0], .[-1])' |
 
 
 .Pipe Output Into Multiple Variables
+[source,bash]
 ----
 history | grep -i hsmak9 | jq -R 'split(" ") | .[0]|tostring' | jq -csr '(.[0] + " " + .[-1])' | while read x y ; do echo $y $x ; done
+----
+
+.Pipe Output Into Multiple Variables (_Re-Usable_)
+[source,bash]
+----
+read x y <<< $(history | grep -i hsmak9 | jq -R 'split(" ") | .[0]|tostring' | jq -csr '(.[0] + " " + .[-1])' )
+
+echo $x
+echo $y
 ----

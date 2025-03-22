@@ -28,5 +28,10 @@ history | grep -i hsmak9 | jq -rR 'split(" ") | .[0]' | jq -cs '(.[0], .[-1])' |
 
 .alternative to the loop
 ----
-history start-end
+----
+
+
+.Pipe Output Into Multiple Variables
+----
+history | grep -i hsmak9 | jq -R 'split(" ") | .[0]|tostring' | jq -csr '(.[0] + " " + .[-1])' | while read x y ; do echo $y $x ; done
 ----

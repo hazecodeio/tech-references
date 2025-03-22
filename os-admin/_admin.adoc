@@ -18,3 +18,15 @@ include::tools-vbox.adoc[]
 
 
 
+== Bash
+
+.Delete Lines From Command History (_ToDo_)
+[source,bash]
+----
+history | grep -i hsmak9 | jq -rR 'split(" ") | .[0]' | jq -cs '(.[0], .[-1])' | for h in $(seq 1006 1008); do history -d 1006; done
+----
+
+.alternative to the loop
+----
+history start-end
+----

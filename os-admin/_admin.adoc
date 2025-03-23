@@ -18,25 +18,26 @@ include::tools-vbox.adoc[]
 
 
 
-== Bash
+== Bash History
 
-.Delete Lines From Command History (_ToDo_)
+// ToRemove
+=== Didn't work - (ToDo - Remove)
+
+// ToDo
+.Delete Lines From Command History (_ToRemove_)
 [source,bash]
 ----
 KEYWORD=SOME_KW; history | grep -i $KEYWORD | jq -rR 'sub("^[ ]+"; "") | split(" ") | .[0]' | jq -cs '(.[0], .[-1])' | for h in $(seq 1006 1008); do history -d 1006; done
 ----
 
-.alternative to the loop
-----
-----
-
-
+// ToDo - Move to another section
 .Pipe Output Into Multiple Variables
 [source,bash]
 ----
 KEYWORD=SOME_KW; history | grep -i $KEYWORD | jq -R 'sub("^[ ]+"; "") | split(" ") | .[0]|tostring' | jq -csr '(.[0] + " " + .[-1])' | while read x y ; do echo $y $x ; done
 ----
 
+// ToDo - Move to another section
 .Pipe Output Into Multiple Variables (_Re-Usable_)
 [source,bash]
 ----
@@ -44,4 +45,13 @@ KEYWORD=SOME_KW; read x y <<< $(history | grep -i $KEYWORD | jq -R 'sub("^[ ]+";
 
 echo $x
 echo $y
+----
+
+=== Using `Sed`
+
+.Delete Lines In Place
+[source,bash]
+----
+sed -i '/pattern/d' ~/.bash_history
+history -r
 ----

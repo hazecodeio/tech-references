@@ -23,7 +23,7 @@ include::tools-vbox.adoc[]
 .Delete Lines From Command History (_ToDo_)
 [source,bash]
 ----
-history | grep -i hsmak9 | jq -rR 'split(" ") | .[0]' | jq -cs '(.[0], .[-1])' | for h in $(seq 1006 1008); do history -d 1006; done
+KEYWORD=SOME_KW; history | grep -i $KEYWORD | jq -rR 'sub("^[ ]+"; "") | split(" ") | .[0]' | jq -cs '(.[0], .[-1])' | for h in $(seq 1006 1008); do history -d 1006; done
 ----
 
 .alternative to the loop
@@ -34,13 +34,13 @@ history | grep -i hsmak9 | jq -rR 'split(" ") | .[0]' | jq -cs '(.[0], .[-1])' |
 .Pipe Output Into Multiple Variables
 [source,bash]
 ----
-history | grep -i hsmak9 | jq -R 'split(" ") | .[0]|tostring' | jq -csr '(.[0] + " " + .[-1])' | while read x y ; do echo $y $x ; done
+KEYWORD=SOME_KW; history | grep -i $KEYWORD | jq -R 'sub("^[ ]+"; "") | split(" ") | .[0]|tostring' | jq -csr '(.[0] + " " + .[-1])' | while read x y ; do echo $y $x ; done
 ----
 
 .Pipe Output Into Multiple Variables (_Re-Usable_)
 [source,bash]
 ----
-read x y <<< $(history | grep -i hsmak9 | jq -R 'split(" ") | .[0]|tostring' | jq -csr '(.[0] + " " + .[-1])' )
+KEYWORD=SOME_KW; read x y <<< $(history | grep -i $KEYWORD | jq -R 'sub("^[ ]+"; "") | split(" ") | .[0]|tostring' | jq -csr '(.[0] + " " + .[-1])')
 
 echo $x
 echo $y

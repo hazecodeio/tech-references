@@ -1,4 +1,4 @@
-== DNS - Quick Guide
+== Domain's DNS, ETc Operations - Quick Guide
 :toc:
 :toclevels: 3
 :sectnums: 3
@@ -7,6 +7,8 @@
 :source-highlighter: rouge
 
 
+.Manage DNS - `resolvctl`
+[source,bash]
 ----
 sudo resolvectl status
 sudo resolvectl statistics
@@ -15,4 +17,15 @@ sudo resolvectl flush-caches
 
 sudo resolvectl query queerfolxcode.io -t help
 sudo resolvectl query queerfolxcode.io -t txt --cache=no --stale-data=no
+----
+
+
+.Query Domains - `dig`
+[source,bash]
+----
+clear;
+for i in A AAA CNAME TXT MX;
+  do echo -e "\n $i -----------------------\n";
+  dig queerfolxcode.io $i;
+done
 ----

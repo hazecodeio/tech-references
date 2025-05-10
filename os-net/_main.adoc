@@ -11,13 +11,3 @@ include::./net-virtual-networking/net-vlans.adoc[]
 
 include::net-dns.adoc[]
 
-== Querying Domains - `dig`
-
-[source,bash]
-----
-clear;
-for i in A AAA CNAME TXT MX;
-  do echo -e "\n $i -----------------------\n";
-  dig queerfolxcode.io $i;
-done
-----

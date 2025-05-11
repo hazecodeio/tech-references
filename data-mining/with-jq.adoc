@@ -1,4 +1,5 @@
-== jq | yq | xq | hq | Data Structuring - Quick guide
+= Developer's Guide to Data Mining - `jq` `yq` `xq` `hq`
+Haze Wylde
 :toc:
 :toclevels: 3
 :sectnums: 3
@@ -6,53 +7,13 @@
 :icons: font
 :source-highlighter: rouge
 
+== Data Mining - HTMLQuery `hq`
 
-=== Archive | Create | Extract | Split with - `tar` & `split`
+== Data Mining - XMLQuery `xq`
 
-- Link: https://unix.stackexchange.com/questions/61774/create-a-tar-archive-split-into-blocks-of-a-maximum-size[create-a-tar-archive-split-into-blocks-of-a-maximum-size]
+== Data Mining - YAMLQuery `yq`
 
-.Create and Split an Archive
- tar cvzf - dir/ | split -b 200m - sda1.backup.tar.gz.
-
-.Merge splits into one archive
- cat sda1.backup.tar.gz.* | tar xzvf -
-
-=== Sync Dirs with - `rsync`
-
-.Syncing dirs
- rsync -avzhruP --delete src_dir dst_dir
-
-.Dry Run
-TIP: add `-n` for dry run.
-
-
-=== Find Files/Dirs with - `find`
-
-==== With `-type f` & `-regextype posix-extended`
-.Find jar files ending with [`-javadoc.jar` | `-sources.jar` | ...]
- find ~/.m2/repository/org/apache/ -type f -regextype posix-extended -regex '^[./].*[-][a-z]+[.]jar$' | sort -d
-
-.Find jar files ending with [`.1.jar` | `.12.jar` | ...]
- find ~/.m2/repository/org/apache/ -type f -regextype posix-extended -regex '^[./].*[.][0-9]+[.]jar$' | sort -d
-
-.Find | Grep
- find ~/.m2/repository/ -type f -regextype posix-extended -regex '^[./].*[.][0-9]+[.]jar$' | sort -d | grep -Eo '([-.a-z+_0-9+\]+[0-9.]+).jar$' | grep -Eo '([-.a-z+_0-9+\]+[0-9.]+).jar' | grep -Eo '([-.a-z+_0-9+\]+[0-9]+)'
-
-.Find | xargs | ln | Grep
- find ~/.m2/repository/ -type f -regextype posix-extended -regex '^[./].*[.][0-9]+[.]jar$' | sort -d | xargs -i ln -s {} $(echo {} | grep -Eo '([-a-z+]+[0-9.]+).jar$' | grep -Eo '([-.a-z+_0-9+\]+[0-9]+)' )
-
-
-=== Grep Text with - `grep`
-
-.?
-[source,bash]
-----
-???
-----
-
-==== With `-E, --extended-regexp`
-
-=== jq - Json Query
+== Data Mining - JSONQuery `jq`
 
 [source,bash]
 .Restructure Output of `ls -al` into a JSON
@@ -86,9 +47,6 @@ cat somejson.json | jq -r 'paths(scalars | true) as $p  | [ ( [ $p[] | tostring 
 
 - convert html/xml to json
 
-
-
-
 [source,bash]
 .print flattened json _keys_ PATHs
 ----
@@ -102,6 +60,7 @@ cat xml-file.xml | xq -r | jq -r 'paths(scalars | true) as $p  | [ ( [ $p[] | to
 ----
 
 .remove null - [RED]#NOT# working as expected
+[source,bash]
 ----
 walk(
     if type == "array" then
@@ -121,7 +80,6 @@ walk(
   )
 ----
 
-
 [source,bash]
 .remove null - [GREEN]#Working#
 ----
@@ -134,3 +92,113 @@ walk( if type == "array" then map(select(length > 0)) elif type == "object" then
 
 - Link: https://github.com/pkoppstein/JESS
 - Link: https://gist.github.com/pkoppstein/a5abb4ebef3b0f72a6ed[schema.jq]
+
+.https://jqlang.org/manual/#error-suppression-optional-operator[Error Suppression]
+NOTE: The `?` operator, used as *EXP?*, is shorthand for *try EXP*
+
+.Example of using `?`
+----
+Command:    jq '[.[] | tonumber?]'
+Input:      ["1", "invalid", "3", 4]
+Output:     [1, 3, 4]
+----
+
+=== RegEx Operations - `jq`
+
+NOTE: Reference: https://jqlang.org/manual/#regular-expressions[JQLang -> RegEx]
+
+* Filter With - `test`
++
+.Run Filter `test`
+[source,bash]
+----
+echo 'name:Hazy Hazel Watching You|number:0123456789' \
+  | jq -Rr '. | test("name:(?<n1>[a-zA-Z ]+)")'
+----
++
+.Output `test`
+[source,json]
+----
+true
+----
+
+
+
+
+
+
+* Filter With - `match`
++
+.Run Filter `match`
+[source,bash]
+----
+echo 'name:Hazy Hazel Watching You|number:0123456789' \
+  | jq -Rr '. | match("name:(?<n1>[a-zA-Z ]+)")'
+----
++
+.Output `match`
+[source,json]
+----
+{
+  "offset": 0,
+  "length": 28,
+  "string": "name:Hazy Hazel Watching You",
+  "captures": [
+    {
+      "offset": 5,
+      "length": 23,
+      "string": "Hazy Hazel Watching You",
+      "name": "n1"
+    }
+  ]
+}
+----
+
+
+
+
+
+
+* Filter With - `capture`
++
+.Run Filter `capture`
+[source,bash]
+----
+echo 'name:Hazy Hazel Watching You|number:0123456789' \
+  | jq -Rr '. | capture("name:(?<n1>[a-zA-Z ]+)[|]number:(?<n2>[0-9]+)")'
+----
++
+.Output `capture`
+[source,json]
+----
+{
+  "n1": "Hazy Hazel Watching You",
+  "n2": "0123456789"
+}
+----
+
+
+
+
+
+
+* Filter With - `sub`
++
+.Run Filter `sub`
+[source,bash]
+----
+echo '                name:Hazy Hazel Watching You' \
+  | jq -Rr '. | sub("^[ ]+"; "")'
+----
++
+.Output `sub`
+[source,text]
+----
+name:Hazy Hazel Watching You
+----
+
+TIP: Use `sub` to remove trailing whitespaces
+
+// ToDo - Add Content
+=== referencing with Variables and Identifiers - `. | as $varname`
+

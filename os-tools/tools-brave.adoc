@@ -1,4 +1,4 @@
-== Brave Browser - Quick Guide
+== Brave Browser - Developer's Guide to Inspecting & Debugging
 :toc:
 :toclevels: 3
 :sectnums: 3
@@ -8,7 +8,7 @@
 
 
 
-
+=== Backup & Syncing - `rsync`
 
 .Profile Name (not dir name)
  find $HOME/.config/BraveSoftware/*/*/Preferences | xargs -i jq --arg path "{}" '{path: $path, profile_name: .profile.name}' "{}"
@@ -58,7 +58,7 @@ rsync -avzhruP --delete \
 ----
 
 
-.Profiles-Onlyc Selective Backup - `rsync`
+.Profiles-Only Selective Backup - `rsync`
 [source,bash]
 ----
 rsync -avzhruP --delete \
@@ -92,11 +92,15 @@ rsync -avzhruP --delete \
 .Find All Extensions in All Profiles (name + path)
 [source,bash]
 ----
-KEYWORD=session; \
+KW=session; \
 find ${HOME}/.config/BraveSoftware/brave-browser-*/Profile@*/Extensions/*/*/manifest.json \
-    | xargs -i jq --arg path "{}" '{short_name: .short_name, name: .name, path: $path}' {} \
-    | jq --arg kw $KEYWORD 'select([.name, .short_name] | tostring | test($kw; "ig"))'; \
-KEYWORD=;
+    | xargs -i jq --arg path "{}" \
+      '{short_name: .short_name,
+          name: .name, path: $path,
+          pathSplits: $path|split("/")
+      }' {} \
+    | jq --arg kw $KW 'select([.name, .short_name] | tostring | test($kw; "ig"))'; \
+KW=;
 ----
 
 
@@ -106,7 +110,7 @@ KEYWORD=;
 .Find All Extensions in All Profiles (name + path)
 [source,bash]
 ----
-KEYWORD=session; \
+KW=session; \
 for P in $(find "${HOME}"/.config/BraveSoftware/brave-browser-*/Profile@*/Extensions/*/*/manifest.json);
   do
   A=$(echo $P | grep -iE 'Extensions/.*json' -o | grep -iE '\/\w+/' -o | grep -iE '\w+' -o);
@@ -114,32 +118,20 @@ for P in $(find "${HOME}"/.config/BraveSoftware/brave-browser-*/Profile@*/Extens
 #  echo $A:$P
 
   cat $P | jq --arg path $P --arg extid $A '{short_name: .short_name, name: .name, extid: $extid, path: $path}' \
-  | jq --arg kw "${KEYWORD}" 'select([.name, .short_name] | tostring | test($kw; "ig"))';
+  | jq --arg kw "${KW}" 'select([.name, .short_name] | tostring | test($kw; "ig"))';
 done; \
-KEYWORD=;
+KW=;
 ----
 
 //ToDo
-.Name?
+.Find All Files Of Type JSON - `file`?
 [source,bash]
 ----
-find "${HOME}"/.config/BraveSoftware/brave-browser-*/ -type f  -exec file {} + \
+KW=ghmbeldphafepmbegfdlkpapadhbakde;find "${HOME}"/.config/BraveSoftware/brave-browser-*/ -type f  -exec file {} + \
   | jq -Rr 'split(":") | select(.[1] | test("json"; "gi")) | {p:.[0]} ' \
   | jq -r '.p' \
-  | xargs -i grep -iE ghmbeldphafepmbegfdlkpapadhbakde {}
+  | xargs -i grep -iE $KW {};
+KW=;
 ----
 
-
-
-
-.https://jqlang.org/manual/#error-suppression-optional-operator[Error Suppression]
-NOTE: The `?` operator, used as *EXP?*, is shorthand for *try EXP*
-
-
-.Example of using `?`
-----
-Command:    jq '[.[] | tonumber?]'
-Input:      ["1", "invalid", "3", 4]
-Output:     [1, 3, 4]
-----
 

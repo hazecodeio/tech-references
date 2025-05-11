@@ -92,10 +92,35 @@ rsync -avzhruP --delete \
 .Find All Extensions in All Profiles (name + path)
 [source,bash]
 ----
-KEYWORD=session; find ${HOME}/.config/BraveSoftware/brave-browser-*/Profile@*/Extensions/*/*/manifest.json \
+KEYWORD=session; \
+find ${HOME}/.config/BraveSoftware/brave-browser-*/Profile@*/Extensions/*/*/manifest.json \
     | xargs -i jq --arg path "{}" '{short_name: .short_name, name: .name, path: $path}' {} \
-    | jq --arg kw $KEYWORD 'select([.name, .short_name] | tostring | test($kw; "ig"))'
+    | jq --arg kw $KEYWORD 'select([.name, .short_name] | tostring | test($kw; "ig"))'; \
+KEYWORD=;
 ----
+
+
+
+
+.Find All Extensions in All Profiles (name + path)
+[source,bash]
+----
+KEYWORD=session; \
+for P in $(find "${HOME}"/.config/BraveSoftware/brave-browser-*/Profile@*/Extensions/*/*/manifest.json);
+  do
+  A=$(echo $P | grep -iE 'Extensions/.*json' -o | grep -iE '\/\w+/' -o | grep -iE '\w+' -o);
+
+#  echo $A:$P
+
+  cat $P | jq --arg path $P --arg extid $A '{short_name: .short_name, name: .name, extid: $extid, path: $path}' \
+  | jq --arg kw "${KEYWORD}" 'select([.name, .short_name] | tostring | test($kw; "ig"))';
+done; \
+KEYWORD=;
+----
+
+
+
+
 
 .https://jqlang.org/manual/#error-suppression-optional-operator[Error Suppression]
 NOTE: The `?` operator, used as *EXP?*, is shorthand for *try EXP*

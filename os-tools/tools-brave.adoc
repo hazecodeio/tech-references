@@ -102,6 +102,7 @@ KEYWORD=;
 
 
 
+//ToDo
 .Find All Extensions in All Profiles (name + path)
 [source,bash]
 ----
@@ -118,6 +119,15 @@ done; \
 KEYWORD=;
 ----
 
+//ToDo
+.Name?
+[source,bash]
+----
+find "${HOME}"/.config/BraveSoftware/brave-browser-*/ -type f  -exec file {} + \
+  | jq -Rr 'split(":") | select(.[1] | test("json"; "gi")) | {p:.[0]} ' \
+  | jq -r '.p' \
+  | xargs -i grep -iE ghmbeldphafepmbegfdlkpapadhbakde {}
+----
 
 
 

@@ -106,11 +106,11 @@ KW=;
 
 
 
-//ToDo
+//ToDo - Bad
 .Find All Extensions in All Profiles (name + path)
 [source,bash]
 ----
-KW=session; \
+KW=SOME_KW; \
 for P in $(find "${HOME}"/.config/BraveSoftware/brave-browser-*/Profile@*/Extensions/*/*/manifest.json);
   do
   A=$(echo $P | grep -iE 'Extensions/.*json' -o | grep -iE '\/\w+/' -o | grep -iE '\w+' -o);
@@ -127,11 +127,62 @@ KW=;
 .Find All Files Of Type JSON - `file`?
 [source,bash]
 ----
-KW=ghmbeldphafepmbegfdlkpapadhbakde;find "${HOME}"/.config/BraveSoftware/brave-browser-*/ -type f  -exec file {} + \
+KW=SOME_KW;find "${HOME}"/.config/BraveSoftware/brave-browser-*/ -regextype posix-extended -regex '.*' -type f -exec file {} + \
   | jq -Rr 'split(":") | select(.[1] | test("json"; "gi")) | {p:.[0]} ' \
   | jq -r '.p' \
   | xargs -i grep -iE $KW {};
-KW=;
+KW=SOME_KW;
+----
+
+.As a function with Args
+[source,bash]
+----
+brave-find-files-with-kw-fun () {
+    P=$1; \
+    FTYPE=$2; \
+    KW=$3; \
+    find ${P} -regextype posix-extended -regex '.*' -type f -exec file {} + \
+      | grep --color=auto -i "${FTYPE}" \
+      | jq --arg FT "${FTYPE}" -R 'split(":") | map(.|sub("^[ ]+|[ ]+$"; "")) | {path: .[0], type: .[1] | capture("(?<d>" + $FT + ")"; "i") | .d | ascii_downcase}' \
+      | jq '.path' \
+      | xargs grep $KW -l \
+      | xargs -i echo {}:$KW \
+      | jq -R 'split(":") | {path: .[0], keyword: .[1]}'
+}
+----
+
+.One way to use this function
+====
+[source,bash]
+----
+brave-find-files-with-kw-fun "${HOME}/.config/BraveSoftware/brave-browser-*/" json ghmbeldphafepmbegfdlkpapadhbakde
+----
+====
+
+
+.Find All Files Of Type JSON - `file`?
+[source,bash]
+----
+KW=ghmbeldphafepmbegfdlkpapadhbakde; \
+find "${HOME}"/.config/BraveSoftware/brave-browser-*/ -regextype posix-extended -regex '.*' -type f -exec file {} + \
+  | grep -i json \
+  | jq --arg FT "${FTYPE}" -R 'split(":") | map(.|sub("^[ ]+|[ ]+$"; "")) | {path: .[0], type: .[1] | capture("(?<d>" + $FT + ")"; "i") | .d | ascii_downcase}' \
+  | jq '.path' \
+  | xargs grep $KW -l \
+  | xargs -i echo {}:$KW \
+  | jq -R 'split(":") | {path: .[0], keyword: .[1]}'
 ----
 
 
+.Possible Variables
+CAUTION: Consider these Vars: +
+$PATH
+$KW_P
+$KW_C
+$FTYPE
+
+
+.macs
+----
+while true; do cat /home/haze/.config/BraveSoftware/brave-browser-experiment/Profile@Experiment/Preferences | jq '.protection.macs.extensions.settings.ghmbeldphafepmbegfdlkpapadhbakde'; sleep 1; done
+----

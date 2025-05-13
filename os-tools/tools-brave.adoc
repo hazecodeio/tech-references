@@ -183,6 +183,54 @@ $FTYPE
 
 
 .macs
+[source,bash]
 ----
-while true; do cat /home/haze/.config/BraveSoftware/brave-browser-experiment/Profile@Experiment/Preferences | jq '.protection.macs.extensions.settings.ghmbeldphafepmbegfdlkpapadhbakde'; sleep 1; done
+while true; \
+  do cat /home/haze/.config/BraveSoftware/brave-browser-experiment/Profile@Experiment/Preferences \
+  | jq '.protection.macs.extensions.settings.ghmbeldphafepmbegfdlkpapadhbakde'; \
+  sleep 1; \
+done
+----
+
+
+.Finding Paths with Operations `group_by` `to_entries` `join` `map` (modified)
+[source,bash]
+----
+KW=ghmbeldphafepmbegfdlkpapadhbakde; \
+find  brave-browser-*/Profile@*/Extensions/$KW/1.31.1_0/ -type f \
+  | jq -R 'split("/") | {profile: .[1], paths: .[4:] | join("/")}' \
+  | jq -s 'group_by(.profile) | to_entries | map({profile: .value[0].profile, paths: [.value[].paths] | sort}) ' \
+  | jq '  .[] as $arr1 |
+          .[] as $arr2 |
+          foreach $arr1 as $i (0; foreach $arr2 as $j (0; {profiles: ($i.profile + " - " + $j.profile) , diff: ($i.paths - $j.paths)}))'
+----
+
+
+
+.Finding Paths with Operations `group_by` `to_entries` `join` `map` (modified)
+[source,bash]
+----
+KW=ghmbeldphafepmbegfdlkpapadhbakde; \
+find brave-browser-*/Profile@*/Extensions/$KW/1.31.1_0/ -type f \
+  | jq -R 'split("/") | {profile: .[1], abspath: .[0:5] | join("/"), paths: .[4:] | join("/")}' \
+  | jq -s 'group_by(.profile) | to_entries | map({abspath: .value[0].abspath, profile: .value[0].profile, paths: [.value[].paths] | sort}) ' \
+  | jq ' .[] as $arr1 |
+         .[] as $arr2 |
+         foreach $arr1 as $i (0; foreach $arr2 as $j (0; {path: $j.abspath, profiles: ($i.profile + " - " + $j.profile) , diff: ($i.paths - $j.paths)}))' \
+  | jq 'select(isempty(.diff[]) == 'false')'
+----
+
+
+
+.Finding Paths with Operations `group_by` `to_entries` `join` `map` (modified)
+[source,bash]
+----
+KW=ghmbeldphafepmbegfdlkpapadhbakde; \
+find ${HOME}/.config/BraveSoftware/brave-browser-*/Profile@*/Extensions/$KW/1.31.1_0/ -type f   \
+  | jq -R 'split("/") | {profile: .[6], abspath: .[0:-1] | join("/"), paths: .[-1] }'  \
+  | jq -s 'group_by(.profile) | to_entries | map({abspath: .value[0].abspath, profile: .value[0].profile, paths: [.value[].paths] | sort}) '   \
+  | jq ' .[] as $arr1 |
+         .[] as $arr2 |
+         foreach $arr1 as $i (0; foreach $arr2 as $j (0; {path: $j.abspath, profiles: ($i.profile + " - " + $j.profile) , diff: ($i.paths - $j.paths)}))' \
+  | jq 'select(isempty(.diff[]) == 'false')'
 ----

@@ -127,7 +127,7 @@ KW=;
 .Find All Files Of Type JSON - `file`?
 [source,bash]
 ----
-KW=SOME_KW;find "${HOME}"/.config/BraveSoftware/brave-browser-*/ -regextype posix-extended -regex '.*' -type f -exec file {} + \
+KW=SOME_KW;find "${HOME}"/.config/BraveSoftware/brave-browser-*/ -regextype posix-extended -iregex '.*' -type f -exec file {} + \
   | jq -Rr 'split(":") | select(.[1] | test("json"; "gi")) | {p:.[0]} ' \
   | jq -r '.p' \
   | xargs -i grep -iE $KW {};
@@ -141,7 +141,7 @@ brave-find-files-with-kw-fun () {
     P=$1; \
     FTYPE=$2; \
     KW=$3; \
-    find ${P} -regextype posix-extended -regex '.*' -type f -exec file {} + \
+    find ${P} -regextype posix-extended -iregex '.*' -type f -exec file {} + \
       | grep --color=auto -i "${FTYPE}" \
       | jq --arg FT "${FTYPE}" -R 'split(":") | map(.|sub("^[ ]+|[ ]+$"; "")) | {path: .[0], type: .[1] | capture("(?<d>" + $FT + ")"; "i") | .d | ascii_downcase}' \
       | jq '.path' \
@@ -164,7 +164,7 @@ brave-find-files-with-kw-fun "${HOME}/.config/BraveSoftware/brave-browser-*/" js
 [source,bash]
 ----
 KW=ghmbeldphafepmbegfdlkpapadhbakde; \
-find "${HOME}"/.config/BraveSoftware/brave-browser-*/ -regextype posix-extended -regex '.*' -type f -exec file {} + \
+find "${HOME}"/.config/BraveSoftware/brave-browser-*/ -regextype posix-extended -iregex '.*' -type f -exec file {} + \
   | grep -i json \
   | jq --arg FT "${FTYPE}" -R 'split(":") | map(.|sub("^[ ]+|[ ]+$"; "")) | {path: .[0], type: .[1] | capture("(?<d>" + $FT + ")"; "i") | .d | ascii_downcase}' \
   | jq '.path' \
@@ -227,16 +227,17 @@ find brave-browser-*/Profile@*/Extensions/$KW/1.31.1_0/ -type f \
 ----
 
 BASE_PATH=;
-KW_P=;
-KW_C=;
+SRC_PATH=;
+TRG_PATH=;
+KW_IN_FILE=;
+KW_IN_PATH_COMMON=;
 BASE_PATH_RANGE=;
 DIFF_PATHS_RANGE=;
 
 
 
 fun-diff-dirs-with-similar-paths() {
-    KW=ghmbeldphafepmbegfdlkpapadhbakde; \
-    find ${HOME}/.config/BraveSoftware/brave-browser-*/Profile@*/Extensions/$KW/1.31.1_0/ -type f   \
+    find ${HOME}/.config/BraveSoftware/brave-browser-*/Profile@*/*/$KW -type f   \
       | jq -R 'split("/") | {profile: .[6], abspath: .[0:-1] | join("/"), paths: .[-1] }'  \
       | jq -s 'group_by(.profile) | to_entries | map({abspath: .value[0].abspath, profile: .value[0].profile, paths: [.value[].paths] | sort}) '   \
       | jq ' .[] as $arr1 |

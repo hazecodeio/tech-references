@@ -245,3 +245,11 @@ fun-diff-dirs-with-similar-paths() {
              foreach $arr1 as $i (0; foreach $arr2 as $j (0; {path: $j.abspath, profiles: ($i.profile + " - " + $j.profile) , diff: ($i.paths - $j.paths)}))' \
       | jq 'select(isempty(.diff[]) == 'false')';}
 ----
+
+
+
+.Loop through Extension's Last Modified Timestamp
+[source,bash]
+----
+while true; do find /home/haze/.config/BraveSoftware/brave-browser-*/*/*/ghmbeldphafepmbegfdlkpapadhbakde/ -regextype posix-extended -iregex '.*(ldb|lo)' -type f -exec ls -alhtr --time-style=+'%F %r' {} +; echo -e "=============="; sleep 1; done
+----

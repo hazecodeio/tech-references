@@ -1,22 +1,16 @@
-= Linux Commands Guide (_Incomplete_)
-Haze Wylde
 :toc:
 :toclevels: 3
 :sectnums: 3
 :sectnumlevels: 3
 :icons: font
 :source-highlighter: rouge
-
-
-include::tools-asciidoctor.adoc[]
+= Linux Commands Guide (_Incomplete_)
+Hazy Wyld
 
 include::tools-brave.adoc[]
-
 include::tools-pandoc.adoc[]
-
 include::tools-gnome.adoc[]
-
-
+include::tools-asciidoctor.adoc[]
 
 
 
@@ -43,6 +37,7 @@ include::tools-gnome.adoc[]
 
 - http://tldp.org/HOWTO/TransparentProxy.html
 
+[source,bash]
 ----
 http_port hsmaklinux:3128 transparent
 IF_WAN="eth0"
@@ -442,6 +437,7 @@ sudo lshw -json | jq -r 'include "m"; .children | pv' | grep -i class | jq -Rr '
 
 === Unclaimed Network PCIE
 
+[source,json]
 ----
 {
     "id" : "network",

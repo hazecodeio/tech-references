@@ -1,16 +1,18 @@
-== Brave Browser - Developer's Guide to Inspecting & Debugging
 :toc:
 :toclevels: 3
 :sectnums: 3
 :sectnumlevels: 3
 :icons: font
 :source-highlighter: rouge
+== Brave Browser - Developer's Guide to Inspecting & Debugging
+
 
 
 
 === Backup & Syncing - `rsync`
 
 .Profile Name (not dir name)
+[source,bash]
  find $HOME/.config/BraveSoftware/*/*/Preferences | xargs -i jq --arg path "{}" '{path: $path, profile_name: .profile.name}' "{}"
 
 
@@ -19,14 +21,18 @@
 
 
 .Profile Dir Name
+[source,bash]
  cat $HOME/.config/BraveSoftware/Brave-Browser/Local\ State | jq -r 'include "m"; pv' | grep -iE PROFILE_DIR_NAME
 
+[source,bash]
  cat $HOME/.config/BraveSoftware/Brave-Browser/Local\ State | jq -r 'include "m"; .profile.info_cache'
 
 .Create a New Profile
+[source,bash]
  brave-browser --profile-directory="PROFILE_DIR_NAME"
 
 .Initiate a New Brave with a New Profile
+[source,bash]
 ----
 BRAVE_HOME_NEW=$HOME/temp-brave
 PROFILE_DIR_NAME=Profile@Therapy
@@ -253,3 +259,4 @@ fun-diff-dirs-with-similar-paths() {
 ----
 while true; do find /home/haze/.config/BraveSoftware/brave-browser-*/*/*/ghmbeldphafepmbegfdlkpapadhbakde/ -regextype posix-extended -iregex '.*(ldb|lo)' -type f -exec ls -alhtr --time-style=+'%F %r' {} +; echo -e "=============="; sleep 1; done
 ----
+

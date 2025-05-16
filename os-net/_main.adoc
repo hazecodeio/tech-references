@@ -1,11 +1,12 @@
-= Linux Commands Guide (_Incomplete_)
-Haze Wylde
 :toc:
 :toclevels: 3
 :sectnums: 3
 :sectnumlevels: 3
 :icons: font
 :source-highlighter: rouge
+
+= Linux Commands Guide (_Incomplete_)
+Haze Wylde
 
 include::./net-virtual-networking/net-vlans.adoc[]
 

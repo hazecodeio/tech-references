@@ -1,10 +1,11 @@
-== IntelliJ - Quick Guide
 :toc:
 :toclevels: 3
 :sectnums: 3
 :sectnumlevels: 3
 :icons: font
 :source-highlighter: rouge
+== IntelliJ - Quick Guide
+
 
 === RegEx - Text Search/Replacement
 

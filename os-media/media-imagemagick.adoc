@@ -1,10 +1,11 @@
-== ImageMagick's Convert - Quick Guide
 :toc:
 :toclevels: 3
 :sectnums: 3
 :sectnumlevels: 3
 :icons: font
 :source-highlighter: rouge
+== ImageMagick's Convert - Quick Guide
+
 
 .Convert PDF to another PDF
  convert -verbose -density 150 -quality 100  source-file.pdf[0-5,10-20] target-file.pdf

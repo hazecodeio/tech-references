@@ -1,10 +1,11 @@
-== VirtualBox - Reference
 :toc:
 :toclevels: 3
 :sectnums: 3
 :sectnumlevels: 3
 :icons: font
 :source-highlighter: rouge
+== VirtualBox - Reference
+
 
 .add users to vboxusers to enable USB usage
  sudo usermod -a -G vboxusers $USER

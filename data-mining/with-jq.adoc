@@ -1,11 +1,12 @@
-= Developer's Guide to Data Mining - `jq` `yq` `xq` `hq`
-Haze Wylde
 :toc:
 :toclevels: 3
 :sectnums: 3
 :sectnumlevels: 3
 :icons: font
 :source-highlighter: rouge
+
+= Developer's Guide to Data Mining - `jq` `yq` `xq` `hq`
+Haze Wylde
 
 == Data Mining - HTMLQuery `hq`
 

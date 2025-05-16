@@ -1,20 +1,24 @@
-== GPG - Quick Guide
 :toc:
 :toclevels: 3
 :sectnums: 3
 :sectnumlevels: 3
 :icons: font
 :source-highlighter: rouge
+== GPG - Quick Guide
+
 
 === Symmetric Encryption/Decryption
 
 .Encrypt via default cipher:
+[source, bash]
  gpg -c file
 
 .Decrypt and output to STDOUT:
+[source, bash]
  gpg -d file.gpg
 
 .Decrypt and output to FILE:
+[source, bash]
  gpg -d -o outfile file.gpg
 
 .You can choose the symmetric cipher:
@@ -26,12 +30,15 @@ NOTE: `AES128`
 === Asymmetric Encryption/Decryption
 
 .List Keys
+[source, bash]
  gpg --list-keys
 
 .Generate Keys
+[source, bash]
  gpg --full-generate-keys
 
 .Encrypt
+[source, bash]
  gpg -e --recipient email_id file
 
 .Decrypt and output to STDOUT:

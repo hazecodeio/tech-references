@@ -1,11 +1,12 @@
-= Spark Quick Guide
-Haze Wylde
 :toc:
 :toclevels: 3
 :sectnums: 3
 :sectnumlevels: 3
 :icons: font
 :source-highlighter: rouge
+
+= Spark Quick Guide
+Haze Wylde
 
 include::00_installation.adoc[]
 

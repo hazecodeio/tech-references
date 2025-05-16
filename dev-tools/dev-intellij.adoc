@@ -17,3 +17,23 @@ Replace:    $1$3_$2$4
 
 
 NOTE: https://www.jetbrains.com/help/idea/tutorial-finding-and-replacing-text-using-regular-expressions.html#capture_groups_and_backreference[Reference - capture_groups_and_backreference]
+
+
+.Asciidoctor's Main Header Replacement - Group Capture
+----
+Find:       (^= .*\n.*)\n:?((:.*:[ ]?.*\n)+)
+Replace:    $2\n$1\n
+----
+
+
+.Asciidoctor's Secondary Header Replacement - Group Capture
+----
+Find:       (^== .*\n)((:.*:[ ]?.*\n)+)
+Replace:    $2$1\n
+----
+
+
+
+
+
+

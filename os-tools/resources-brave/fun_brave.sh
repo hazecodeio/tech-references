@@ -1,13 +1,18 @@
-BASE_PATH=${HOME}/.config/BraveSoftware/brave-browser-*/Profile@*;
+BASE_PATH=${HOME}/.config/BraveSoftware/brave-browser-*/Profile@*
+#BASE_NAME=*
+#KW='.*'
+
+BASE_NAME=ghmbeldphafepmbegfdlkpapadhbakde
+KW='.*haze.vid.*'
 
 
 
 #DataPrepOp
 fun_me_paths_tokenize() {
-    find $BASE_PATH \
-      -regextype posix-extended \
-      -iregex '.*' \
-      -type f \
+    find $BASE_PATH -name "${BASE_NAME}" \
+      | xargs -i find {}  -regextype posix-extended \
+                          -iregex $KW \
+                          -type f  \
     	| jq -R 'split("/") as $s | {path_base: ., filename: $s[-1], pathSplits: $s}';  \
 }
 

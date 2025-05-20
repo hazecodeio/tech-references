@@ -60,4 +60,4 @@ fun_me_paths_filter() {
 #      | jq -s '.[0].diff_concatenated[]'
 }
 
-fun_me_paths_filter
+#fun_me_paths_filter

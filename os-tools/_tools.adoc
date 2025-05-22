@@ -401,13 +401,24 @@ sudo update-initramfs -u
 
 === AMD Graphics Driver - `amdgpu-install`
 
+[source,bash]
 ----
 amdgpu-install -y --accept-eula --usecase=graphics --vulkan=amdvlk --opencl=rocr
 ----
 
-.via ROCm
+.Install via ROCm - (_Don't use unless the other one is broken_)
+[source,bash]
 ----
 amdgpu-install --usecase=graphics,rocm --opengl=mesa --opencl=rocr --vulkan=amdvlk
+----
+
+.Verify Installation
+[source,bash]
+----
+dkms status
+clinfo
+rocminfo
+glxinfo -B
 ----
 
 === Open Sockets/Ports

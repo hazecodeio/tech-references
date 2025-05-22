@@ -419,6 +419,7 @@ dkms status
 clinfo
 rocminfo
 glxinfo -B
+eglinfo -B
 ----
 
 === Open Sockets/Ports

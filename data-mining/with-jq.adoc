@@ -203,3 +203,7 @@ TIP: Use `sub` to remove trailing whitespaces
 // ToDo - Add Content
 === referencing with Variables and Identifiers - `. | as $varname`
 
+.Add a JSON path as an ARG to current JSON inputsource after a pipe `|`
+----
+... | xargs -i jq --arg P {} '. += {path: $P}' {}
+----

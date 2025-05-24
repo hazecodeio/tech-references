@@ -1,0 +1,17 @@
+:toc:
+:toclevels: 3
+:sectnums: 3
+:sectnumlevels: 3
+:icons: font
+:source-highlighter: rouge
+= Data Mining - `grep`
+
+== Grep Text with - `grep`
+
+.?
+[source,bash]
+----
+???
+----
+
+== With `-E, --extended-regexp`

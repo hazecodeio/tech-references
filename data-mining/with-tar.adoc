@@ -1,0 +1,19 @@
+:toc:
+:toclevels: 3
+:sectnums: 3
+:sectnumlevels: 3
+:icons: font
+:source-highlighter: rouge
+= Data Mining - `tar`
+Haze Wylde
+
+
+== Archive | Create | Extract | Split with - `tar` & `split`
+
+- Link: https://unix.stackexchange.com/questions/61774/create-a-tar-archive-split-into-blocks-of-a-maximum-size[create-a-tar-archive-split-into-blocks-of-a-maximum-size]
+
+.Create and Split an Archive
+ tar cvzf - dir/ | split -b 200m - sda1.backup.tar.gz.
+
+.Merge splits into one archive
+ cat sda1.backup.tar.gz.* | tar xzvf -

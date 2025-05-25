@@ -422,6 +422,23 @@ glxinfo -B
 eglinfo -B
 ----
 
+
+
+.EDID (External Display Identification Data)
+[source,bash]
+----
+find /sys/class/drm/card*/edid
+----
+
+
+- Reference -> https://wiki.archlinux.org/title/Variable_refresh_rate#Change_VRR_range_of_a_FreeSync_monitor[Change_VRR_range_of_a_FreeSync_monitor]
+
+
+
+
+
+
+
 === Open Sockets/Ports
 
 [source,bash]

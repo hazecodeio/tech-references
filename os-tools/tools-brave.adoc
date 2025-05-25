@@ -95,6 +95,19 @@ rsync -avzhruP --delete \
 === Extensions Management
 
 
+.Find the Hashes of Extensions
+[source,bash]
+----
+find .config/BraveSoftware/brave-browser-*/ \( -not -iregex '.*Profile\@.*' -regex '.*json'  \) -type f  \( -exec grep -iEl '.*ghmbel.*' {} \;  \) \
+    | xargs -i jq --arg P {} '. + {path: $P}' {} \
+    | jq -s ' map(. as $i | $i.hashes | to_entries
+              | { path: $i.path,
+                        manifest: map(  { hash: .key,
+                                          appid: .value.appid | select(contains(""))
+                                        })
+                } )'
+----
+
 .Find All Extensions in All Profiles (name + path)
 [source,bash]
 ----

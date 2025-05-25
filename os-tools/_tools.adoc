@@ -433,8 +433,28 @@ find /sys/class/drm/card*/edid
 
 - Reference -> https://wiki.archlinux.org/title/Variable_refresh_rate#Change_VRR_range_of_a_FreeSync_monitor[Change_VRR_range_of_a_FreeSync_monitor]
 
-
-
+// ToDo
+.Issues with `ghmbeldphafepmbegfdlkpapadhbakde`
+----
+./IndexedDB/chrome-extension_ghmbeldphafepmbegfdlkpapadhbakde_0.indexeddb.leveldb/LOG
+./IndexedDB/chrome-extension_ghmbeldphafepmbegfdlkpapadhbakde_0.indexeddb.leveldb/LOG.old
+./IndexedDB/chrome-extension_ghmbeldphafepmbegfdlkpapadhbakde_0.indexeddb.leveldb/LOCK
+./Managed Extension Settings/ghmbeldphafepmbegfdlkpapadhbakde/LOG
+./Managed Extension Settings/ghmbeldphafepmbegfdlkpapadhbakde/CURRENT
+./Managed Extension Settings/ghmbeldphafepmbegfdlkpapadhbakde/MANIFEST-000001
+./Managed Extension Settings/ghmbeldphafepmbegfdlkpapadhbakde/000003.log
+./Managed Extension Settings/ghmbeldphafepmbegfdlkpapadhbakde/LOCK
+./Local Extension Settings/ghmbeldphafepmbegfdlkpapadhbakde/LOG
+./Local Extension Settings/ghmbeldphafepmbegfdlkpapadhbakde/CURRENT
+./Local Extension Settings/ghmbeldphafepmbegfdlkpapadhbakde/MANIFEST-000001
+./Local Extension Settings/ghmbeldphafepmbegfdlkpapadhbakde/000003.log
+./Local Extension Settings/ghmbeldphafepmbegfdlkpapadhbakde/LOCK
+./Sync Extension Settings/ghmbeldphafepmbegfdlkpapadhbakde/LOG
+./Sync Extension Settings/ghmbeldphafepmbegfdlkpapadhbakde/CURRENT
+./Sync Extension Settings/ghmbeldphafepmbegfdlkpapadhbakde/MANIFEST-000001
+./Sync Extension Settings/ghmbeldphafepmbegfdlkpapadhbakde/000003.log
+./Sync Extension Settings/ghmbeldphafepmbegfdlkpapadhbakde/LOCK
+----
 
 
 

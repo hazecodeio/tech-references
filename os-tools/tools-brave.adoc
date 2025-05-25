@@ -273,3 +273,11 @@ fun-diff-dirs-with-similar-paths() {
 while true; do find /home/haze/.config/BraveSoftware/brave-browser-*/*/*/ghmbeldphafepmbegfdlkpapadhbakde/ -regextype posix-extended -iregex '.*(ldb|lo)' -type f -exec ls -alhtr --time-style=+'%F %r' {} +; echo -e "=============="; sleep 1; done
 ----
 
+.Join every 3 lines together
+[source,bash]
+----
+find .config/BraveSoftware/brave-browser-*/ \( -not -iregex '.*Profile\@.*'   \) -type f  \( -exec grep -iEl '.*ghmbel.*' {} \; -exec grep -iEl '.*ghmbel.*' {} \;  -exec echo '1111111111' \; \) \
+    | jq -R \
+    | jq -s '.[]' \
+    | jq  '[., input, input]'
+----

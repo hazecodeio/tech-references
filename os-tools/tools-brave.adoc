@@ -281,3 +281,17 @@ find .config/BraveSoftware/brave-browser-*/ \( -not -iregex '.*Profile\@.*'   \)
     | jq -s '.[]' \
     | jq  '[., input, input]'
 ----
+
+.With -s
+----
+// find ~/.config/BraveSoftware/brave-browser-*/ \( -iregex '.*Profile\@.*' -iregex '.*preferenc.*'  \) -type f  \( -exec grep -iEl '.*ghmbel.*' {} \;  \)     | xargs -i jq --arg P {} '. + {path: $P}' {} | jq  -s 'include "m"; . as $i | $i | map({p:.path, m: tostream | select(.[0] | index("ghmbeldphafepmbegfdlkpapadhbakde"))}) | group_by(.p)' | jq 'length'
+
+find ~/.config/BraveSoftware/brave-browser-*/ \( -iregex '.*Profile\@.*' -iregex '.*preferenc.*'  \) -type f  \( -exec grep -iEl '.*ghmbel.*' {} \;  \)     | xargs -i jq --arg P {} '. + {path: $P}' {} | jq  -s 'include "m"; . as $i | $i | map({path:.path, preferences: tostream | select(.[0] | index("ghmbeldphafepmbegfdlkpapadhbakde"))}) | group_by(.path) | to_entries | map({path :.value[0].path, preferences: [.value[].preferences] })'
+----
+
+.Without -s
+----
+// find ~/.config/BraveSoftware/brave-browser-*/ \( -iregex '.*Profile\@.*' -iregex '.*preferenc.*'  \) -type f  \( -exec grep -iEl '.*ghmbel.*' {} \;  \)     | xargs -i jq --arg P {} '. + {path: $P}' {} | jq 'include "m"; . as $i | $i | [{p:.path, m: tostream | select(.[0] | index("ghmbeldphafepmbegfdlkpapadhbakde"))}] | group_by(.p)' | jq -s 'length'
+
+find ~/.config/BraveSoftware/brave-browser-*/ \( -iregex '.*Profile\@.*' -iregex '.*preferenc.*'  \) -type f  \( -exec grep -iEl '.*ghmbel.*' {} \;  \)     | xargs -i jq --arg P {} '. + {path: $P}' {} | jq 'include "m"; . as $i | $i | [{path:.path, preferences: tostream | select(.[0] | index("ghmbeldphafepmbegfdlkpapadhbakde"))}] | group_by(.path) | to_entries | .[] | {path :.value[0].path, preferences: [.value[].preferences]}'
+----

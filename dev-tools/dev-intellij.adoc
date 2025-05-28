@@ -37,3 +37,8 @@ Replace:    $2$1\n
 
 
 
+.Asciidoctor's Content Tagging - Group Capture
+----
+Find:       (\w+[_]\w+)+\(\)+?[ ]\{+?\n([ ]+.*\n)+^\}$
+Replace:    # tag::$1[]\n$0\n# end::$1[]
+----

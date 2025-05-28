@@ -295,3 +295,42 @@ find ~/.config/BraveSoftware/brave-browser-*/ \( -iregex '.*Profile\@.*' -iregex
 
 find ~/.config/BraveSoftware/brave-browser-*/ \( -iregex '.*Profile\@.*' -iregex '.*preferenc.*'  \) -type f  \( -exec grep -iEl '.*ghmbel.*' {} \;  \)     | xargs -i jq --arg P {} '. + {path: $P}' {} | jq 'include "m"; . as $i | $i | [{path:.path, preferences: tostream | select(.[0] | index("ghmbeldphafepmbegfdlkpapadhbakde"))}] | group_by(.path) | to_entries | .[] | {path :.value[0].path, preferences: [.value[].preferences]}'
 ----
+
+
+
+
+
+
+
+
+
+
+
+
+
+// ToDo - Investigate
+.fromstream | index | tostream | pick
+[source,bath]
+----
+find ~/.config/BraveSoftware/brave-browser-*/ \( -iregex '.*Profile\@.*' -iregex '.*preferenc.*'  \) -type f  \( -exec grep -iEl '.*ghmbel.*' {} \;  \)     \
+    | xargs -i jq --arg P {} '. + {path: $P}' {} \
+    | jq   'include "m"; . as $i | $i |
+        map(   fromstream( select(tostream[0] | index("ghmbeldphafepmbegfdlkpapadhbakde")) | tostream)   ) '
+----
+
+
+
+// ToDo - Reaching somewhere with `setpath()`
+[source,path]
+----
+find ~/.config/BraveSoftware/brave-browser-*/ \( -iregex '.*Profile\@.*' -iregex '.*preferenc.*'  \) -type f  \( -exec grep -iEl '.*ghmbel.*' {} \;  \)     | xargs -i jq --arg P {} '. + {path: $P}' {} | jq  -s 'include "m"; . as $i | $i | map({path:.path, preferences: tostream | select(.[0] | index("ghmbeldphafepmbegfdlkpapadhbakde"))}) | group_by(.path) | to_entries | map({path :.value[0].path, preferences: [.value[].preferences] })' | jq '.[0].preferences[] | {p:.[0], v: .[1]} | setpath(.p; .v)'
+----
+
+
+
+[source,bash]
+----
+echo '[{"a":1,"c": 3},{"b":2, "c": {"a": 33}}]' |   jq   'map(  fromstream(
+                                                                        select(tostream[0]|index("a")) | tostream )
+                                                                )'
+----

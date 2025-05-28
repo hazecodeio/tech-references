@@ -44,6 +44,26 @@ Haze Wylde
 cat somejson.json | jq -r 'paths(scalars | true) as $p  | [ ( [ $p[] | tostring ] | join(".") ), ( getpath($p) | tojson )] | join(": ")'
 ----
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 === jq xq xml html json
 
 - convert html/xml to json
@@ -206,4 +226,15 @@ TIP: Use `sub` to remove trailing whitespaces
 .Add a JSON path as an ARG to current JSON inputsource after a pipe `|`
 ----
 ... | xargs -i jq --arg P {} '. += {path: $P}' {}
+----
+
+
+
+.stream
+[source,bash]
+----
+echo '[{"a":1,"c": 3},{"b":2, "c": {"a": 33}}]' \
+  | jq   'map(  fromstream(
+                        select(tostream[0]|index("a")) | tostream )
+            )'
 ----

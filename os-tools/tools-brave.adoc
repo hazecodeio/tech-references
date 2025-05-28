@@ -275,10 +275,7 @@ include::./resources-brave/brave-utils.sh[tag=fun_brave_check_extension_dir]
 .Join every 3 lines together
 [source,bash]
 ----
-find .config/BraveSoftware/brave-browser-*/ \( -not -iregex '.*Profile\@.*'   \) -type f  \( -exec grep -iEl '.*ghmbel.*' {} \; -exec grep -iEl '.*ghmbel.*' {} \;  -exec echo '1111111111' \; \) \
-    | jq -R \
-    | jq -s '.[]' \
-    | jq  '[., input, input]'
+
 ----
 
 
@@ -295,58 +292,10 @@ find .config/BraveSoftware/brave-browser-*/ \( -not -iregex '.*Profile\@.*'   \)
 
 .Select Paths of a KW - With -s
 ----
-// find ~/.config/BraveSoftware/brave-browser-*/ \( -iregex '.*Profile\@.*' -iregex '.*preferenc.*'  \) -type f  \( -exec grep -iEl '.*ghmbel.*' {} \;  \)     | xargs -i jq --arg P {} '. + {path: $P}' {} | jq  -s 'include "m"; . as $i | $i | map({p:.path, m: tostream | select(.[0] | index("ghmbeldphafepmbegfdlkpapadhbakde"))}) | group_by(.p)' | jq 'length'
-
-find ~/.config/BraveSoftware/brave-browser-*/ \( -iregex '.*Profile\@.*' -iregex '.*preferenc.*'  \) -type f  \( -exec grep -iEl '.*ghmbel.*' {} \;  \)     | xargs -i jq --arg P {} '. + {path: $P}' {} | jq  -s 'include "m"; . as $i | $i | map({path:.path, preferences: tostream | select(.[0] | index("ghmbeldphafepmbegfdlkpapadhbakde"))}) | group_by(.path) | to_entries | map({path :.value[0].path, preferences: [.value[].preferences] })'
 ----
 
 ..Select Paths of a KW - Without -s
 ----
-// find ~/.config/BraveSoftware/brave-browser-*/ \( -iregex '.*Profile\@.*' -iregex '.*preferenc.*'  \) -type f  \( -exec grep -iEl '.*ghmbel.*' {} \;  \)     | xargs -i jq --arg P {} '. + {path: $P}' {} | jq 'include "m"; . as $i | $i | [{p:.path, m: tostream | select(.[0] | index("ghmbeldphafepmbegfdlkpapadhbakde"))}] | group_by(.p)' | jq -s 'length'
-
-find ~/.config/BraveSoftware/brave-browser-*/ \( -iregex '.*Profile\@.*' -iregex '.*preferenc.*'  \) -type f  \( -exec grep -iEl '.*ghmbel.*' {} \;  \)     | xargs -i jq --arg P {} '. + {path: $P}' {} | jq 'include "m"; . as $i | $i | [{path:.path, preferences: tostream | select(.[0] | index("ghmbeldphafepmbegfdlkpapadhbakde"))}] | group_by(.path) | to_entries | .[] | {path :.value[0].path, preferences: [.value[].preferences]}'
 ----
 
 
-
-
-
-
-
-
-
-
-
-
-
-// ToDo - Investigate
-.fromstream | index | tostream | pick
-[source,bath]
-----
-find ~/.config/BraveSoftware/brave-browser-*/ \( -iregex '.*Profile\@.*' -iregex '.*preferenc.*'  \) -type f  \( -exec grep -iEl '.*ghmbel.*' {} \;  \)     \
-    | xargs -i jq --arg P {} '. + {path: $P}' {} \
-    | jq   'include "m"; . as $i | $i |
-        map(   fromstream( select(tostream[0] | index("ghmbeldphafepmbegfdlkpapadhbakde")) | tostream)   ) '
-----
-
-
-
-// ToDo - Reaching somewhere with `setpath()`
-[source,path]
-----
-find ~/.config/BraveSoftware/brave-browser-*/ \( -iregex '.*Profile\@.*' -iregex '.*preferenc.*'  \) -type f  \( -exec grep -iEl '.*ghmbel.*' {} \;  \)     | xargs -i jq --arg P {} '. + {path: $P}' {} | jq  -s 'include "m"; . as $i | $i | map({path:.path, preferences: tostream | select(.[0] | index("ghmbeldphafepmbegfdlkpapadhbakde"))}) | group_by(.path) | to_entries | map({path :.value[0].path, preferences: [.value[].preferences] })' | jq '.[0].preferences[] | {p:.[0], v: .[1]} | setpath(.p; .v)'
-----
-
-.Try with
-- yq
-
-
-
-
-[source,bash]
-----
-echo '[{"a":1,"c": 3},{"b":2, "c": {"a": 33}}]' \
-  | jq   'map(  fromstream(
-                        select(tostream[0]|index("a")) | tostream )
-            )'
-----

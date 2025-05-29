@@ -57,10 +57,14 @@ fun_brave_check_extension_hashes() {
 #fun_brave_check_extension_hashes
 
 
+
+
+
 fun_jsonpaths_key_to_value_array() {
+  KW=ghmbeldphafepmbegfdlkpapadhbakde;
   find ~/.config/BraveSoftware/brave-browser-*/ \( -iregex '.*Profile\@.*' -iregex '.*Preferences.*'  \) -type f  \( -exec grep -iEl '.*ghmbel.*' {} \;  \)     \
   | xargs -i jq --arg P {} '. + {path: $P}' {} \
-  | jq 'include "m"; {path:.path, jsonpaths: tostream | select(.[0] | index("ghmbeldphafepmbegfdlkpapadhbakde")) | select(length > 1) }' \
+  | jq --arg kw ${KW} 'include "m"; {path:.path, jsonpaths: tostream | select(.[0] | index($kw)) | select(length > 1) }' \
   | jq -s 'group_by(.path) | to_entries | map({path :.value[0].path, jsonpaths: [.value[].jsonpaths] })'
 
 #  NOTE: You still need to slurp the json objects for GroupBy to work.
@@ -69,10 +73,12 @@ fun_jsonpaths_key_to_value_array() {
 
 
 fun_jsonpaths_key_to_value_array_02() {
+  KW=ghmbeldphafepmbegfdlkpapadhbakde;
   find ~/.config/BraveSoftware/brave-browser-*/ \( -iregex '.*Profile\@.*' -iregex '.*Preferences.*'  \) -type f  \( -exec grep -iEl '.*ghmbel.*' {} \;  \)     \
   | xargs -i jq --arg P {} '. + {path: $P}' {} \
-  | jq -s 'include "m"; map( { path:.path, jsonpaths: (tostream | select(.[0] | index("ghmbeldphafepmbegfdlkpapadhbakde"))) | select(length > 1) } ) | group_by(.path) | to_entries | map({path :.value[0].path, jsonpaths: [.value[].jsonpaths] })' \
+  | jq --arg kw ${KW} -s 'include "m"; map( { path:.path, jsonpaths: (tostream | select(.[0] | index($kw))) | select(length > 1) } ) | group_by(.path) | to_entries | map({path :.value[0].path, jsonpaths: [.value[].jsonpaths] })' \
 
+#  NOTE: You still need to slurp the json objects for GroupBy to work.
 }
 
 fun_jsonpaths_key_to_value_dotted() {
@@ -91,3 +97,26 @@ fun_jsonpaths_key_dotted() {
   fun_jsonpaths_key_to_value_dotted \
   | jq 'map( { path:.path, jsonpaths: ( .jsonpaths | map(.[0]) ) } )'
 }
+
+
+fun_jsonpaths_delete_leaves() {
+  KW=ghmbeldphafepmbegfdlkpapadhbakde;
+  OUT=$(fun_jsonpaths_key_array | jq -r '.[0].jsonpaths | tojson')
+
+  cat ${HOME}/.config/BraveSoftware/brave-browser-*/Profile@*/Preferences \
+  | jq --argjson P ${OUT} 'delpaths($P)' \
+#  | jq --arg kw ${KW} '.extensions.settings | {ghmbeldphafepmbegfdlkpapadhbakde}' | grep -i '\|ghmbeldphafepmbegfdlkpapadhbakde'
+}
+
+
+fun_jsonpaths_delete_parent() {
+  KW=ghmbeldphafepmbegfdlkpapadhbakde;
+  OUT=$(fun_jsonpaths_key_array | jq --arg kw ${KW} -r '.[0].jsonpaths | map(.[:index($kw)+1]) | tojson')
+
+  cat ${HOME}/.config/BraveSoftware/brave-browser-*/Profile@*/Preferences \
+  | jq --argjson P ${OUT} 'delpaths($P)' \
+#  | jq --arg kw ${KW} '.extensions.settings | {ghmbeldphafepmbegfdlkpapadhbakde}' | grep -i '\|ghmbeldphafepmbegfdlkpapadhbakde'
+}
+
+
+

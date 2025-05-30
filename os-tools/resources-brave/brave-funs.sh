@@ -1,19 +1,19 @@
-BASE_PATH=${HOME}/.config/BraveSoftware/brave-browser-*/*
-#BASE_NAME=*
+BASEDIR=${HOME}/.config/BraveSoftware/brave-browser-*/*
+#BASENAME=*
 #KW='.*'
 
-BASE_NAME=ghmbeldphafepmbegfdlkpapadhbakde
-KW='.*Profile@.*queerly.*'
+BASENAME=ghmbeldphafepmbegfdlkpapadhbakde
+KW='.*Profile@.*'
 
 
 
 #DataPrepOp
 fun_filepaths_tokenize() {
-    find $BASE_PATH -name "${BASE_NAME}" \
+    find $BASEDIR -name "${BASENAME}" \
       | xargs -i find {}  -regextype posix-extended \
                           -iregex $KW \
                           -type f  \
-    	| jq -R 'split("/") as $s | {path_base: ., filename: $s[-1], pathSplits: $s}';  \
+    	| jq -R 'split("/") as $s | {filepath: ., filename: $s[-1], filepathSplits: $s}';  \
 }
 
 
@@ -22,7 +22,7 @@ fun_filepaths_tokenize() {
 #GroupOp
 fun_filepaths_groupby() {
   fun_filepaths_tokenize \
-    | jq '. += {groupby:.pathSplits[0:7]}' \
+    | jq '. += {groupby:.filepathSplits[0:7]}' \
     | jq -s 'group_by(.groupby) | to_entries'
 }
 
@@ -32,14 +32,14 @@ fun_filepaths_groupby() {
 #MapOp
 fun_filepaths_groupby_map() {
   fun_filepaths_groupby \
-    | jq 'map({groupby: .value[0].groupby | join("/"), pathSplits: [.value[].pathSplits[7:] | join("/")] | sort})'
+    | jq 'map({groupby: .value[0].groupby | join("/"), filepathSplits: [.value[].filepathSplits[7:] | join("/")] | sort})'
 }
 
 
 fun_filepaths_groupby_map_join() {
   fun_filepaths_groupby_map \
     | jq 'map(. as $i | { groupby,
-                          pathSplits:  (.pathSplits as $j | $j
+                          filepathSplits:  (.filepathSplits as $j | $j
                                             | map(. | [$i.groupby, .] | join("/"))
                                         )})'
 }
@@ -54,7 +54,7 @@ fun_filepaths_groupby_map_diff() {
   fun_filepaths_groupby_map \
     | jq ' .[] as $arr1 |
            .[] as $arr2 |
-           foreach $arr1 as $i (0; foreach $arr2 as $j (0; {path_src: $i.groupby, path_dst: $j.groupby, diffing: ($i.groupby + " - " + $j.groupby) , diff: ($i.pathSplits - $j.pathSplits)}))' \
+           foreach $arr1 as $i (0; foreach $arr2 as $j (0; {path_src: $i.groupby, path_dst: $j.groupby, diffing: ($i.groupby + " - " + $j.groupby) , diff: ($i.filepathSplits - $j.filepathSplits)}))' \
     | jq 'select(isempty(.diff[]) == 'false')'
 }
 

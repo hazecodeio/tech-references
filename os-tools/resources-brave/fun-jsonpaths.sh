@@ -6,7 +6,7 @@ EXT_ID=ghmbeldphafepmbegfdlkpapadhbakde
 fun_jsonpaths_key_to_value_array() {
 
   find ${BASEDIR} \
-      \( -iregex '.*Profile\@.*' -iregex '.*Preferences.*'  \) -type f  \
+      \( -iregex '.*Profile\@.*vid.*' -iregex '.*Preferences.*'  \) -type f  \
       \( -exec grep -iEl '.*ghmbel.*' {} \;  \)  \
   | xargs -i jq --arg P {} '. + {filepath: $P}' {} \
   | jq 'include "m"; {  filepath:   .filepath,
@@ -56,7 +56,11 @@ fun_jsonpaths_key_dotted() {
 fun_jsonpaths_key_to_value_array_filtered() {
 
   fun_jsonpaths_key_to_value_array \
-  | jq --arg kw ${EXT_ID} 'include "m"; map({  filepath, jsonpaths: (.jsonpaths | map(select( .[0]|index($kw)) | select(length > 1)))  }) ' \
+| jq --arg kw ${EXT_ID} 'include "m"; map({  filepath, jsonpaths: (.jsonpaths | map(select( .[0] | select(contains([$kw])) ) | select(length > 1)))  }) ' \
+
+#  | jq --arg kw ${EXT_ID} 'include "m"; map({  filepath, jsonpaths: (.jsonpaths | map(select( .[0] | index($kw)) | select(length > 1)))  }) ' \
+
+
 #  | jq -s 'group_by(.filepath) | to_entries | map({filepath :.value[0].filepath, jsonpaths: [.value[].jsonpaths] })'
 
 #  NOTE: You still need to slurp the json objects for GroupBy to work.
@@ -90,7 +94,7 @@ fun_jsonpaths_key_dotted_filtered() {
 fun_jsonpaths_delete_leaves() {
   OUT=$(fun_jsonpaths_key_array_filtered | jq -r '.[0].jsonpaths | tojson')
 
-  cat ${HOME}/.config/BraveSoftware/brave-browser-*/Profile@*Queerly*/Preferences \
+  cat ${HOME}/.config/BraveSoftware/brave-browser-*/Profile@*Vid*/Preferences \
   | jq --argjson P ${OUT} 'delpaths($P)' \
 #  | jq --arg kw ${EXT_ID} '.extensions.settings | {ghmbeldphafepmbegfdlkpapadhbakde}' | grep -i '\|ghmbeldphafepmbegfdlkpapadhbakde'
 }
@@ -99,7 +103,7 @@ fun_jsonpaths_delete_leaves() {
 fun_jsonpaths_delete_parent() {
   OUT=$(fun_jsonpaths_key_array_filtered | jq --arg kw ${EXT_ID} -r '.[0].jsonpaths | map(.[:index($kw)+1]) | tojson')
 
-  cat ${HOME}/.config/BraveSoftware/brave-browser-*/Profile@*Queerly*/Preferences \
+  cat ${HOME}/.config/BraveSoftware/brave-browser-*/Profile@*Vid*/Preferences \
   | jq --argjson P ${OUT} 'delpaths($P)' \
 #  | jq --arg kw ${EXT_ID} '.extensions.settings | {ghmbeldphafepmbegfdlkpapadhbakde}' | grep -i '\|ghmbeldphafepmbegfdlkpapadhbakde'
 }

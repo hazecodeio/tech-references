@@ -1,5 +1,4 @@
 BASEDIR=${HOME}/.config/BraveSoftware/brave-browser-*/*
-EXT_ID=ghmbeldphafepmbegfdlkpapadhbakde
 
 
 # NOTE: You still need to slurp the json objects for GroupBy to work.
@@ -51,6 +50,9 @@ fun_jsonpaths_key_dotted() {
 
 
 ############# Filtered with KW #################
+
+
+EXT_ID=ghmbeldphafepmbegfdlkpapadhbakde
 
 # ToDo - Add as jq function to the common jq module
 fun_jsonpaths_key_to_value_array_filtered() {

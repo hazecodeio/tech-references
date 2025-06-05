@@ -1,30 +1,35 @@
 BASEDIR=${HOME}/.config/BraveSoftware/brave-browser-*/*
+EXT_ID=ghmbeldphafepmbegfdlkpapadhbakde
 
-
-# NOTE: You still need to slurp the json objects for GroupBy to work.
+# ToDo - Separate the GroupBy from the ToStream to its own function
 fun_jsonpaths_key_to_value_array() {
 
   find ${BASEDIR} -regextype posix-extended  \
       \( -iregex '.*Profile\@.*' -iregex '.*/Preferences$'  \) -type f  \
       \( -exec grep -iEl '.*ghmbel.*' {} \;  \)  \
-  | xargs -i jq --arg P {} '. + {filepath: $P}' {} \
+  | xargs -i jq --arg P {} '{filepath: $P, jsonpaths: .}' {} \
   | jq 'include "m"; {  filepath:   .filepath,
-                        jsonpaths:  tostream }' \
+                        jsonpaths:  (.jsonpaths | tostream) }' \
   | jq -s 'group_by(.filepath)  | to_entries
                                 | map({ filepath:   .value[0].filepath,
                                         jsonpaths:  [.value[].jsonpaths] })'
 }
-
+# NOTE: You still need to slurp the json objects for GroupBy to work.
 
 
 fun_jsonpaths_key_to_value_dotted() {
   fun_jsonpaths_key_to_value_array \
-  | jq 'map({ filepath:   .filepath,
-              jsonpaths:  ( .jsonpaths
-                            | map(
-                                    [(["", .[0]] | flatten | join(".")), .[1]])
-                          )
-            })'
+  | jq 'map({ filepath:   .filepath, jsonpaths: [fromstream(.jsonpaths[])]  })' \
+  | jq 'include "m"; map({ filepath:   .filepath, jsonpaths: (.jsonpaths | map(pv)) })'
+
+
+
+#  | jq 'map( { filepath:   .filepath,             jsonpaths:  ( .jsonpaths
+#                            | map(
+#                                    [(.[0] | join(".")), .[1]])
+#                                    #[(["", .[0]] | flatten | join(".")), .[1]]) # prepend "." to each path.
+#                          )
+#            })'
 }
 
 
@@ -52,20 +57,29 @@ fun_jsonpaths_key_dotted() {
 ############# Filtered with KW #################
 
 
-EXT_ID=ghmbeldphafepmbegfdlkpapadhbakde
+
 
 # ToDo - Add as jq function to the common jq module
 fun_jsonpaths_key_to_value_array_filtered() {
 
   fun_jsonpaths_key_to_value_array \
-| jq --arg kw ${EXT_ID} 'include "m"; map({  filepath, jsonpaths: (.jsonpaths | map(select( .[0] | select(contains([$kw])) ) | select(length > 1)))  }) ' \
+  | jq --arg kw ${EXT_ID} 'include "m"; map({  filepath, jsonpaths: ( .jsonpaths
+                                                                      | map(  select( [ (.[0]|contains([$kw])), (.[1]|tostring|contains($kw)) ] | any  )
+                                                                              | select(length > 1)
+                                                                           )
+                                                                    )
+                                            }) ' \
 
-#  | jq --arg kw ${EXT_ID} 'include "m"; map({  filepath, jsonpaths: (.jsonpaths | map(select( .[0] | index($kw)) | select(length > 1)))  }) ' \
+#| jq --arg kw ${EXT_ID} 'include "m"; map({  filepath, jsonpaths: ( .jsonpaths
+#                                                                    | map( select( (.[0]|contains([$kw])) or (.[1]|tostring|contains($kw))  ) | select(length > 1)))
+#                                          }) ' \
 
+}
 
-#  | jq -s 'group_by(.filepath) | to_entries | map({filepath :.value[0].filepath, jsonpaths: [.value[].jsonpaths] })'
+fun_jsonpaths_key_to_value_array_filtered_onvalue() {
+  fun_jsonpaths_key_to_value_array \
+  | jq 'map(.jsonpaths | map(select(.[1]|tostring|contains("ghmbel")))) ' \
 
-#  NOTE: You still need to slurp the json objects for GroupBy to work.
 }
 
 

@@ -8,9 +8,9 @@ fun_jsonpaths_key_to_value_array() {
       \( -iregex '.*Profile\@.*' -iregex '.*/Preferences$'  \) -type f  \
       \( -exec grep -iEl '.*ghmbel.*' {} \;  \)  \
   | xargs -i jq --arg P {} '{filepath: $P, jsonpaths: .}' {} \
-  | jq 'include "m"; {  filepath:   .filepath,
-                        jsonpaths:  (.jsonpaths | tostream) }' \
-  | jq -s 'group_by(.filepath)  | to_entries
+  | jq -r 'include "m"; { filepath:   .filepath,
+                          jsonpaths:  (.jsonpaths | tostream) }' \
+  | jq -rs 'group_by(.filepath) | to_entries
                                 | map({ filepath:   .value[0].filepath,
                                         jsonpaths:  [.value[].jsonpaths] })'
 }
@@ -19,8 +19,12 @@ fun_jsonpaths_key_to_value_array() {
 
 fun_jsonpaths_key_to_value_dotted() {
   fun_jsonpaths_key_to_value_array \
-  | jq 'map({ filepath:   .filepath, jsonpaths: [fromstream(.jsonpaths[])]  })' \
-  | jq 'include "m"; map({ filepath:   .filepath, jsonpaths: (.jsonpaths | map(pv)) })'
+  | jq -r 'map({  filepath:  .filepath,
+                  jsonpaths: [ fromstream(.jsonpaths[]) ]
+               })' \
+  | jq -r 'include "m"; map({ filepath: .filepath,
+                              jsonpaths: (.jsonpaths | map(pv))
+                            })'
 
 
 
@@ -36,12 +40,14 @@ fun_jsonpaths_key_to_value_dotted() {
 # Use this function to filter out jsonpaths for delpaths() accept an array as a param
 fun_jsonpaths_key_array() {
   fun_jsonpaths_key_to_value_array \
-  | jq 'map( { filepath:.filepath, jsonpaths: ( .jsonpaths | map(.[0]) ) } )'
+  | jq -r 'map({  filepath:.filepath,
+                  jsonpaths: ( .jsonpaths | map(.[0]) ) })'
 }
 
 fun_jsonpaths_key_dotted() {
   fun_jsonpaths_key_to_value_dotted \
-  | jq 'map( { filepath:.filepath, jsonpaths: ( .jsonpaths | map(.[0]) ) } )'
+  | jq -r 'map({  filepath:.filepath,
+                  jsonpaths: ( .jsonpaths | map(.[0]) ) })'
 }
 
 
@@ -63,12 +69,13 @@ fun_jsonpaths_key_dotted() {
 fun_jsonpaths_key_to_value_array_filtered() {
 
   fun_jsonpaths_key_to_value_array \
-  | jq --arg kw ${EXT_ID} 'include "m"; map({  filepath, jsonpaths: ( .jsonpaths
-                                                                      | map(  select( [ (.[0]|contains([$kw])), (.[1]|tostring|contains($kw)) ] | any  )
-                                                                              | select(length > 1)
-                                                                           )
-                                                                    )
-                                            }) ' \
+  | jq -r --arg kw ${EXT_ID} 'include "m"; map({  filepath,
+                                                  jsonpaths: (  .jsonpaths
+                                                                | map(  select( [ (.[0] | contains([$kw])) , (.[1] | tostring | contains($kw)) ] | any  )
+                                                                        | select(length > 1)
+                                                                     )
+                                                              )
+                                               }) ' \
 
 #| jq --arg kw ${EXT_ID} 'include "m"; map({  filepath, jsonpaths: ( .jsonpaths
 #                                                                    | map( select( (.[0]|contains([$kw])) or (.[1]|tostring|contains($kw))  ) | select(length > 1)))
@@ -76,29 +83,29 @@ fun_jsonpaths_key_to_value_array_filtered() {
 
 }
 
-fun_jsonpaths_key_to_value_array_filtered_onvalue() {
-  fun_jsonpaths_key_to_value_array \
-  | jq 'map(.jsonpaths | map(select(.[1]|tostring|contains("ghmbel")))) ' \
-
-}
-
-
 
 fun_jsonpaths_key_to_value_dotted_filtered() {
   fun_jsonpaths_key_to_value_array_filtered \
-  | jq 'map( { filepath:.filepath, jsonpaths: ( .jsonpaths | map( [(["", .[0]] | flatten | join(".")), .[1]] ) ) } )'
+  | jq -r 'map({  filepath,
+                  jsonpaths: ( .jsonpaths | map( [(.[0] | join(".")), .[1]] ) )
+               })'
+
+
+#  | jq -r 'map({  filepath,
+#                  jsonpaths: ( .jsonpaths | map( [(["", .[0]] | flatten | join(".")), .[1]] ) )
+#               })'
 }
 
 
 # Use this function to filter out jsonpaths for delpaths() accept an array as a param
 fun_jsonpaths_key_array_filtered() {
   fun_jsonpaths_key_to_value_array_filtered \
-  | jq 'map( { filepath:.filepath, jsonpaths: ( .jsonpaths | map(.[0]) ) } )'
+  | jq -r 'map( { filepath:.filepath, jsonpaths: ( .jsonpaths | map(.[0]) ) } )'
 }
 
 fun_jsonpaths_key_dotted_filtered() {
   fun_jsonpaths_key_to_value_dotted_filtered \
-  | jq 'map( { filepath:.filepath, jsonpaths: ( .jsonpaths | map(.[0]) ) } )'
+  | jq -r 'map( { filepath:.filepath, jsonpaths: ( .jsonpaths | map(.[0]) ) } )'
 }
 
 
@@ -127,8 +134,8 @@ fun_jsonpaths_delete_leaves() {
   find ${BASEDIR} -regextype posix-extended  \
         \( -iregex ${PROFILE} -iregex '.*/Preferences$'  \) -type f  \
   | xargs -i cat {} \
-  | jq --argjson P ${OUT} 'delpaths($P)' \
-#  | jq --arg kw ${EXT_ID} '.extensions.settings | {ghmbeldphafepmbegfdlkpapadhbakde}' | grep -i '\|ghmbeldphafepmbegfdlkpapadhbakde'
+  | jq -r --argjson P ${OUT} 'delpaths($P)' \
+#  | jq -r --arg kw ${EXT_ID} '.extensions.settings | {ghmbeldphafepmbegfdlkpapadhbakde}' | grep -i '\|ghmbeldphafepmbegfdlkpapadhbakde'
 }
 
 
@@ -150,8 +157,8 @@ fun_jsonpaths_delete_parent() {
   find ${BASEDIR} -regextype posix-extended  \
           \( -iregex ${PROFILE} -iregex '.*/Preferences$'  \) -type f  \
   | xargs -i cat {} \
-  | jq --argjson P ${OUT} 'delpaths($P)' \
-#  | jq --arg kw ${EXT_ID} '.extensions.settings | {ghmbeldphafepmbegfdlkpapadhbakde}' | grep -i '\|ghmbeldphafepmbegfdlkpapadhbakde'
+  | jq -r --argjson P ${OUT} 'delpaths($P)' \
+#  | jq -r --arg kw ${EXT_ID} '.extensions.settings | {ghmbeldphafepmbegfdlkpapadhbakde}' | grep -i '\|ghmbeldphafepmbegfdlkpapadhbakde'
 }
 
 

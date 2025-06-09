@@ -117,51 +117,6 @@ fun_jsonpaths_key_dotted_filtered() {
 
 
 
-PROFILE=.*Profile@.*codeio.*
-
-# ToDo - automate with: cd, cp, mkdir, etc... Automate Backing up files being modified
-fun_jsonpaths_delete_leaves() {
-
-  OUT=$(fun_jsonpaths_key_array_filtered \
-        | jq -r --arg PROF ${PROFILE} 'map(select(.filepath | test($PROF; "ig") and endswith("Preferences")))')
-
-#  echo $OUT | jq -r 'map({filepath})'
-#  echo "-----------------------------------------"
-
-  OUT=$(echo $OUT | jq -r '.[] | .jsonpaths | tojson')
-#  echo $OUT
-
-  find ${BASEDIR} -regextype posix-extended  \
-        \( -iregex ${PROFILE} -iregex '.*/Preferences$'  \) -type f  \
-  | xargs -i cat {} \
-  | jq -r --argjson P ${OUT} 'delpaths($P)' \
-#  | jq -r --arg kw ${EXT_ID} '.extensions.settings | {ghmbeldphafepmbegfdlkpapadhbakde}' | grep -i '\|ghmbeldphafepmbegfdlkpapadhbakde'
-}
-
-
-fun_jsonpaths_delete_parent() {
-
-
-#  OUT=$(fun_jsonpaths_key_array_filtered | jq -r --arg PROF ${PROFILE} --arg kw ${EXT_ID} '.[] | select(.filepath | test($PROF; "ig") and endswith("Preferences")) | .jsonpaths | map(.[:index($kw)+1]) | tojson')
-
-
-  OUT=$(fun_jsonpaths_key_array_filtered \
-        | jq -r --arg PROF ${PROFILE} 'map(select(.filepath | test($PROF; "ig") and endswith("Preferences")))')
-
-#  echo $OUT | jq -r 'map({filepath})'
-#  echo "-----------------------------------------"
-
-  OUT=$(echo $OUT | jq -r --arg kw ${EXT_ID} '.[] | .jsonpaths | map(.[:index($kw)+1]) | tojson')
-#  echo $OUT
-
-  find ${BASEDIR} -regextype posix-extended  \
-          \( -iregex ${PROFILE} -iregex '.*/Preferences$'  \) -type f  \
-  | xargs -i cat {} \
-  | jq -r --argjson P ${OUT} 'delpaths($P)' \
-#  | jq -r --arg kw ${EXT_ID} '.extensions.settings | {ghmbeldphafepmbegfdlkpapadhbakde}' | grep -i '\|ghmbeldphafepmbegfdlkpapadhbakde'
-}
-
-
 
 
 

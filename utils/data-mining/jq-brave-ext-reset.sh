@@ -3,7 +3,7 @@ source /home/haze/dev/tech-references/utils/data-mining/fun-jsonpaths.sh
 BASEDIR=${HOME}/.config/BraveSoftware/brave-browser-*/*
 
 PARENT=.*/brave-browser-.*/.*
-PROFILE=.*Profile@haze.queerlyfit.*
+PROFILE=.*Profile@.*
 
 #PARENT=
 #PROFILE=

@@ -27,7 +27,7 @@ fun_filepaths_tokenize() {
 }
 
 
-################## #GroupMapReduc Ops #################
+################## #GroupMapReduce Ops #################
 
 #GroupOp
 fun_filepaths_groupby() {
@@ -42,19 +42,22 @@ fun_filepaths_groupby() {
 #MapOp
 fun_filepaths_groupby_map() {
   fun_filepaths_groupby \
-    | jq -r 'map({    filepath: .value[0].filepath,
-                      filename: .value[0].filename,
-                      groupby: .value[0].groupby | join("/"),
-                      filepathJoined: [.value[].filepathSplits[7:] | join("/")] | sort
+    | jq -r 'map({
+                      groupby: .value[0].groupby,
+                      filepathSplits: [.value[].filepathSplits[7:]]
                  })'
 }
 
 
-fun_filepaths_groupby_map_join() {
+#ReduceOp
+fun_filepaths_groupby_map_reduce() {
   fun_filepaths_groupby_map \
-    | jq -r 'map(. as $i |  {   groupby,
-                                filepathJoined:  ( .filepathJoined | map(. | [$i.groupby, .] | join("/")) )
-                            })'
+    | jq -r 'map( (.groupby | join("/")) as $g |
+                  { groupby: $g,
+                    filepathJoined:  (.filepathSplits | map( [$g,  .] | flatten | join("/")) | sort)
+                  })'
+
+#                            .filepathSplits[7:] | join("/")] | sort
 }
 
 
@@ -63,11 +66,18 @@ fun_filepaths_groupby_map_join() {
 
 #################### # Diffing # ###################
 
-fun_filepaths_groupby_map_diff() {
-  fun_filepaths_groupby_map \
+fun_filepaths_groupby_map_reduce_to_diff() {
+  fun_filepaths_groupby_map_reduce \
     | jq -r '.[] as $arr1 |
              .[] as $arr2 |
-             foreach $arr1 as $i (0; foreach $arr2 as $j (0; {path_src: $i.groupby, path_dst: $j.groupby, diffing: ($i.groupby + " - " + $j.groupby) , diff: ($i.filepathJoined - $j.filepathJoined)}))' \
+             foreach $arr1 as $i
+                              (0; foreach $arr2 as  $j
+                                                    (0; { path_src: $i.groupby,
+                                                          path_dst: $j.groupby, diffing: ($i.groupby + " - " + $j.groupby) ,
+                                                          diff: ($i.filepathJoined - $j.filepathJoined)
+                                                        }
+                                                    )
+                              )' \
     | jq -r 'select(isempty(.diff[]) == 'false')'
 }
 
@@ -75,14 +85,14 @@ fun_filepaths_groupby_map_diff() {
 #jq '. as $i | [$i.path_src, "/"] | join(.diff[])
 
 #ReduceOp
-fun_filepaths_groupby_map_diff_join() {
-  fun_filepaths_groupby_map_diff \
+fun_filepaths_groupby_map_reduce_to_diff_join() {
+  fun_filepaths_groupby_map_reduce_to_diff \
   | jq -r '. as $i | $i += {diff_concatenated: [$i.diff[] | [$i.path_src, .] | join ("/")]}'
 }
 
 
-fun_filepaths_groupby_map_diff_join_filter() {
-    fun_filepaths_groupby_map_diff_join \
+fun_filepaths_groupby_map_reduce_to_diff_join_filter() {
+    fun_filepaths_groupby_map_reduce_to_diff_join \
     | jq -r 'select(.path_src | ascii_downcase | contains("queer", "codeio")) | select(.path_dst | ascii_downcase | contains("codeio", "queer"))' \
 #    | jq -s '.[0].diff_concatenated[]'
 }

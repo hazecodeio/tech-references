@@ -2,7 +2,7 @@ BASEDIR=${HOME}/.config/BraveSoftware/brave-browser-*/*
 EXT_ID=ghmbeldphafepmbegfdlkpapadhbakde
 
 # ToDo - Separate the GroupBy from the ToStream to its own function
-fun_jsonpaths_key_to_value_array() {
+fun_jsonpaths_stream_toKeyValue() {
 
   find ${BASEDIR} -regextype posix-extended  \
       \( -iregex '.*Profile\@.*' -iregex '.*/Preferences$'  \) -type f  \
@@ -10,6 +10,12 @@ fun_jsonpaths_key_to_value_array() {
   | xargs -i jq --arg P {} '{filepath: $P, jsonpaths: .}' {} \
   | jq -r 'include "m"; { filepath:   .filepath,
                           jsonpaths:  (.jsonpaths | tostream) }' \
+
+}
+# NOTE: You still need to slurp the json objects for GroupBy to work.
+
+fun_jsonpaths_stream_toKeyValue_groupby() {
+  fun_jsonpaths_stream_toKeyValue \
   | jq -rs 'group_by(.filepath) | to_entries
                                 | map({ filepath:   .value[0].filepath,
                                         jsonpaths:  [.value[].jsonpaths] })'
@@ -17,8 +23,8 @@ fun_jsonpaths_key_to_value_array() {
 # NOTE: You still need to slurp the json objects for GroupBy to work.
 
 
-fun_jsonpaths_key_to_value_dotted() {
-  fun_jsonpaths_key_to_value_array \
+fun_jsonpaths_stream_toKeyValue_groupby_reduce() {
+  fun_jsonpaths_stream_toKeyValue_groupby \
   | jq -r 'map({  filepath:  .filepath,
                   jsonpaths: [ fromstream(.jsonpaths[]) ]
                })' \
@@ -38,14 +44,14 @@ fun_jsonpaths_key_to_value_dotted() {
 
 
 # Use this function to filter out jsonpaths for delpaths() accept an array as a param
-fun_jsonpaths_key_array() {
-  fun_jsonpaths_key_to_value_array \
+fun_jsonpaths_stream_toKeyValue_groupby_mapToKeys() {
+  fun_jsonpaths_stream_toKeyValue_groupby \
   | jq -r 'map({  filepath:.filepath,
                   jsonpaths: ( .jsonpaths | map(.[0]) ) })'
 }
 
-fun_jsonpaths_key_dotted() {
-  fun_jsonpaths_key_to_value_dotted \
+fun_jsonpaths_stream_toKeyValue_groupby_mapToKeys_reduce() {
+  fun_jsonpaths_stream_toKeyValue_groupby_reduce \
   | jq -r 'map({  filepath:.filepath,
                   jsonpaths: ( .jsonpaths | map(.[0]) ) })'
 }
@@ -66,9 +72,9 @@ fun_jsonpaths_key_dotted() {
 
 
 # ToDo - Add as jq function to the common jq module
-fun_jsonpaths_key_to_value_array_filtered() {
+fun_jsonpaths_stream_toKeyValue_groupby_filtered() {
 
-  fun_jsonpaths_key_to_value_array \
+  fun_jsonpaths_stream_toKeyValue_groupby \
   | jq -r --arg kw ${EXT_ID} 'include "m"; map({  filepath,
                                                   jsonpaths: (  .jsonpaths
                                                                 | map(  select( [ (.[0] | contains([$kw])) , (.[1] | tostring | contains($kw)) ] | any  )
@@ -84,8 +90,8 @@ fun_jsonpaths_key_to_value_array_filtered() {
 }
 
 
-fun_jsonpaths_key_to_value_dotted_filtered() {
-  fun_jsonpaths_key_to_value_array_filtered \
+fun_jsonpaths_stream_toKeyValue_groupby_reduced_filtered() {
+  fun_jsonpaths_stream_toKeyValue_groupby_filtered \
   | jq -r 'map({  filepath,
                   jsonpaths: ( .jsonpaths | map( [(.[0] | join(".")), .[1]] ) )
                })'
@@ -98,13 +104,13 @@ fun_jsonpaths_key_to_value_dotted_filtered() {
 
 
 # Use this function to filter out jsonpaths for delpaths() accept an array as a param
-fun_jsonpaths_key_array_filtered() {
-  fun_jsonpaths_key_to_value_array_filtered \
+fun_jsonpaths_stream_toKeyValue_groupby_mapToKey_filtered() {
+  fun_jsonpaths_stream_toKeyValue_groupby_filtered \
   | jq -r 'map( { filepath:.filepath, jsonpaths: ( .jsonpaths | map(.[0]) ) } )'
 }
 
-fun_jsonpaths_key_dotted_filtered() {
-  fun_jsonpaths_key_to_value_dotted_filtered \
+fun_jsonpaths_stream_toKeyValue_groupby_mapToKey_reduced_filtered() {
+  fun_jsonpaths_stream_toKeyValue_groupby_reduced_filtered \
   | jq -r 'map( { filepath:.filepath, jsonpaths: ( .jsonpaths | map(.[0]) ) } )'
 }
 

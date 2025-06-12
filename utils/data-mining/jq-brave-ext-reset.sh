@@ -3,18 +3,19 @@ source /home/haze/dev/tech-references/utils/data-mining/fun-jsonpaths.sh
 BASEDIR=${HOME}/.config/BraveSoftware/brave-browser-*/*
 
 PARENT=.*/brave-browser-.*/.*
-PROFILE=.*Profile@.*
+PROFILE=.*Profile@.*code.*
 
 #PARENT=
 #PROFILE=
 
 EXT_ID=ghmbeldphafepmbegfdlkpapadhbakde
 
+#ToDo - Loop for multiple files
 
 # ToDo - automate with: cd, cp, mkdir, etc... Automate Backing up files being modified
 fun_jsonpaths_delete_leaves() {
 
-  OUT=$(fun_jsonpaths_key_array_filtered \
+  OUT=$(fun_jsonpaths_stream_toKeyValue_groupby_mapToKey_filtered \
         | jq -r --arg PROF ${PROFILE} 'map(select(.filepath | test($PROF; "ig") and endswith("Preferences")))')
 
 #  echo $OUT | jq -r 'map({filepath})'
@@ -38,7 +39,7 @@ fun_jsonpaths_delete_parent() {
 #  OUT=$(fun_jsonpaths_key_array_filtered | jq -r --arg PROF ${PROFILE} --arg kw ${EXT_ID} '.[] | select(.filepath | test($PROF; "ig") and endswith("Preferences")) | .jsonpaths | map(.[:index($kw)+1]) | tojson')
 
 
-  OUT=$(fun_jsonpaths_key_array_filtered \
+  OUT=$(fun_jsonpaths_stream_toKeyValue_groupby_mapToKey_filtered \
         | jq -r --arg PROF ${PROFILE} 'map(select(.filepath | test($PROF; "ig") and endswith("Preferences")))')
 
 #  echo $OUT | jq -r 'map({filepath})'
@@ -50,7 +51,7 @@ fun_jsonpaths_delete_parent() {
   find ${BASEDIR} -regextype posix-extended  \
           \( -iregex ${PROFILE} -iregex '.*/Preferences$'  \) -type f  \
   | xargs -i cat {} \
-#  | jq -r --argjson P ${OUT} 'delpaths($P)' \
+  | jq -r --argjson P ${OUT} 'delpaths($P)' \
 #  | jq -r --arg kw ${EXT_ID} '.extensions.settings | {ghmbeldphafepmbegfdlkpapadhbakde}' | grep -i '\|ghmbeldphafepmbegfdlkpapadhbakde'
 }
 

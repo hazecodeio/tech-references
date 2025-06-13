@@ -1,4 +1,31 @@
+brave_find_files_ofType_withKW() {
+  BASEDIR="${1}"
+  FTYPE="${2}"
+  KW_P="${3}"
+  KW_C="${4}"
 
+  find ${BASEDIR} -regextype posix-extended \
+                  \( -iregex "${KW_P}" \) -type f \
+                  \( -exec file "{}" \; \) \
+  | grep -iE "${FTYPE}" \
+  | jq -R --arg FT "${FTYPE}" 'split(":")
+                              | map( . | sub("^[ ]+|[ ]+$"; "") )
+                              | { path: .[0],
+                                  type: .[1] | capture("(?<d>" + $FT + ")"; "i") | .d | ascii_downcase
+                                }' \
+  | jq -r '.path | tojson' \
+  | xargs grep -iEl "${KW_C}" \
+  | xargs -i echo {}:"${KW_C}" \
+  | jq -R 'split(":") | {path: .[0], keyword: .[1]}'
+}
+
+brave_find_files_ofJson_withKW() {
+  BASEDIR="${HOME}/.config/BraveSoftware/brave-browser-*/*"
+  FTYPE="json";
+  KW_P=".*local[ ]+?state.*"
+  KW_C="";
+  brave_find_files_ofType_withKW "${BASEDIR}" "${FTYPE}" "${KW_P}" "${KW_C}"
+}
 
 
 

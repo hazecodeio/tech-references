@@ -269,7 +269,7 @@ fun-diff-dirs-with-similar-paths() {
 
 .Loop through Extension's Last Modified Timestamp
 [source,bash]
-include::./resources-brave/brave-utils.sh[tag=fun_brave_check_extension_dir]
+include::../../utils/data-mining/jq-brave-ext-reset.sh[tag=fun_brave_check_extension_dir]
 
 
 .Join every 3 lines together

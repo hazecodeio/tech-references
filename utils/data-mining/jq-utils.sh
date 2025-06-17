@@ -16,14 +16,16 @@ brave_find_files_ofType_withKW() {
   | jq -r '.path | tojson' \
   | xargs grep -iEl "${KW_C}" \
   | xargs -i echo {}:"${KW_C}" \
-  | jq -R 'split(":") | {path: .[0], keyword: .[1]}'
+  | jq -R 'split(":") | {path: .[0], keyword: .[1]}' \
+  | jq -sr
 }
 
 brave_find_files_ofJson_withKW() {
   BASEDIR="${HOME}/.config/BraveSoftware/brave-browser-*/*"
-  FTYPE="json";
+  FTYPE="json"
   KW_P=".*local[ ]+?state.*"
-  KW_C="";
+  KW_C=""
+
   brave_find_files_ofType_withKW "${BASEDIR}" "${FTYPE}" "${KW_P}" "${KW_C}"
 }
 
@@ -32,8 +34,12 @@ brave_find_files_ofJson_withKW() {
 fun_join_every_n_lines() {
   BASEDIR=${HOME}/.config/BraveSoftware/brave-browser-*/*
 
-  find ${BASEDIR} \( -not -iregex '.*Profile\@.*'   \) -type f  \
-      \( -exec grep -iEl '.*ghmbel.*' {} \; -exec grep -iEl '.*ghmbel.*' {} \;  -exec echo '1111111111' \; \) \
+  find ${BASEDIR} -type f  \
+      \( -not -iregex '.*Profile\@.*'   \) \
+      \(  -exec grep -iEl '.*ghmbel.*' {} \; \
+          -exec grep -iEl '.*ghmbel.*' {} \;  \
+          -exec echo '1111111111' \; \
+      \) \
   | jq -R \
   | jq -s '.[]' \
   | jq  '[., input, input]'

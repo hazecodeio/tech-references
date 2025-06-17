@@ -1,12 +1,23 @@
-BASEDIR=${HOME}/.config/BraveSoftware/brave-browser-*/*
-EXT_ID=ghmbeldphafepmbegfdlkpapadhbakde
+#BASEDIR=${HOME}/.config/BraveSoftware/brave-browser-*/*
+#EXT_ID=ghmbeldphafepmbegfdlkpapadhbakde
 
 # ToDo - Separate the GroupBy from the ToStream to its own function
 fun_jsonpaths_stream_toKeyValue() {
 
-  find ${BASEDIR} -regextype posix-extended  \
-      \( -iregex '.*Profile\@.*' -iregex '.*/Preferences$'  \) -type f  \
-      \( -exec grep -iEl '.*ghmbel.*' {} \;  \)  \
+
+
+
+  BASEDIR="${1}"
+  WITH_PROFILE="${2}"
+  ENDS_WITH="${3}"
+  EXT_ID="${4}"
+
+
+  find ${BASEDIR} -type f  \
+      -regextype posix-extended  \
+      \(  -iregex "${WITH_PROFILE}" \
+          -iregex "${ENDS_WITH}"  \) \
+      \(  -exec grep -iEl ${EXT_ID} {} \;  \)  \
   | xargs -i jq --arg P {} '{filepath: $P, jsonpaths: .}' {} \
   | jq -r 'include "m"; { filepath:   .filepath,
                           jsonpaths:  (.jsonpaths | tostream) }' \
@@ -14,8 +25,32 @@ fun_jsonpaths_stream_toKeyValue() {
 }
 # NOTE: You still need to slurp the json objects for GroupBy to work.
 
+
+fun_brave_localstate_jsonpaths_stream_toKeyValue() {
+
+  BASEDIR="${HOME}/.config/BraveSoftware/brave-browser-*/*"
+  WITH_PROFILE=".*"
+  ENDS_WITH=".*/Local State$"
+  EXT_ID="."
+
+
+  fun_jsonpaths_stream_toKeyValue "${BASEDIR}" "${WITH_PROFILE}" "${ENDS_WITH}" "${EXT_ID}"
+}
+
+
+fun_brave_preferences_jsonpaths_stream_toKeyValue() {
+
+  BASEDIR="${HOME}/.config/BraveSoftware/brave-browser-*/*"
+  WITH_PROFILE=".*Profile\@.*"
+  ENDS_WITH=".*/Preferences$"
+  EXT_ID="ghmbeldphafepmbegfdlkpapadhbakde"
+
+
+  fun_jsonpaths_stream_toKeyValue "${BASEDIR}" "${WITH_PROFILE}" "${ENDS_WITH}" "${EXT_ID}"
+}
+
 fun_jsonpaths_stream_toKeyValue_groupby() {
-  fun_jsonpaths_stream_toKeyValue \
+  fun_brave_preferences_jsonpaths_stream_toKeyValue \
   | jq -rs 'group_by(.filepath) | to_entries
                                 | map({ filepath:   .value[0].filepath,
                                         jsonpaths:  [.value[].jsonpaths] })'
@@ -54,6 +89,12 @@ fun_jsonpaths_stream_toKeyValue_groupby_mapToKeys_reduce() {
   fun_jsonpaths_stream_toKeyValue_groupby_reduce \
   | jq -r 'map({  filepath:.filepath,
                   jsonpaths: ( .jsonpaths | map(.[0]) ) })'
+}
+
+fun_jsonpaths_stream_toKeyValue_groupby_reduce_mapToKeyValue() {
+  fun_jsonpaths_stream_toKeyValue_groupby_reduce \
+  | jq -r 'map({  filepath:.filepath,
+                  jsonpaths: ( .jsonpaths | map( ([.[0], .[1]|tostring] | join(": ") ) ) )} )'
 }
 
 
@@ -114,6 +155,10 @@ fun_jsonpaths_stream_toKeyValue_groupby_mapToKey_reduced_filtered() {
   | jq -r 'map( { filepath:.filepath, jsonpaths: ( .jsonpaths | map(.[0]) ) } )'
 }
 
+fun_jsonpaths_stream_toKeyValue_groupby_mapToKeyValue_reduced_filtered() {
+  fun_jsonpaths_stream_toKeyValue_groupby_reduced_filtered \
+  | jq -r 'map( { filepath:.filepath, jsonpaths: ( .jsonpaths | map( ([.[0], .[1]|tostring] | join(": ") ) ) )} )'
+}
 
 
 

@@ -1,4 +1,4 @@
-source /home/haze/dev/tech-references/utils/data-mining/fun-jsonpaths.sh
+source /home/haze/dev/tech-references/utils/data-mining/jq-jsonpaths.sh
 
 BASEDIR=${HOME}/.config/BraveSoftware/brave-browser-*/*
 
@@ -28,7 +28,7 @@ fun_jsonpaths_delete_leaves() {
         \( -iregex ${PROFILE} -iregex '.*/Preferences$'  \) -type f  \
   | xargs -i cat {} \
   | jq -r --argjson P ${OUT} 'delpaths($P)' \
-#  | jq -r --arg kw ${EXT_ID} '.extensions.settings | {ghmbeldphafepmbegfdlkpapadhbakde}' | grep -i '\|ghmbeldphafepmbegfdlkpapadhbakde'
+  | jq -r --arg kw ${EXT_ID} '.extensions.settings | {ghmbeldphafepmbegfdlkpapadhbakde}' | grep -i '\|ghmbeldphafepmbegfdlkpapadhbakde'
 
 }
 
@@ -52,7 +52,7 @@ fun_jsonpaths_delete_parent() {
           \( -iregex ${PROFILE} -iregex '.*/Preferences$'  \) -type f  \
   | xargs -i cat {} \
   | jq -r --argjson P ${OUT} 'delpaths($P)' \
-#  | jq -r --arg kw ${EXT_ID} '.extensions.settings | {ghmbeldphafepmbegfdlkpapadhbakde}' | grep -i '\|ghmbeldphafepmbegfdlkpapadhbakde'
+  | jq -r --arg kw ${EXT_ID} '.extensions.settings | {ghmbeldphafepmbegfdlkpapadhbakde}' | grep -i '\|ghmbeldphafepmbegfdlkpapadhbakde'
 }
 
 
@@ -81,9 +81,13 @@ fun_brave_profile_extension_db() {
 
   EXT_ID=.*ghmbeldphafepmbegfdlkpapadhbakde.*
 
-  find ${BASEDIR} \
+  find ${BASEDIR} -type f \
       -regextype posix-extended \
-      \( -iregex ${PARENT} -not -iregex '.*Extensions.*' -iregex ${PROFILE} -iregex ${EXT_ID} \) -type f \
+      \(  -not -iregex '.*Extensions.*' \
+          -not -iregex '.*tpac.*' \) \
+      \(  -iregex ${PARENT} \
+          -iregex ${PROFILE} \
+          -iregex ${EXT_ID} \) \
 
 #      -exec ls -alhtr --time-style=+'%F %r' {} +;
 }
@@ -96,29 +100,31 @@ fun_brave_profile_extension_db() {
 
 
 # tag::fun_brave_check_extension_hashes[]
-fun_brave_extension_hashes() {
+fun_brave_extension_cached() {
 
-  BASEDIR=${HOME}/.config/BraveSoftware/brave-browser-*/*
-  PARENT=.*/brave-browser-.*/.*
-  PROFILE=.*Profile@.*
+  BASEDIR="${HOME}/.config/BraveSoftware/brave-browser-*/*"
+  PROFILE=".*Profile@.*"
+  NOT_KW=".*official.*|.*tpac.*"
 
-  EXT_ID=ghmbeldphafepmbegfdlkpapadhbakde
+  EXT_ID="ghmbeldphafepmbegfdlkpapadhbakde"
 
-  find ${BASEDIR} \
+  find ${BASEDIR} -type f  \
       -regextype posix-extended \
-      \( -iregex ${PARENT} -not -iregex ${PROFILE} -iregex '.*json'  \) -type f  \
+      \(  -not -iregex ${PROFILE} \
+          -not -iregex ${NOT_KW} \) \
+      \(  -iregex '.*json'  \) \
       \( -exec grep -iEl ${EXT_ID} {} \;  \) \
-  | xargs -i jq -r --arg P {} '{path: $P} + .' {}
+  | xargs -i jq -r --arg P {} '{filepath: $P} + .' {}
 
 }
 # end::fun_brave_check_extension_hashes[]
 
 #fun_brave_check_extension_hashes
 
-fun_brave_extension_hashes_map() {
-  fun_brave_extension_hashes \
-  | jq -rs 'map( (.path | split("/")) as $p
-                | { path,
+fun_brave_extension_cached_map() {
+  fun_brave_extension_cached \
+  | jq -rs 'map( (.filepath | split("/")) as $p
+                | { filepath,
                     hashpaths:  .hashes
                                 | to_entries
                                 | map({ appid: .value.appid,
@@ -128,12 +134,12 @@ fun_brave_extension_hashes_map() {
                   })'
 }
 
-fun_brave_extension_hashes_map_filtered() {
+fun_brave_extension_cached_map_filtered() {
 
   EXT_ID=ghmbeldphafepmbegfdlkpapadhbakde
 
-  fun_brave_extension_hashes_map \
-  | jq -r --arg kw ${EXT_ID} 'map({ path,
+  fun_brave_extension_cached_map \
+  | jq -r --arg kw ${EXT_ID} 'map({ filepath,
                                     hashpaths:  .hashpaths
                                                 | map(select(.appid | ascii_downcase | contains($kw)))
                                   })'

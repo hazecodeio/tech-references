@@ -104,7 +104,7 @@ fun_brave_extension_cached() {
 
   BASEDIR="${HOME}/.config/BraveSoftware/brave-browser-*/*"
   PROFILE=".*Profile@.*"
-  NOT_KW=".*official.*|.*tpac.*"
+  NOT_KW=".*tpac.*"
 
   EXT_ID="ghmbeldphafepmbegfdlkpapadhbakde"
 

@@ -81,3 +81,10 @@ fun_print_RegEx() {
 }
 # end::fun_print_RegEx[]
 
+
+fun_unzip_to_Dir() {
+  find *.zip \
+  | jq -R \
+  | xargs -i jq -n --arg p {} '{p:$p,s:$p|rtrimstr(".zip")} | (.p, .s)' \
+  | xargs -n2 bash -c 'unzip -o "$0" -d "$1"'
+}

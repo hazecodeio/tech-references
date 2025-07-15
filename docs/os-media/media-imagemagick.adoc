@@ -7,8 +7,11 @@
 == ImageMagick's Convert - Quick Guide
 
 
-.Convert PDF to another PDF
- convert -verbose -density 150 -quality 100  source-file.pdf[0-5,10-20] target-file.pdf
+.Convert PDF to another PDF - `magick`
+ magick -verbose -density 150 -quality 100  source-file.pdf[0-5,10-20] target-file.pdf
+
+.Convert PDF to another PDF - `pdfunit`
+ pdfunit src-*.pdf target-file.pdf
 
 
 === Installation - From Source

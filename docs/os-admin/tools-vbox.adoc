@@ -16,14 +16,42 @@
 === Expanding/Resizing Hard Disk Size in VirtualBox
 Create a new hdd, then:
 http://forums.virtualbox.org/viewtopic.php?f=1&t=364&start=75
-VBoxManage clonehd old.vdi new.vdi –existing
+
+.Old Note
+ VBoxManage clonehd old.vdi new.vdi –existing
+
+
+. Firstly create a new vdi, under ~/.VirtualBox/HardDisks
+
+ #VBoxManage createhd -filename new.vdi --size 10000 --remember
+ ... See More
+ This creates a 10Gb VDI.
+
+. Next you need to clone the VDI, make sure you fully qualify the VDI paths seemed to give me troube when I didn't :-
+
+ #VBoxManage clonehd old.vdi new.vdi --existing
+
+. Once cloned you need to attach the new vdi and detach the other.
+
+ #VBoxManage modifyvm MyVMName --hda none
+ #VBoxManage modifyvm MyVMName --hda new.vdi
+
+. Boot the VM and then check the disk size, shows unallocated space, I then used free Partition Wizzard 5 to resize the partition, booted again to check machine now showed full partition.
+
+. Now just need to remove and delete the old VDI, again you need to fully qualify the path to the vdi.
+
+ #VBoxManage closemedium disk old.vdi
+ #rm old.vdi
+
+. Sorted, I now have an extra 5Gb in my windows VM. You should be able to use the same method for a linux VM to, something like GParted is a free partion tool for linux.
 
 === convert vdi to a raw format/physical hard drive
 http://askubuntu.com/questions/32499/migrate-from-a-virtual-machine-vm-to-a-physical-system
 
 === VBoxManage extpack
 http://www.virtualbox.org/manual/ch08.html#vboxmanage-extpack
-VBoxManage extpack install --replace <tarball>
+
+ VBoxManage extpack install --replace <tarball>
 
 === WiFi as an Access Point
 make you WiFi as an access point for other machines:

@@ -1,0 +1,49 @@
+:toc:
+:toclevels: 3
+:sectnums: 3
+:sectnumlevels: 3
+:icons: font
+:source-highlighter: rouge
+== Kernel Config - Quick Guide
+
+* Grub Menu
+* `info -f grub -n SECTION_TITLE`
++
+.Example
+[source,bash]
+----
+$ info -f grub -n 'Simple configuration'
+----
+
+* Linux Kernel
+* Boot Setting: Images | Order | Default
+* `update-grub`
+* `update-grub2`
++
+.Defaulting to `update-grub`
+[source,bash]
+----
+$ which update-grub2 | xargs ls -al
+/usr/sbin/update-grub2 -> update-grub
+----
+
+* `update-initramfs`
+
+list of commands used in this regard
+[source,bash]
+----
+$ uname -a
+$ apt changelog apt
+$ ls -al /etc/apt/apt.conf.d/
+$ ls -al /etc/kernel/postinst.d
+$ dpkg --list | grep linux-image
+$ apt list --installed | grep linux-image
+$ ls -al /lib/modules/
+$ sudo find /boot/ -iname "vmlinuz*"
+
+$ cat /etc/kernel/postrm.d/initramfs-tools
+$ cat /usr/lib/dkms/dkms_autoinstaller
+
+$ sudo cat /boot/grub/grub.cfg
+sudo vim /etc/default/grub
+----

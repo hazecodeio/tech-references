@@ -6,6 +6,9 @@
 :source-highlighter: rouge
 == Kernel Config - Quick Guide
 
+.Keywords
+ grub grub-update update-initramfs dkms
+
 * Grub Menu
 * `info -f grub -n SECTION_TITLE`
 +
@@ -36,14 +39,29 @@ $ uname -a
 $ apt changelog apt
 $ ls -al /etc/apt/apt.conf.d/
 $ ls -al /etc/kernel/postinst.d
+
 $ dpkg --list | grep linux-image
+$ dpkg --print-architecture
+$ dpkg-architecture
+$ dpkg-architecture -q DEB_BUILD_GNU_CPU
+
 $ apt list --installed | grep linux-image
 $ ls -al /lib/modules/
 $ sudo find /boot/ -iname "vmlinuz*"
 
 $ cat /etc/kernel/postrm.d/initramfs-tools
 $ cat /usr/lib/dkms/dkms_autoinstaller
+$ ls al /var/lib/dkms
+$ ls al /var/lib/dkms/amdgpu
+$ find /usr/lib/modules/ -maxdepth 4 | grep -i dkms
+$ cat /etc/modprobe.d/dkms.conf
+$ cat/var/lib/dkms/amdgpu/6.12.12-2164967.24.04/build/amd/dkms/dkms.conf
+$ sudo dkms status
+$ sudo dkms status -m amdgpu
+
+$ find /etc/*release -follow -type f \
+      | xargs -i jq -sRr --arg p {} '{path: $p, lines: .|split("\n")}' {}
 
 $ sudo cat /boot/grub/grub.cfg
-sudo vim /etc/default/grub
+$ sudo vim /etc/default/grub
 ----

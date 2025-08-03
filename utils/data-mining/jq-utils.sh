@@ -1,4 +1,4 @@
-brave_find_files_ofType_withKW() {
+func-brave-find-files-ofType-withKW() {
   BASEDIR="${1}"
   FTYPE="${2}"
   KW_P="${3}"
@@ -20,18 +20,18 @@ brave_find_files_ofType_withKW() {
   | jq -sr
 }
 
-brave_find_files_ofJson_withKW() {
+func-brave-find-files-ofJson-withKW() {
   BASEDIR="${HOME}/.config/BraveSoftware/brave-browser-*/*"
   FTYPE="json"
   KW_P=".*local[ ]+?state.*"
   KW_C=""
 
-  brave_find_files_ofType_withKW "${BASEDIR}" "${FTYPE}" "${KW_P}" "${KW_C}"
+  func_brave_find_files_ofType_withKW "${BASEDIR}" "${FTYPE}" "${KW_P}" "${KW_C}"
 }
 
 
 
-fun_join_every_n_lines() {
+func-join-every-n-lines() {
   BASEDIR=${HOME}/.config/BraveSoftware/brave-browser-*/*
 
   find ${BASEDIR} -type f  \
@@ -46,7 +46,7 @@ fun_join_every_n_lines() {
 }
 
 
-fun_jq_link_files() {
+func-jq-link-files() {
   BASEDIR=/opt/_tools/spark/spark-current/sbin/
 
   find ${BASEDIR} -type f \
@@ -58,14 +58,14 @@ fun_jq_link_files() {
   | xargs -n2 bash -c 'ln -snf $0  $1'
 }
 
-#fun_jq_link_files
+#func_jq_link_files
 
 
 
 #Loop through Extension's Last Modified Timestamp
 
-# tag::fun_loop[]
-fun_loop() {
+# tag::func_loop[]
+func-loop() {
   FUN=$1
   while true; do
         ${FUN};
@@ -73,23 +73,23 @@ fun_loop() {
         sleep 1;
   done
 }
-# end::fun_loop[]
+# end::func_loop[]
 
-# tag::fun_print_RegEx[]
-fun_print_RegEx() {
+# tag::func_print_RegEx[]
+func-print-RegEx() {
   echo '{"RegEx": "(\w+[_]\w+)+\(\)+?[ ]\{+?\n([ ]+.*\n)+^\}$", "RegExRepl": "# tag::$1[]\n$0\n# end::$1[]"}' | jq -Rr
 }
-# end::fun_print_RegEx[]
+# end::func_print_RegEx[]
 
 
-fun_unzip_to_Dir() {
+func-unzip-to-Dir() {
   find *.zip \
   | jq -R \
   | xargs -i jq -n --arg p {} '{p:$p,s:$p|rtrimstr(".zip")} | (.p, .s)' \
   | xargs -n2 bash -c 'unzip -o "$0" -d "$1"'
 }
 
-fun_find_files_not_matching_fltr() {
+func-find-files-not-matching-fltr() {
   FLTR=$(jq -rn '["pdf", "image", "audio", "mpeg", "iso"] | tojson')
 
   find $(pwd)/ -not -iregex '.*jpg' -type f -exec file {} + \
@@ -101,22 +101,52 @@ fun_find_files_not_matching_fltr() {
 }
 
 
-fun_brave_crx_groupby() {
+func-brave-crx-groupby() {
   find  ${HOME}/.config/BraveSoftware/brave-browser-*/*crx*/metadata.json -not -iregex .*tpac.* \
   | xargs -i jq --arg p {} '{ p: $p,
                               groupby: $p | split("/")[-2]
                             } + .' {} \
-  | jq -s 'group_by(.groupby) | to_entries | map({ groupby: .value[0].groupby, value: .value | map(del(.groupby)) })'
+  | jq -s ' group_by(.groupby) | to_entries
+            | map({ groupby: .value[0].groupby,
+                    value: .value | map(del(.groupby)) })'
 }
 
-fun_merge_dirs() {
+func-merge-dirs() {
   SRC=${HOME}/Documents/temp
   DST=${HOME}/Documents/temp2
 
   # create subdirectories with mkdir -p
-  find "${SRC}" -type f | jq -R 'split("/")[8:-1]|join("/")' | jq -s 'unique[]' | xargs -i mkdir -p "${DST}"/{}
+  find "${SRC}" -type f \
+  | jq -R 'split("/")[8:-1] | join("/")' \
+  | jq -s 'unique[]' \
+  | xargs -i mkdir -p "${DST}"/{}
 
   find "${SRC}" -type f \
-  | jq -Rr --arg dst ${DST} '{src: ., dst: [$dst, (. | split("/")[8:]|join("/")) ] | join("/") } | (.src, .dst) | tojson' \
+  | jq -Rr --arg dst ${DST} ' {   src: .,
+                                  dst: [$dst, (. | split("/")[8:]|join("/")) ] | join("/") }
+                              | (.src, .dst) | tojson' \
 #  | xargs -n2 bash -c 'mv "$0" "$1" '
+}
+
+func-traceroute-with-geolocation-byUrl() {
+  URL=${1}
+  traceroute --resolve-hostnames $URL \
+  | jq -R ' split("[\\s]+"; "i")
+            | map(select(length > 0))
+            | .[1:3]
+            | map(select(test("\\d+.\\d+.\\d+.\\d+"; "i"))) | .[0]
+            | select(type != "null")' \
+  | xargs -P 5 -n1 bash -c 'curl -s ipinfo.io/${0}' \
+#  | jq
+}
+
+func-git-get-remotes() {
+  BASEDIR="${HOME}/dev/"
+
+  find "${BASEDIR}" -name ".git" -type d  \( -exec git -C '{}/..' remote -v  \; \) -print0 \
+  | jq -Rs 'split("\u0000"; "i")
+            | map(split("\n"; "i")
+            | map(sub("\t"; " "; "i"))) ' \
+  | jq 'map({ path: .[-1] | select(length > 0),
+              gitRemote: .[:-1] | select(length > 0)})'
 }

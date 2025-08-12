@@ -1,0 +1,10 @@
+properties/*
+!*/
+
+!/properties/*.gpg
+
+# Whitelisting files with an extension
+#!*.gpg
+
+# Whitelsting a subdirectory
+#!/groups/**

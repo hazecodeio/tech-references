@@ -1,0 +1,9 @@
+[Unit]
+Description="A job that increases cpu fans when core temperature reaches 40C"
+
+[Install]
+WantedBy=multi-user.target
+
+[Service]
+TimeoutSec=infinity
+ExecStart=/usr/local/bin/fanctl.sh 40

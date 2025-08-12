@@ -1,0 +1,39 @@
+= Trello Control - JS
+Haze Wylde
+:toc:
+:toclevels: 3
+:sectnums: 3
+:sectnumlevels: 3
+:icons: font
+:source-highlighter: rouge
+
+
+[source,javascript]
+.Delete All Archived Cards
+----
+(async function(){
+    async function getJSON(url){
+        let res = await fetch(url)
+        let json = await res.json()
+        return json
+    }
+
+    let dsc = decodeURIComponent(document.cookie.split(';').find(v => v.includes('dsc=')).split('=')[1])
+    let boardId = (await getJSON(window.location.origin + window.location.pathname + '.json')).id
+    let archivedCards = await getJSON(`https://trello.com/1/boards/${boardId}/cards/closed`)
+    for(let {id, name} of archivedCards){
+        await fetch(`https://trello.com/1/cards/${id}`, {
+            method: 'DELETE',
+            headers:{
+                "Content-Type":"application/json"
+
+            },
+            body:JSON.stringify({
+                dsc
+            })
+        })
+        console.log(`${name} deleted`)
+    }
+    console.log(`Finished, total ${archivedCards.length} cards deleted`)
+}())
+----

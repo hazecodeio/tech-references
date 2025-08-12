@@ -150,3 +150,24 @@ func-git-get-remotes() {
   | jq 'map({ path: .[-1] | select(length > 0),
               gitRemote: .[:-1] | select(length > 0)})'
 }
+
+
+func-pdftotext-recursive() {
+
+  BASEDIR="${1}"
+
+  find "${BASEDIR}" -iname '*.pdf' -type f  \
+  | xargs -i jq -Rn --arg p {} '($p | split("/")) as $pathSplits |
+                                {
+                                    filepath: $pathSplits | join("/"),
+                                    filename: $pathSplits[-1],
+                                    out:  (($pathSplits[-1] | gsub("pdf"; "txt"; "i")) as $fnOut |
+                                          {
+                                              filepath: [($pathSplits[:-1]), $fnOut] | flatten | join("/"),
+                                              filename: $fnOut
+                                          })
+                                }' \
+  | jq -s 'sort | map((.filepath, .out.filepath))' \
+#  | jq .[] | xargs -L2 bash -c 'pdftotext -layout -nopgbrk $0 $1'
+
+}

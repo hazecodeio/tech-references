@@ -4,6 +4,7 @@
 :sectnumlevels: 3
 :icons: font
 :source-highlighter: rouge
+
 == Git - Quick Guide (_Incomplete_)
 
 
@@ -138,4 +139,6 @@ git stash clear
 ----
 
 === Strategies and Best Practices
+
 ==== Syncing Other's with Forked
+

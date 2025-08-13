@@ -4,16 +4,15 @@
 :sectnumlevels: 3
 :icons: font
 :source-highlighter: rouge
+
 == Brave Browser - Developer's Guide to Inspecting & Debugging
 
 
-
-
-=== Backup & Syncing - `rsync`
-
 .Profile Name (not dir name)
 [source,bash]
- find $HOME/.config/BraveSoftware/*/*/Preferences | xargs -i jq --arg path "{}" '{path: $path, profile_name: .profile.name}' "{}"
+----
+find $HOME/.config/BraveSoftware/*/*/Preferences | xargs -i jq --arg path "{}" '{path: $path, profile_name: .profile.name}' "{}"
+----
 
 
 
@@ -269,7 +268,7 @@ fun-diff-dirs-with-similar-paths() {
 
 .Loop through Extension's Last Modified Timestamp
 [source,bash]
-include::../../utils/data-mining/jq-brave-ext-reset.sh[tag=fun_brave_check_extension_dir]
+include::../../utils/data-processing/jq-brave-ext-reset.sh[tag=fun_brave_check_extension_dir]
 
 
 .Join every 3 lines together

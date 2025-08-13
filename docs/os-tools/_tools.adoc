@@ -4,12 +4,16 @@
 :sectnumlevels: 3
 :icons: font
 :source-highlighter: rouge
+
 = Linux Commands Guide (_Incomplete_)
-Hazy Wyld
+Hazy Wylde
 
 include::tools-brave.adoc[]
+
 include::tools-pandoc.adoc[]
+
 include::tools-gnome.adoc[]
+
 include::tools-asciidoctor.adoc[]
 
 
@@ -674,3 +678,4 @@ cd hplip-3.24.4
 
 .warning: Failed to read /etc/cups/ppd/OfficeJet_250_Mobile.ppd ppd file
  TBD
+

@@ -226,11 +226,40 @@ NOTE: It uses `qemu-kvm`
 ----
 
 .Install APK via adb
+[source,bash]
+----
+adb -s install PATH_TO_ANDROID_PACKAGE.apk
 ----
 
+.List installed packages
+[sourcce,bash]
+----
+adb -s SERIAL_NAME shell pm list packages
 ----
 
- ANDROID_SDK_HOME=/opt/_langs/android/sdk/; $ANDROID_SDK_HOME/emulator/emulator -list-avds
+.Install APK via adb
+[source,bash]
+----
+adb -s SERIAL_NAME install PATH_TO_ANDROID_PACKAGE.apk
+----
 
- $ANDROID_SDK_HOME/emulator/emulator -list-avds
- $ANDROID_SDK_HOME/emulator/emulator -avd Small_Phone_API_34
+.List installed packages
+[sourcce,bash]
+----
+adb -s SERIAL_NAME shell pm list packages
+----
+
+.Uninstall APK via adb
+[source,bash]
+----
+adb -s SERIAL_NAME uninstall PACKAGE_NAME
+----
+
+
+.Android Emulators
+----
+ANDROID_SDK_HOME=/opt/_langs/android/sdk/; $ANDROID_SDK_HOME/emulator/emulator -list-avds
+
+$ANDROID_SDK_HOME/emulator/emulator -list-avds
+$ANDROID_SDK_HOME/emulator/emulator -avd Small_Phone_API_34
+----

@@ -8,7 +8,7 @@ function funinit() {
   #echo "${CWD}"
 
   #find ~/dev/api-calls-sandbox -type f -regex '.*.properties'| xargs cat
-  eval export "$(find "${CWD}" -type f -regextype posix-extended -regex "^(../|./|/).*(_env-)*.properties$" | xargs cat)"
+  export "$(find "${CWD}" -type f -regextype posix-extended -iregex "^(../|./|/).*(_env-)*.properties$" | xargs cat)"
 }
 
 funinit

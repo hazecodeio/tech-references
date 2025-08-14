@@ -3,7 +3,7 @@
 #Bash Strict Mode
 set -euo pipefail
 
-function funinit() {
+function funcinit() {
   local CWD=$(echo $(realpath "${0}") | xargs dirname)
   #echo "${CWD}"
 
@@ -11,4 +11,4 @@ function funinit() {
   export "$(find "${CWD}" -type f -regextype posix-extended -iregex "^(../|./|/).*(_env-)*.properties$" | xargs cat)"
 }
 
-funinit
+funcinit

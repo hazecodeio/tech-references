@@ -16,6 +16,7 @@ include::tools-kvm-qemu.adoc[]
 
 include::tools-vbox.adoc[]
 
+include::tools-cryptsetup-luks.adoc[]
 
 
 

@@ -89,7 +89,7 @@ fun_brave_profile_extension_db() {
           -iregex ${PROFILE} \
           -iregex ${EXT_ID} \) \
 
-#      -exec ls -alhtr --time-style=+'%F %r' {} +;
+#      -exec ls -alhtr --time-style=+'%F %r' {} +;c
 }
 # end::fun_brave_check_extension_dir[]
 

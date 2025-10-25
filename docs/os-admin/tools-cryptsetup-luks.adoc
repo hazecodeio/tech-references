@@ -1,0 +1,13 @@
+:toc:
+:toclevels: 3
+:sectnums: 3
+:sectnumlevels: 3
+:icons: font
+:source-highlighter: rouge
+== Cryptsetup LUKS - Quick Guide
+
+
+* https://unix.stackexchange.com/questions/260533/how-to-determine-what-encryption-is-being-used-a-luks-partition
+* https://www.baeldung.com/linux/check-disk-encryption
+* https://askubuntu.com/questions/1146846/how-to-determine-whether-a-partition-is-a-luks-partition-from-its-mountpoint
+

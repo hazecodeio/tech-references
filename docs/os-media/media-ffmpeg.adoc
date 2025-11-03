@@ -125,3 +125,59 @@ $ ffmpeg -f concat -i mylist.txt -c copy output.mp4
 .`exiftool`
  sudo apt install exiftool
  exiftool -json media_src
+
+
+=== Reduce Video Size
+
+To reduce the size of an MP4 file using FFmpeg, you can re-encode it with a lower bitrate or change the codec.
+For example, you can use the command
+
+ ffmpeg -i input.mp4 -c:v libx264 -crf 23 output.mp4
+
+where -crf controls the quality and file size (lower values mean better quality).
+
+.Links:
+- https://unix.stackexchange.com/questions/28803/how-can-i-reduce-a-videos-size-with-ffmpeg
+- https://www.mux.com/articles/how-to-compress-video-files-while-maintaining-quality-with-ffmpeg
+- https://www.gumlet.com/learn/ffmpeg-compress-video/
+
+
+==== Basic Compression Techniques
+
+Change Video Codec
+Using a more efficient codec can significantly reduce file size. The H.264 codec is widely compatible and offers good compression.
+Command:
+ ffmpeg -i input.mp4 -c:v libx264 -pix_fmt yuv420p output.mp4
+
+Adjust Bitrate
+Lowering the bitrate reduces file size but may affect quality. A bitrate of around 1000 kbps is often a good balance.
+Command:
+ ffmpeg -i input.mp4 -b:v 1000k output.mp4
+
+Use Constant Rate Factor (CRF)
+The CRF setting allows you to control the quality versus size. A CRF value between 23 and 28 is recommended for good quality.
+Command:
+ ffmpeg -i input.mp4 -c:v libx264 -crf 28 output.mp4
+
+
+==== Advanced Techniques
+
+Reduce Resolution
+Lowering the resolution can also decrease file size. For example, changing to 720p is effective for mobile viewing.
+Command:
+ ffmpeg -i input.mp4 -vf scale=1280:720 output.mp4
+
+Change Frame Rate
+Reducing the frame rate can help decrease the size. Common frame rates are 30 fps or 24 fps.
+Command:
+ ffmpeg -i input.mp4 -r 24 output.mp4
+
+Summary of Commands
+Technique	Command Example
+
+Change Video Codec	ffmpeg -i input.mp4 -c:v libx264 output.mp4
+Adjust Bitrate	ffmpeg -i input.mp4 -b:v 1000k output.mp4
+Use Constant Rate Factor	ffmpeg -i input.mp4 -crf 28 output.mp4
+Reduce Resolution	ffmpeg -i input.mp4 -vf scale=1280:720 output.mp4
+Change Frame Rate	ffmpeg -i input.mp4 -r 24 output.mp4
+These methods will help you effectively reduce the size of your MP4 files while maintaining acceptable quality.

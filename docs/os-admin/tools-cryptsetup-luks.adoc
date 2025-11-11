@@ -10,4 +10,21 @@
 * https://unix.stackexchange.com/questions/260533/how-to-determine-what-encryption-is-being-used-a-luks-partition
 * https://www.baeldung.com/linux/check-disk-encryption
 * https://askubuntu.com/questions/1146846/how-to-determine-whether-a-partition-is-a-luks-partition-from-its-mountpoint
+* https://www.youtube.com/watch?v=E31OWSUVM-g
 
+
+.Create a LUKS-Encrypted Drive - `cryptsetup`
+----
+lsblk -p
+sudo cryptsetup luksFormat -y -v /dev/sdx
+sudo cryptsetup luksOpen /dev/sdx LUKS_LABEL
+sudo mkfs.ext4 /dev/mapper/LUKS_LABEL -L DRIVE_LABEL
+sudo cryptsetup luksClose LUKS_LABEL
+----
+
+.Open/Close
+----
+sudo cryptsetup luksOpen /dev/sdx LUKS_LABEL
+sudo mount -w /dev/mapper/LUKS_LABEL MNT_POINT
+sudo cryptsetup luksClose /dev/sdx LUKS_LABEL
+----

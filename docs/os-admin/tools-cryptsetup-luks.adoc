@@ -6,7 +6,7 @@
 :source-highlighter: rouge
 == Cryptsetup LUKS - Quick Guide
 
-
+.Links
 * https://unix.stackexchange.com/questions/260533/how-to-determine-what-encryption-is-being-used-a-luks-partition
 * https://www.baeldung.com/linux/check-disk-encryption
 * https://askubuntu.com/questions/1146846/how-to-determine-whether-a-partition-is-a-luks-partition-from-its-mountpoint
@@ -15,12 +15,18 @@
 * https://gist.github.com/cyberanchor/6535a5b38ceb4c57986d4c8324e0a94c
 
 
+.Cryptsetup + GPG Protected Keys
+* https://github.com/mpoletiek/cryptsetup_guide
+
+
 .Create a LUKS-Encrypted Drive - `cryptsetup`
 ----
 lsblk -p
+sudo wipefs -a /dev/sdx
 sudo cryptsetup luksFormat -y -v /dev/sdx
 sudo cryptsetup luksOpen /dev/sdx LUKS_LABEL
 sudo mkfs.ext4 /dev/mapper/LUKS_LABEL -L DRIVE_LABEL
+sudo mount -w /dev/mapper/LUKS_LABEL MNT_POINT
 sudo cryptsetup luksClose LUKS_LABEL
 ----
 

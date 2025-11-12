@@ -11,6 +11,7 @@
 * https://www.baeldung.com/linux/check-disk-encryption
 * https://askubuntu.com/questions/1146846/how-to-determine-whether-a-partition-is-a-luks-partition-from-its-mountpoint
 * https://www.youtube.com/watch?v=E31OWSUVM-g
+* https://www.paulserban.eu/blog/post/a-deep-dive-into-cryptsetup-in-linux-secure-your-data-with-encryption/
 
 
 .Create a LUKS-Encrypted Drive - `cryptsetup`

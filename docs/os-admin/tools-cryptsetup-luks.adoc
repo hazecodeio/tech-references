@@ -12,6 +12,7 @@
 * https://askubuntu.com/questions/1146846/how-to-determine-whether-a-partition-is-a-luks-partition-from-its-mountpoint
 * https://www.youtube.com/watch?v=E31OWSUVM-g
 * https://www.paulserban.eu/blog/post/a-deep-dive-into-cryptsetup-in-linux-secure-your-data-with-encryption/
+* https://gist.github.com/cyberanchor/6535a5b38ceb4c57986d4c8324e0a94c
 
 
 .Create a LUKS-Encrypted Drive - `cryptsetup`
@@ -29,3 +30,23 @@ sudo cryptsetup luksOpen /dev/sdx LUKS_LABEL
 sudo mount -w /dev/mapper/LUKS_LABEL MNT_POINT
 sudo cryptsetup luksClose /dev/sdx LUKS_LABEL
 ----
+
+
+
+
+.Fast LUKS container setup
+----
+cryptsetup luksFormat --type luks2 --cipher aes-xts-plain64 --key-size 256 --hash sha256 --pbkdf pbkdf2 --pbkdf-force-iterations 1000000 --use-random /home/user/luks_container.img --debug --verbose
+----
+
+.Secure LUKS container setup
+----
+cryptsetup luksFormat --type luks2 --cipher aes-xts-plain64 --key-size 512 --hash sha512 --pbkdf argon2id --pbkdf-memory 4194304 --pbkdf-parallel 8 --iter-time 5000 --use-random --sector-size 4096 --keyslot-cipher aes-xts-plain64 --keyslot-key-size 512 --luks2-keyslots-size 16m --luks2-metadata-size 256k /home/user/luks_container.img --debug --verbose
+----
+
+
+.Random
+----
+sudo cryptsetup luksFormat --type luks2 --sector-size 4096 --key-size 512 --cipher aes-xts-plain64 --hash sha512 /dev/sdb1
+----
+

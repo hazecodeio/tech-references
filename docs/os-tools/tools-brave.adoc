@@ -194,9 +194,9 @@ find "${HOME}"/.config/BraveSoftware/brave-browser-*/ -regextype posix-extended 
 
 .Possible Variables
 CAUTION: Consider these Vars: +
-$PATH
-$KW_P
-$KW_C
+$PATH +
+$KW_P +
+$KW_C +
 $FTYPE
 
 
@@ -268,7 +268,9 @@ fun-diff-dirs-with-similar-paths() {
 
 .Loop through Extension's Last Modified Timestamp
 [source,bash]
+----
 include::../../utils/data-processing/jq-brave-ext-reset.sh[tag=fun_brave_check_extension_dir]
+----
 
 
 .Join every 3 lines together

@@ -141,6 +141,7 @@ sudo losetup -d /dev/loopXY
 .links
 * https://help.ubuntu.com/community/InstallingANewHardDrive
 * https://sysadminsage.com/resize-a-partition-linux/
+* https://docs.redhat.com/en/documentation/red_hat_enterprise_linux/9/html/managing_storage_devices/getting-started-with-partitions_managing-storage-devices#proc_resizing-a-partition-with-parted_getting-started-with-partitions
 
  sudo fdisk /dev/sdb
 

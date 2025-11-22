@@ -76,8 +76,71 @@ iptables -t nat -A PREROUTING -i eth0 -p tcp --dport 80 -j REDIRECT --to-port 31
 /boot/grub/menu.list
 ----
 
+=== Booting an Ubuntu Drive Image
+
+IMAGE_NAME=ubuntu-drive.img
+
+NOTE: same commands can be used with a loopback device without mounting - see `losetup`
+
+.`parted`
+----
+parted $IMAGE_NAME unit B print
+----
+
+.Output
+----
+Number  Start       End            Size           Type      File system  Flags
+1      1048576B    537919487B     536870912B     primary   fat32        boot
+2      538967040B  525112180735B  524573213696B  extended
+5      538968064B  525112180735B  524573212672B  logical   ext4
+----
+
+.`mount` with an offset
+----
+sudo mount -v -m -o loop,rw,offset=538968064 $IMAGE_NAME /mnt/rabbit
+----
+
+=== run `fsck`/`e2fsck` on a loopback device/image - `losetup`
+
+.link
+* https://unix.stackexchange.com/questions/413991/fsck-at-boot-time-for-loopback-device
+* https://unix.stackexchange.com/questions/418322/persistent-lvm-device-with-loopback-devices-by-fstab/421414#421414
+* https://commandmasters.com/commands/losetup-linux/
+
+
+.list loopback devices
+----
+sudo losetup --all
+sudo losetup --list --json
+sudo losetup --list --output-all
+----
+
+.create a loopback device - without mounting
+----
+sudo losetup --show --partscan -f $IMAGE_NAME
+----
+
+
+fix filesystem errors - `fsck`
+----
+sudo fsck.ext4 -y /dev/loopXYpZ
+----
+
+
+.Detach
+----
+sudo losetup -d /dev/loopXY
+----
+
+
+
+
+
 === Partitioning & Format
-- https://help.ubuntu.com/community/InstallingANewHardDrive
+
+.links
+* https://help.ubuntu.com/community/InstallingANewHardDrive
+* https://sysadminsage.com/resize-a-partition-linux/
 
  sudo fdisk /dev/sdb
 

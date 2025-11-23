@@ -133,7 +133,19 @@ sudo losetup -d /dev/loopXY
 ----
 
 
+=== Resize (Shrink/Expand) a Partition - no data loss
 
+----
+sudo e2fsck -fy /dev/sdXY
+# sudo resize2fs -M /dev/sdXY
+sudo resize2fs /dev/sdXY 200GB # make sure it's a bit more than actual data size
+
+sudo parted /dev/sdX
+resizepart 1 200G
+
+sudo fdisk /dev/sdX
+n
+----
 
 
 === Partitioning & Format

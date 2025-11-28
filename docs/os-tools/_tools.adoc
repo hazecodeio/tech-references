@@ -133,19 +133,138 @@ sudo losetup -d /dev/loopXY
 ----
 
 
-=== Resize (Shrink/Expand) a Partition - no data loss
+=== Resize (Shrink/Expand) Partition - no data loss
+
+* fdsik
+* sfdisk
+* parted
+* partx
+* partprobe
+* growpart
+* e2fsck/fsck
+* resize2fs
+* cryptsetup-resize
+
+CAUTION: Never modify partitions while mounted!
+
+.resize2fs
+NOTE: The `resize2fs` program does not manipulate the size of partitions.
+
+
+.If you wish to enlarge a file system: Always start with the partition table then the filesystem
+* you must make sure you can expand the size of the underlying partition first.
+* After running `fdisk`/`parted`, run `resize2fs` to resize the ext2 file system to use all of the space in the newly enlarged partition.
+
+.If you wish to shrink an ext2 partition,
+* first use `resize2fs` to shrink the size of file system.
+* Then you may use `fdisk`/`parted` to shrink the size of the partition.
+* When shrinking the size of the partition, make sure you do not make it smaller than the new size of the ext2 file system!
+
+
+.Order of Commands - Shrink: Always start with the filesystem then the partition table
+. sudo e2fsck -fy /dev/sdXY
+. sudo resize2fs -M /dev/sdXY
+. sudo parted /dev/sdX resizepart 1 SIZE_X
+
+
+.Order of Commands - Expand
+. sudo parted /dev/sdX resizepart 1 SIZE_X
+. sudo e2fsck -fy /dev/sdXY
+. sudo resize2fs -Mp /dev/sdXY
+
+
 
 ----
 sudo e2fsck -fy /dev/sdXY
 # sudo resize2fs -M /dev/sdXY
-sudo resize2fs /dev/sdXY 200GB # make sure it's a bit more than actual data size
+sudo resize2fs -p /dev/sdXY 200GB # make sure it's a bit more than actual data size
+----
 
+----
 sudo parted /dev/sdX
 resizepart 1 200G
+----
 
+----
 sudo fdisk /dev/sdX
 n
 ----
+
+
+==== Resize Partitions By Merging
+
+.Options:
+* LEFT Merge: data must be moved to the left by copying/cloning
+    ** `dd` can be useful but caution to be
+* RIGHT Merge
+
+.links
+* https://agix.com.au/expand-a-luks-encrypted-volume/
+* https://help.ubuntu.com/community/ResizeEncryptedPartitions
+* https://unix.stackexchange.com/questions/320957/extend-a-luks-encrypted-partition-to-fill-disk
+
+
+----
+sudo cryptsetup --debug --verbose open /dev/mapper/VOLUME_NAME VOLUME_NAME
+sudo fdisk /dev/sdX
+> delete partition
+> While maintaining the the same starting sector of the partition in mind,
+> recreate with size in mind.
+sudo cryptsetup --debug --verbose resize VOLUME_NAME
+sudo e2fsck -fyv /dev/mapper/VOLUME_NAME
+sudo resize2fs -p /dev/mapper/VOLUME_NAME
+----
+
+
+
+
+
+==== Rearrange the Order of a Partition - `parted`
+
+.parted - print help menu
+----
+sudo parted /dev/sdc  unit s help
+----
+
+parted - Note down the START/END Sectors of the intended partitions
+----
+sudo parted /dev/sdc --json unit s print free
+sudo parted /dev/sdc --json unit s print
+----
+
+
+.parted - Recreate the partitions in the desired order
+----
+sudo parted /dev/sdc --json unit s rm 2
+sudo parted /dev/sdc --json unit s mkpart ext4 4194304 419430399
+----
+
+
+
+
+
+
+Resize the LUKS Volume
+
+.Calculate the new size using the formula:
+----
+NEW_LUKS_SECTOR_COUNT = (PV_EXTENT_COUNT * PV_EXTENT_SIZE) / LUKS_SECTOR_SIZE
+----
+
+.Then resize the LUKS volume:
+----
+cryptsetup -b NEW_LUKS_SECTOR_COUNT resize cryptdisk
+----
+
+----
+NEW_PARTITION_SECTOR_END = PARTITION_SECTOR_START + (LUKS_SIZE_SECTORS + LUKS_OFFSET_SECTORS) - 1
+----
+
+
+
+
+
+
 
 
 === Partitioning & Format
@@ -154,6 +273,21 @@ n
 * https://help.ubuntu.com/community/InstallingANewHardDrive
 * https://sysadminsage.com/resize-a-partition-linux/
 * https://docs.redhat.com/en/documentation/red_hat_enterprise_linux/9/html/managing_storage_devices/getting-started-with-partitions_managing-storage-devices#proc_resizing-a-partition-with-parted_getting-started-with-partitions
+* https://bbs.archlinux.org/viewtopic.php?pid=2178377#p2178377
+
+.Alignment
+* 4K alignment?
+* MiB Alignment?
+
+.4K alignment
+NOTE: You can verify if partitions are 4K aligned using commands like fdisk -l or parted.
+Look for the starting sector of each partition to ensure it is a multiple of 8 (since 4K = 8 sectors of 512 bytes).
+
+
+PART_START/(512*8)
+PART_END-1/(512*8)
+
+
 
  sudo fdisk /dev/sdb
 
@@ -222,6 +356,24 @@ Image has been written to stdout ….
  mkisofs -udf -b boot.bin -no-emul-boot -hide boot.bin -relaxed-filenames -joliet-long -D -o windows7.iso windows7ISO
 
 . windows7.iso is your new bootable ISO
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 //ToDo - Move to scripts-sandbox
@@ -755,3 +907,8 @@ cd hplip-3.24.4
 .warning: Failed to read /etc/cups/ppd/OfficeJet_250_Mobile.ppd ppd file
  TBD
 
+== `strace` - trace system calls and signals
+
+----
+strace echo "hi"
+----

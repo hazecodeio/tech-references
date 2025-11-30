@@ -1,0 +1,332 @@
+:toc:
+:toclevels: 3
+:sectnums: 3
+:sectnumlevels: 3
+:icons: font
+:source-highlighter: rouge
+== DIsk Storage Management - Quick Guide
+
+=== Booting an Ubuntu Drive Image
+
+IMAGE_NAME=ubuntu-drive.img
+
+NOTE: same commands can be used with a loopback device without mounting - see `losetup`
+
+.`parted`
+----
+parted $IMAGE_NAME unit B print
+----
+
+.Output
+----
+Number  Start       End            Size           Type      File system  Flags
+1      1048576B    537919487B     536870912B     primary   fat32        boot
+2      538967040B  525112180735B  524573213696B  extended
+5      538968064B  525112180735B  524573212672B  logical   ext4
+----
+
+.`mount` with an offset
+----
+sudo mount -v -m -o loop,rw,offset=538968064 $IMAGE_NAME /mnt/rabbit
+----
+
+=== run `fsck`/`e2fsck` on a loopback device/image - `losetup`
+
+.link
+* https://unix.stackexchange.com/questions/413991/fsck-at-boot-time-for-loopback-device
+* https://unix.stackexchange.com/questions/418322/persistent-lvm-device-with-loopback-devices-by-fstab/421414#421414
+* https://commandmasters.com/commands/losetup-linux/
+
+
+.list loopback devices
+----
+sudo losetup --all
+sudo losetup --list --json
+sudo losetup --list --output-all
+----
+
+.create a loopback device - without mounting
+----
+sudo losetup --show --partscan -f $IMAGE_NAME
+----
+
+
+fix filesystem errors - `fsck`
+----
+sudo fsck.ext4 -y /dev/loopXYpZ
+----
+
+
+.Detach
+----
+sudo losetup -d /dev/loopXY
+----
+
+
+
+
+=== Partitioning & Format
+
+.links
+* https://help.ubuntu.com/community/InstallingANewHardDrive
+* https://sysadminsage.com/resize-a-partition-linux/
+* https://docs.redhat.com/en/documentation/red_hat_enterprise_linux/9/html/managing_storage_devices/getting-started-with-partitions_managing-storage-devices#proc_resizing-a-partition-with-parted_getting-started-with-partitions
+* https://bbs.archlinux.org/viewtopic.php?pid=2178377#p2178377
+
+.Alignment
+* 4K alignment?
+* MiB Alignment?
+
+.4K alignment
+NOTE: You can verify if partitions are 4K aligned using commands like fdisk -l or parted.
+Look for the starting sector of each partition to ensure it is a multiple of 8 (since 4K = 8 sectors of 512 bytes).
+
+
+PART_START/(512*8)
+PART_END-1/(512*8)
+
+
+
+ sudo fdisk /dev/sdb
+
+.then:
+- d:   delete a partition
+- n:   add a new partition
+- w:   write table to disk and exit
+
+ sudo mkfs -t ext3 /dev/sdb1  “for file system type: ext3”
+
+.or
+ sudo mke2fs /dev/sdb1
+
+
+.mount a partition from a hard drive image
+- http://www.andremiller.net/content/mounting-hard-disk-image-including-partitions-using-linux
+
+.extract boot record from Window ISO
+- http://linuxtuneup.blogspot.com/2006/01/slipstreaming-windows-cd-under-linux.html
+
+.making bootable windows iso images
+- http://linuxtuneup.blogspot.com/2006/01/slipstreaming-windows-cd-under-linux.html
+- http://users.telenet.be/mydotcom/howto/boot/bootcd_win.htm
+
+.For Windows 7 img udf
+- http://forums.opensuse.org/english/get-technical-help-here/applications/460308-making-bootable-iso-dvd-virtualbox.html
+
+. Use dd to make an image copy of the DVD to an image file
+
+ > dd if=/dev/sr0 of=windows7.img
+
+. Use geteltorito (in openSUSE, this is in the genisoimage package) to extract the boot binary image
+
+ > geteltorito windows7.iso > boot.bin
++
+----
+Booting catalog starts at sector: 22
+Manufacturer of CD: Microsoft Corporation
+Image architecture: x86
+Boot media type is: no emulation
+El Torito image starts at sector 735 and has 8 sector(s) of 512 Bytes
+Image has been written to stdout ….
+----
+
+. Make a directory to store the contents of the ISO
+
+ > mkdir windows7ISO
+
+. Mount the image file to copy the contents
++
+----
+> su
+# mkdir /mnt/dvd
+# mount windows7.img /mnt/dvd -o loop
+# exit
+> cp -r /mnt/dvd/* windows7ISO
+> chmod -R 754 windows7ISO
+----
+
+. Copy boot.bin to the new ISO directory
+
+ > cp boot.bin windows7ISO
+
+. Make the ISO
+
+ mkisofs -udf -b boot.bin -no-emul-boot -hide boot.bin -relaxed-filenames -joliet-long -D -o windows7.iso windows7ISO
+
+. windows7.iso is your new bootable ISO
+
+
+
+=== Resize (Shrink/Expand) Partitions - In Place
+
+* fdsik
+* sfdisk
+* parted
+* partx
+* partprobe
+* growpart
+* e2fsck/fsck
+* resize2fs
+* cryptsetup-resize
+
+CAUTION: Never modify partitions while mounted!
+
+.resize2fs
+NOTE: The `resize2fs` program does not manipulate the size of partitions.
+
+
+.If you wish to enlarge a file system: Always start with the partition table then the filesystem
+* you must make sure you can expand the size of the underlying partition first.
+* After running `fdisk`/`parted`, run `resize2fs` to resize the ext2 file system to use all of the space in the newly enlarged partition.
+
+.If you wish to shrink an ext2 partition,
+* first use `resize2fs` to shrink the size of file system.
+* Then you may use `fdisk`/`parted` to shrink the size of the partition.
+* When shrinking the size of the partition, make sure you do not make it smaller than the new size of the ext2 file system!
+
+
+.Order of Commands - Shrink: Always start with the filesystem then the partition table
+. sudo e2fsck -fy /dev/sdXY
+. sudo resize2fs -M /dev/sdXY
+. sudo parted /dev/sdX resizepart 1 SIZE_X
+
+
+.Order of Commands - Expand
+. sudo parted /dev/sdX resizepart 1 SIZE_X
+. sudo e2fsck -fy /dev/sdXY
+. sudo resize2fs -Mp /dev/sdXY
+
+
+
+----
+sudo e2fsck -fy /dev/sdXY
+# sudo resize2fs -M /dev/sdXY
+sudo resize2fs -p /dev/sdXY 200GB # make sure it's a bit more than actual data size
+----
+
+----
+sudo parted /dev/sdX
+resizepart 1 200G
+----
+
+----
+sudo fdisk /dev/sdX
+n
+----
+
+
+==== Resize Partitions By Merging
+
+.Options:
+* LEFT Merge: data must be moved to the left by copying/cloning
+** `dd` can be useful but caution to be taken
+* RIGHT Merge
+
+.links
+* https://agix.com.au/expand-a-luks-encrypted-volume/
+* https://help.ubuntu.com/community/ResizeEncryptedPartitions
+* https://unix.stackexchange.com/questions/320957/extend-a-luks-encrypted-partition-to-fill-disk
+
+
+----
+sudo cryptsetup --debug --verbose open /dev/mapper/VOLUME_NAME VOLUME_NAME
+sudo fdisk /dev/sdX
+> delete partition
+> While maintaining the the same starting sector of the partition in mind,
+> recreate with size in mind.
+sudo cryptsetup --debug --verbose resize VOLUME_NAME
+sudo e2fsck -fyv /dev/mapper/VOLUME_NAME
+sudo resize2fs -p /dev/mapper/VOLUME_NAME
+----
+
+
+
+
+
+==== Rearrange the Order of a Partition - `parted`
+
+.parted - print help menu
+----
+sudo parted /dev/sdc  unit s help
+----
+
+parted - Note down the START/END Sectors of the intended partitions
+----
+sudo parted /dev/sdc --json unit s print free
+sudo parted /dev/sdc --json unit s print
+----
+
+
+.parted - Recreate the partitions in the desired order
+----
+sudo parted /dev/sdc --json unit s rm 2
+sudo parted /dev/sdc --json unit s mkpart ext4 4194304 419430399
+----
+
+
+
+==== Resize the LUKS Volume
+
+.Calculate the new size using the formula:
+----
+NEW_LUKS_SECTOR_COUNT = (PV_EXTENT_COUNT * PV_EXTENT_SIZE) / LUKS_SECTOR_SIZE
+----
+
+.Then resize the LUKS volume:
+----
+cryptsetup -b NEW_LUKS_SECTOR_COUNT resize cryptdisk
+----
+
+----
+NEW_PARTITION_SECTOR_END = PARTITION_SECTOR_START + (LUKS_SIZE_SECTORS + LUKS_OFFSET_SECTORS) - 1
+----
+
+
+
+
+
+
+=== Resize (Shrink/Expand) LUKS Partitions - In Place
+
+
+CAUTION: Always unlock the LUKS partition befor Resizing; and never mounted!
+
+IMPORTANT: Mind the sector size and 4K alignment
+
+.4K Alignment
+****
+The number 2048 is significant in partition alignment. Here’s why:
+
+1 MiB = 1,048,576 bytes
+1,048,576 ÷ 512 bytes/sector = 2048 sectors
+
+Aligning partitions to start at multiples of 2048 sectors ensures optimal alignment for both 512-byte and 4K sector drives.
+****
+
+NOTE: TBC
+
+
+
+// ToDo - Modify for LUKS partitions
+.If you wish to enlarge a file system: Always start with the partition table then the filesystem
+* you must make sure you can expand the size of the underlying partition first.
+* After running `fdisk`/`parted`, run `resize2fs` to resize the ext2 file system to use all of the space in the newly enlarged partition.
+
+.If you wish to shrink an ext2 partition,
+* first use `resize2fs` to shrink the size of file system.
+* Then you may use `fdisk`/`parted` to shrink the size of the partition.
+* When shrinking the size of the partition, make sure you do not make it smaller than the new size of the ext2 file system!
+
+
+.Order of Commands - Shrink: Always start with the filesystem then the partition table
+. sudo e2fsck -fy /dev/sdXY
+. sudo resize2fs -M /dev/sdXY
+. sudo parted /dev/sdX resizepart 1 SIZE_X
+
+
+.Order of Commands - Expand
+. sudo parted /dev/sdX resizepart 1 SIZE_X
+. sudo e2fsck -fy /dev/sdXY
+. sudo resize2fs -Mp /dev/sdXY
+
+

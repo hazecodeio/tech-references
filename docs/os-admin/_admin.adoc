@@ -18,6 +18,8 @@ include::tools-vbox.adoc[]
 
 include::tools-cryptsetup-luks.adoc[]
 
+include::tools-disk.adoc[]
+
 
 
 == Bash History

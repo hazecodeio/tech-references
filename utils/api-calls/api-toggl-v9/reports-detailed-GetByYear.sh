@@ -1,16 +1,24 @@
 CWD=$(echo $(realpath "${0}") | xargs dirname)
 source "${CWD}"/_env-loader.sh
 
+#List(
+# (2025-12-19,2024-12-18),
+# (2024-12-17,2023-12-18),
+# (2023-12-17,2022-12-17),
+# (2022-12-16,2021-12-16),
+# (2021-12-15,2020-12-15))
+
 
 function jsonPayload() {
 
-  local timestamp="$(date "+%Y-%m-%dT%T"-06:00)"
+  local DATA_START="2020-12-15"
+  local DATE_END="2021-12-15"
 
   cat << EOF
   {
-      "start_date": "2024-01-01",
-      "end_date": "2025-01-01",
-      "page_size": 1,
+      "start_date": "${DATA_START}",
+      "end_date": "${DATE_END}",
+      "page_size": 100000,
 
       "order_by": "date",
       "order_dir": "ASC",

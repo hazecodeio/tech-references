@@ -56,3 +56,19 @@ http://www.virtualbox.org/manual/ch08.html#vboxmanage-extpack
 === WiFi as an Access Point
 make you WiFi as an access point for other machines:
 http://www.webupd8.org/2013/06/how-to-set-up-wireless-hotspot-access.html
+
+=== Disabling Kernel Modules `kvm_intel` & `kvm` - Using `modprobe`
+
+.Disabling
+[source,bash]
+----
+sudo modprobe -vr kvm_intel kvm
+----
+
+.Enabling
+[source,bash]
+----
+sudo modprobe -v kvm_intel kvm
+----
+
+TIP: Use `-n` for dry run!

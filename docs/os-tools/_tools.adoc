@@ -49,34 +49,6 @@ iptables -t nat -A POSTROUTING -o $IF_WAN -j MASQUERADE
 iptables -t nat -A PREROUTING -i eth0 -p tcp --dport 80 -j REDIRECT --to-port 3128
 ----
 
-=== Data Backup & Recovery
-
-- https://help.ubuntu.com/community/DataRecovery
-
- sudo foremost -v -t jpg -i /dev/hda -o /recovery/foremost
-
-- Ubuntu OS Backup & Recovery
-
-.Backup
- dd if=/dev/sda of=/mnt/LocalDrive/Ubuntu9.04_Backup_20090625.img conv=noerror,sync bs=4M
-
-.Recovery
- dd of=/dev/sdc if=/mnt/LocalDrive/Ubuntu9.04_Backup_20090625.img bs=4M
-
-
-.ToDo
- sudo tune2fs -U random /dev/sdc1
-
-.get the new UUID from:
- sudo blkid
-
-.modify UUID in the following files accordingly:
-----
-/etc/fstab
-/boot/grub/menu.list
-----
-
-
 
 
 

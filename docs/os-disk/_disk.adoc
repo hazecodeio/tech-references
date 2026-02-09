@@ -1,0 +1,43 @@
+:toc:
+:toclevels: 3
+:sectnums: 3
+:sectnumlevels: 3
+:icons: font
+:source-highlighter: rouge
+
+= Linux Commands Guide (_Incomplete_)
+Haze Wylde
+
+include::disk-cryptsetup-luks.adoc[]
+
+include::disk-disk.adoc[]
+
+
+
+== Data Backup & Recovery
+
+- https://help.ubuntu.com/community/DataRecovery
+
+ sudo foremost -v -t jpg -i /dev/hda -o /recovery/foremost
+
+- Ubuntu OS Backup & Recovery
+
+.Backup
+ dd if=/dev/sda of=/mnt/LocalDrive/Ubuntu9.04_Backup_20090625.img conv=noerror,sync bs=4M
+
+.Recovery
+ dd of=/dev/sdc if=/mnt/LocalDrive/Ubuntu9.04_Backup_20090625.img bs=4M
+
+
+.ToDo
+ sudo tune2fs -U random /dev/sdc1
+
+.get the new UUID from:
+ sudo blkid
+
+.modify UUID in the following files accordingly:
+----
+/etc/fstab
+/boot/grub/menu.list
+----
+

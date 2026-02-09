@@ -4,7 +4,7 @@
 :sectnumlevels: 3
 :icons: font
 :source-highlighter: rouge
-== DIsk Storage Management - Quick Guide
+== Disk Storage Management - Quick Guide
 
 === Booting an Ubuntu Drive Image
 

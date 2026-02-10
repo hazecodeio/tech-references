@@ -42,12 +42,21 @@ sudo cryptsetup luksClose /dev/sdx LUKS_LABEL
 
 
 
-.Fast LUKS container setup
+.LUKS container setup - Secure (Default)
+----
+sudo cryptsetup luksFormat --type luks2 --cipher aes-xts-plain64 --key-size 512 --hash sha512 /dev/sdXn --debug --verbose
+----
+
+
+
+
+
+.LUKS container setup - Fast
 ----
 sudo cryptsetup luksFormat --type luks2 --cipher aes-xts-plain64 --key-size 256 --hash sha256 --pbkdf pbkdf2 --pbkdf-force-iterations 1000000 --use-random /home/user/luks_container.img --debug --verbose
 ----
 
-.Secure LUKS container setup
+.LUKS container setup - Secure
 ----
 sudo cryptsetup luksFormat --type luks2 --cipher aes-xts-plain64 --key-size 512 --hash sha512 --pbkdf argon2id --pbkdf-memory 4194304 --pbkdf-parallel 8 --iter-time 5000 --use-random --sector-size 4096 --keyslot-cipher aes-xts-plain64 --keyslot-key-size 512 --luks2-keyslots-size 16m --luks2-metadata-size 256k /home/user/luks_container.img --debug --verbose
 ----
@@ -58,3 +67,21 @@ sudo cryptsetup luksFormat --type luks2 --cipher aes-xts-plain64 --key-size 512 
 sudo cryptsetup luksFormat --type luks2 --sector-size 4096 --key-size 512 --cipher aes-xts-plain64 --hash sha512 /dev/sdb1
 ----
 
+
+=== Change LUKS Passphrase
+
+.Link:
+* https://www.cyberciti.biz/security/how-to-change-luks-disk-encryption-passphrase-in-linux/
+
+.Test current LUKS passphrase
+----
+sudo cryptsetup -v open --test-passphrase /dev/sdXn
+----
+
+.Change current LUKS passphrase
+----
+sudo cryptsetup -v luksChangeKey /dev/sda3 -S 0
+----
+
+.`--key-slot`, `-S <0-N>`
+NOTE: For LUKS operations that add key material, this option allows you to specify which key slot is selected for the new key.

@@ -1,0 +1,34 @@
+
+
+
+
+.apt
+* ssh
+* git
+
+.deb/bin
+* brave
+* signal
+* xmind
+* joplin
+* audacity
+
+.build from src
+* ffmpeg
+
+.install from git
+* scrcpy
+
+.configs
+* ~/.bash_aliases
+* ~/.bash_history
+* ~/.local/share/applications/
+* /usr/local/etc/ImageMagick-7/
+* /usr/local/share/applications/
+* /etc/thinkfan.conf*
+* /etc/hosts
+* /etc/netns/
+* /etc/netplan/
+
+.gnome extensions
+* ???

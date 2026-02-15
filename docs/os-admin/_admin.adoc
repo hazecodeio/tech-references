@@ -54,3 +54,19 @@ echo $y
 sed -i '/pattern/d' ~/.bash_history
 history -r
 ----
+
+== icon files `*.desktop`
+
+.Locations of `*.desktop` files
+----
+~/.local/share/applications/
+/usr/local/share/applications/
+/usr/share/applications/
+----
+
+
+.Update the desktop database after modifying icons with extension `*.desktop`
+[source,bash]
+----
+sudo update-desktop-database
+----

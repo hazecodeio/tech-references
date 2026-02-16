@@ -97,7 +97,43 @@ org.gnome.shell.extensions.tiling-assistant tile-maximize-vertically @as "[]"
 ----
 
 
-=== Gnome Shell `gnome-shell`
+=== Gnome Extensions - Install/Uninstall via Gnome Shell `gnome-shell`
+
+
+===
+
+==== Gnome Extension - `tactile@lundal.io`
+
+
+.Download/Clone Project
+----
+git clone https://gitlab.com/lundal/tactile.git
+----
+
+.Build
+----
+make
+----
+
+.Install the zip bundle created by `make`
+----
+gnome-extensions install tactile@lundal.io.zip
+----
+
+.Or, Unzip to this location
+----
+DST="${HOME}/.local/share/gnome-shell/extensions/tactile@lundal.io/"; mkdir -p ${DST}; unzip tactile\@lundal.io -d ${DST}
+----
+
+.gnome-extensions install
+TIP: will install to the same location define by ${DST}
+
+IMPORTANT: Reboot the machine
+
+.Show installed extensions
+----
+gnome-extensions list
+----
 
 .Enable Gnome Extension
 ----

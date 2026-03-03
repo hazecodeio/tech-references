@@ -126,7 +126,7 @@ DST="${HOME}/.local/share/gnome-shell/extensions/tactile@lundal.io/"; mkdir -p $
 ----
 
 .gnome-extensions install
-TIP: will install to the same location define by ${DST}
+TIP: will install to the same location defined by ${DST}
 
 IMPORTANT: Reboot the machine
 

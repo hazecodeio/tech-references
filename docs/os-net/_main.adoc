@@ -12,3 +12,32 @@ include::./net-virtual-networking/net-vlans.adoc[]
 
 include::net-dns.adoc[]
 
+== List Network Connections
+
+=== Using Command `netstat`
+
+.Type this and press Enter to see all connections.
+ netstat -a
+
+Additional Options:
+
+.Use this for TCP connections only.
+ netstat -at
+
+.Use this for UDP connections only.
+ netstat -au
+
+.Use this to see listening ports along with the process ID.
+ sudo netstat -tulpn
+
+
+=== Using Command `lsof`
+
+.list all open network connections:
+ lsof -i
+
+.show connections for a specific protocol:
+ lsof -iTCP
+
+=== Using Command `ss`
+

@@ -14,3 +14,10 @@ include::security-keytool.adoc[]
 
 
 
+== Sandboxing
+
+.links
+* https://www.baeldung.com/linux/sandboxing-process
+* https://www.baeldung.com/linux/list-namespaces
+* https://archive.org/details/StartTelegramInAFirejailedSandbox
+

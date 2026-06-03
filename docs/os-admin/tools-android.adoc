@@ -51,6 +51,53 @@ scrcpy --tcpip=192.168.1.6:5555
 scrcpy --tcpip=192.168.1.6:5555 --max-size=2800
 ----
 
+==== Install `scrcpy` release 4.0
+
+.Link
+* https://github.com/Genymobile/scrcpy/blob/master/doc/linux.md
+
+.Error - Dependency "sdl3" not found
+----
+Run-time dependency sdl3 found: NO (tried pkgconfig and cmake)
+
+app/meson.build:130:4: ERROR: Dependency "sdl3" not found, tried pkgconfig and cmake
+----
+
+.SDL3
+* https://wiki.libsdl.org/SDL3/README-cmake
+* https://github.com/libsdl-org/SDL/blob/main/docs/INTRO-cmake.md
+
+.Building SDL on UNIX
+****
+SDL will build with very few dependencies, but for full functionality you should install the packages detailed in README-linux.md.
+
+Assuming you're in the SDL source directory, building and installing to /usr/local can be done with:
+
+----
+cmake -S . -B build
+cmake --build build
+sudo cmake --install build --prefix /usr/local
+----
+
+****
+
+.Error
+----
+
+CMake Error at cmake/macros.cmake:433 (message):
+  Couldn't find dependency package for XTEST.  Please install the needed
+  packages or configure with -DSDL_X11_XTEST=OFF
+
+----
+
+.Solution
+* https://github.com/libsdl-org/SDL/blob/main/docs/README-linux.md
+
+
+
+
+
+
 
 
 === Data Backup and Sync

@@ -37,7 +37,7 @@ include::tools-asciidoctor.adoc[]
 
 .What are these?
 - Squid Proxy Server
-- visible_host hsmaklinux
+- visible_host HOSTNAME
 
 - http://tldp.org/HOWTO/TransparentProxy.html
 
@@ -221,6 +221,16 @@ cat somejson.json | jq -r 'paths(scalars | true) as $p  | [ ( [ $p[] | tostring 
 
 
 === ThinkFan
+
+.link
+* https://www.kernel.org/doc/html/latest/admin-guide/laptops/thinkpad-acpi.html
+
+----
+cat /sys/module/thinkpad_acpi/parameters/fan_control
+cat /proc/acpi/ibm/fan
+----
+
+
 
 .`thinkfan`
 [source,bash]

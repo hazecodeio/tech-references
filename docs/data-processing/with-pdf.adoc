@@ -1,0 +1,32 @@
+:toc:
+:toclevels: 3
+:sectnums: 3
+:sectnumlevels: 3
+:icons: font
+:source-highlighter: rouge
+= Data Processing of PDF - `pdftotext` `pdfseparate` `pdfunite`
+Haze Wylde
+
+
+== Extract PDF Pages - `pdfseparate`
+
+ pdfseparate -f 1 -l 2 eStmt_2024-01-24.pdf out.pdf
+
+ pdfseparate -l 1 eStmt_2024-01-24.pdf eStmt_2024-01-24-%d.pdf
+
+ pdfseparate -f 1 -l 2 eStmt_2024-01-24.pdf out-%d.pdf
+
+----
+find *.pdf |
+            jq -R | jq -s 'map({src: ., dst: . | capture("(?<a>.*)(.pdf)") | (.a + "_p%d.pdf")})' |
+            jq '.[] | (.src, .dst)' |
+            xargs -n2 bash -c 'pdfseparate -l 1 "$0" "$1"'
+----
+
+
+== Merge PDF Pages - `pdfunite`
+
+NOTE: `pdfunite` works only with PDF files
+
+ pdfunite INPUT* OUTPUT.pdf
+

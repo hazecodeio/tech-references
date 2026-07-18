@@ -72,3 +72,9 @@ sudo modprobe -v kvm_intel kvm
 ----
 
 TIP: Use `-n` for dry run!
+
+.List all kernel modules
+----
+modprobe -c | grep -i MODULE_NAME
+lsmod | grep -i MODULE_NAME
+----
